@@ -124,19 +124,15 @@ function Adventure (options) {
     this.commands.push(entry)
   }.bind(this))
 
-  this.modifiers.push({
-      name: 'lang'
-    , filter: require('./lib/langFilter')
-    , short: 'l'
-    , handler: require('./lib/modifiers/lang').handler
-  })
-  this.modifiers.push({
-      name: 'version'
-    , filter: require('./lib/appDirFilter')
-    , short: 'v'
-    , handler: require('./lib/modifiers/version').handler
-  })
-
+  ;[
+     'lang'
+    , 'version'
+  ].forEach(function (name) {
+    var entry = require('./lib/modifiers/' + name)
+    entry.name = name
+    this.modifiers.push(entry)
+  }.bind(this))
+  
   this.commands.sort(function (a, b) {
     var orderA = a.order || 0
       , orderB = b.order || 0
