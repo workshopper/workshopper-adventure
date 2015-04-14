@@ -106,82 +106,35 @@ function Adventure (options) {
 
   this.current = this.getData('current')
 
-  function langFilter(shop) {
-    return shop.i18n.languages && shop.i18n.languages.length > 1
-  }
-  this.commands.push({
-      name: 'help'
-    , order: 2
-    , handler: require('./lib/commands/help').handler
-  })
+  ;[
+      'help'
+    , 'language'
+    , 'version'
+    , 'list'
+    , 'current'
+    , 'print'
+    , 'run'
+    , 'verify'
+    , 'next'
+    , 'reset'
+    , 'completed'
+  ].forEach(function (name) {
+    var entry = require('./lib/commands/' + name)
+    entry.name = name
+    this.commands.push(entry)
+  }.bind(this))
+
   this.modifiers.push({
       name: 'lang'
-    , filter: langFilter
+    , filter: require('./lib/langFilter')
     , short: 'l'
     , handler: require('./lib/modifiers/lang').handler
   })
-  this.commands.push({
-      name: 'language'
-    , filter: langFilter
-    , order: 1
-    , handler: require('./lib/commands/language').handler
-  })
-  
-  function appDirFilter(shop) {
-    return typeof this.appDir === 'string'
-  }
   this.modifiers.push({
       name: 'version'
-    , filter: appDirFilter
+    , filter: require('./lib/appDirFilter')
     , short: 'v'
     , handler: require('./lib/modifiers/version').handler
-  })
-  this.commands.push({
-      name: 'version'
-    , short: 'v'
-    , filter: appDirFilter
-    , menu: false
-    , handler: require('./lib/commands/version').handler
-  })
-  this.commands.push({
-      name: 'list'
-    , menu: false
-    , handler: require('./lib/commands/list').handler
-  })
-  this.commands.push({
-      name: 'current'
-    , menu: false
-    , handler: require('./lib/commands/current').handler
-  })
-  this.commands.push({
-      name: 'print'
-    , menu: false
-    , handler: require('./lib/commands/print').handler
-  })
-  this.commands.push({
-      name: 'run'
-    , menu: false
-    , handler: require('./lib/commands/run').handler
-  })
-  this.commands.push({
-      name: 'verify'
-    , menu: false
-    , handler: require('./lib/commands/verify').handler
-  })
-  this.commands.push({
-      name: 'next'
-    , menu: false
-    , handler: require('./lib/commands/next').handler
-  })
-  this.commands.push({
-      name: 'reset'
-    , menu: false
-    , handler: require('./lib/commands/reset').handler
-  })
-  this.commands.push({
-      name: 'completed'
-    , menu: false
-    , handler: require('./lib/commands/completed').handler
   })
 
   this.commands.sort(function (a, b) {
