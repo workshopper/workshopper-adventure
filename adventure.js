@@ -106,7 +106,7 @@ function Adventure (options) {
 
   this.current = this.getData('current')
 
-  ;[
+  this.commands = this.commands.concat([
       'help'
     , 'language'
     , 'version'
@@ -118,21 +118,21 @@ function Adventure (options) {
     , 'next'
     , 'reset'
     , 'completed'
-  ].forEach(function (name) {
+  ].map(function (name) {
     var entry = require('./lib/commands/' + name)
     entry.name = name
-    this.commands.push(entry)
-  }.bind(this))
+    return entry
+  }))
 
-  ;[
-     'lang'
+  this.modifiers = this.modifiers.concat([
+      'lang'
     , 'version'
-  ].forEach(function (name) {
+  ].map(function (name) {
     var entry = require('./lib/modifiers/' + name)
     entry.name = name
-    this.modifiers.push(entry)
-  }.bind(this))
-  
+    return entry
+  }))
+
   this.commands.sort(function (a, b) {
     var orderA = a.order || 0
       , orderB = b.order || 0
