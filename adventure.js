@@ -91,103 +91,185 @@ function Adventure (options) {
   this.options = options
 
   this.i18n      = i18n.init(this.options, this.exercises, this.globalDataDir, this.dataDir, this.defaultLang)
+  this.__        = this.i18n.__
+  this.__n       = this.i18n.__n
+  this.languages = this.i18n.languages
+
+  // backwards compatibility for title and subtitle and width
+  this.__defineGetter__('title', this.__.bind(this, 'title'))
+  this.__defineGetter__('subtitle', this.__.bind(this, 'subtitle'))
+  this.__defineGetter__('lang', this.i18n.lang.bind(this.i18n, 'lang'))
+  this.__defineGetter__('width', function () {
+    return this.menuOptions.width
+  }.bind(this))
+
+  this.current = this.getData('current')
+
   if (this.i18n.languages && this.i18n.languages.length > 1) {
     this.modifiers.push({
         name: 'lang'
       , short: 'l'
-      , handler: function (workshopper, lang) {
-          this.selectLanguage(lang)
-        }.bind(this)
+      , handler: function (shop, lang) {
+          shop.selectLanguage(lang)
+        }
     })
+
+    function printLanguageMenu(shop) {
+      var __ = shop.i18n.__
+        , menu = createMenu(shop.menuOptions)
+        , completed = shop.getData('completed') || []
+
+      menu.writeLine(chalk.bold(__('title')))
+
+      if (shop.i18n.has('subtitle'))
+        menu.writeLine(chalk.italic(__('subtitle')))
+
+      menu.writeSeparator()
+
+      shop.i18n.languages.forEach(function (language) {
+        var label = chalk.bold('»') + ' ' + __('language.' + language)
+          , marker = (shop.lang === language) ? '[' + __('language._current') + ']' : ''
+        menu.add(label, marker, function () {
+          shop.selectLanguage(language)
+          shop.printMenu()
+        })
+      })
+
+      menu.writeSeparator()
+
+      menu.add(chalk.bold(__('menu.cancel')), shop.printMenu.bind(shop))
+      menu.add(chalk.bold(__('menu.exit')), shop._exit.bind(shop))
+    }
     this.commands.unshift({
         name: 'language'
-      , handler: this.printLanguageMenu.bind(this)
+      , handler: printLanguageMenu
     }) 
+  }
+  function printHelp(dir, shop) {
+    var part
+      , stream = require("combined-stream").create()
+
+    if (shop.helpFile)
+      part = print.localisedFileStream(shop.appName, shop.appDir, shop.helpFile, shop.lang)
+
+    if (part)
+      stream.append(part)
+
+    part = print.localisedFirstFileStream(shop.appName, shop.appDir, [
+            path.join(dir, './i18n/usage/{lang}.txt'),
+            path.join(dir, './i18n/usage/en.txt')
+          ], shop.lang)
+    if (part)
+      stream.append(part)
+
+    stream.pipe(process.stdout)
   }
   this.commands.unshift({
       name: 'help'
-    , handler: this._printHelp.bind(this)
+    , handler: printHelp.bind(null, __dirname)
   })
+  function printVersion(shop) {
+    console.log(
+        shop.appName
+      + '@'
+      + require(path.join(shop.appDir, 'package.json')).version
+    )
+    process.exit()
+  }
   this.modifiers.push({
       name: 'version'
     , short: 'v'
-    , handler: this.printVersion.bind(this)
+    , handler: printVersion
   })
   this.commands.push({
       name: 'version'
     , short: 'v'
     , menu: false
-    , handler: this.printVersion.bind(this)
+    , handler: printVersion
   })
   this.commands.push({
       name: 'list'
     , menu: false
-    , handler: function () {
-        this.exercises.forEach(function (name) {
-          console.log(this.__('exercise.' + name))
-        }.bind(this))
-      }.bind(this)
+    , handler: function (shop) {
+        shop.exercises.forEach(function (name) {
+          console.log(shop.__('exercise.' + name))
+        })
+      }
   })
   this.commands.push({
       name: 'current'
     , menu: false
-    , handler: function () {
-        console.log(this.__('exercise.' + this.current))
-      }.bind(this)
+    , handler: function (shop) {
+        console.log(shop.__('exercise.' + shop.current))
+      }
   })
   this.commands.push({
       name: 'print'
     , menu: false
-    , handler: function () {
-      var selected = argv._.length > 1 ? argv._.slice(1).join(' ') : this.current
-      if (/[0-9]+/.test(selected)) {
-        selected = this.exercises[parseInt(selected-1, 10)] || selected
-      } else {
-        selected = this.exercises.filter(function (exercise) {
-          return selected === this.__('exercise.' + exercise)
-        }.bind(this))[0] || selected;
+    , handler: function (shop) {
+        var selected = argv._.length > 1 ? argv._.slice(1).join(' ') : shop.current
+        if (/[0-9]+/.test(selected)) {
+          selected = shop.exercises[parseInt(selected-1, 10)] || selected
+        } else {
+          selected = shop.exercises.filter(function (exercise) {
+            return selected === shop.__('exercise.' + exercise)
+          }.bind(shop))[0] || selected;
+        }
+        onselect.call(shop, selected)
       }
-      onselect.call(this, selected)
-    }.bind(this)
   })
+  function runOrVerify(mode, shop, argv) {
+    if (!shop.current)
+      return error(shop.__('error.exercise.none_active'))
+
+    exercise = shop.loadExercise(shop.current)
+
+    if (!exercise)
+      return error(shop.__('error.exercise.missing', {name: name}))
+
+    if (exercise.requireSubmission !== false && argv._.length == 1)
+      return error(shop.__('ui.usage', {appName: shop.appName, mode: mode}))
+
+    return shop.runExercise(exercise, mode, argv._.slice(1))
+  }
   this.commands.push({
       name: 'run'
     , menu: false
-    , handler: this.runOrVerify.bind(this, 'run')
+    , handler: runOrVerify.bind(null, 'run')
   })
   this.commands.push({
       name: 'verify'
     , menu: false
-    , handler: this.runOrVerify.bind(this, 'verify')
+    , handler: runOrVerify.bind(null, 'verify')
   })
   this.commands.push({
       name: 'next'
     , menu: false
-    , handler: function () {
-        var remainingAfterCurrent = this.exercises.slice(this.exercises.indexOf(this.current))
+    , handler: function (shop) {
+        var remainingAfterCurrent = shop.exercises.slice(shop.exercises.indexOf(shop.current))
 
-        var completed = this.getData('completed')
+        var completed = shop.getData('completed')
 
         if (!completed)
-          return error(this.__('error.exercise.none_active') + '\n')
+          return error(shop.__('error.exercise.none_active') + '\n')
 
         var incompleteAfterCurrent = remainingAfterCurrent.filter(function (elem) {
           return completed.indexOf(elem) < 0
         })
 
         if (incompleteAfterCurrent.length === 0)
-          return console.log(this.__('error.no_uncomplete_left') + '\n')
+          return console.log(shop.__('error.no_uncomplete_left') + '\n')
 
-        return onselect.call(this, incompleteAfterCurrent[0])
-      }.bind(this)
+        return onselect.call(shop, incompleteAfterCurrent[0])
+      }
   })
   this.commands.push({
       name: 'reset'
     , menu: false
-    , handler: function () {
-      this.reset()
-      return console.log(this.__('progress.reset', {title: this.__('title')}))
-    }
+    , handler: function (shop) {
+        shop.reset()
+        return console.log(shop.__('progress.reset', {title: shop.__('title')}))
+      }
   })
 }
 
@@ -204,51 +286,24 @@ Adventure.prototype.execute = function (args) {
         }
       })
 
-  this.__        = this.i18n.__
-  this.__n       = this.i18n.__n
-  this.languages = this.i18n.languages
-
-  // backwards compatibility for title and subtitle and width
-  this.__defineGetter__('title', this.__.bind(this, 'title'))
-  this.__defineGetter__('subtitle', this.__.bind(this, 'subtitle'))
-  this.__defineGetter__('width', function () {
-    return this.menuOptions.width
-  }.bind(this))
-
-  this.current = this.getData('current')
-
   this.modifiers.forEach(function (item) {
     var value = argv[item.name] || argv[item.short]
     if (value)
       item.handler(this, value)
   }.bind(this))
 
-  this.commands.forEach(function (item) {
-    if (!handled && (
-            mode == item.name
-        || (mode == item.short))) {
-      handled = true
-      return item.handler(this, argv)
-    }
-  }.bind(this))
+  if (mode) 
+    this.commands.forEach(function (item) {
+      if (!handled && (
+              mode == item.name
+          || (mode == item.short))) {
+        handled = true
+        return item.handler(this, argv)
+      }
+    }.bind(this))
 
   if (!handled)
     this.printMenu()
-}
-
-Adventure.prototype.runOrVerify = function (mode, workshopper, argv) {
-  if (!this.current)
-    return error(this.__('error.exercise.none_active'))
-
-  exercise = this.loadExercise(this.current)
-
-  if (!exercise)
-    return error(this.__('error.exercise.missing', {name: name}))
-
-  if (exercise.requireSubmission !== false && argv._.length == 1)
-    return error(this.__('ui.usage', {appName: this.appName, mode: mode}))
-
-  return this.runExercise(exercise, mode, argv._.slice(1))
 }
 
 Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
@@ -318,15 +373,6 @@ Adventure.prototype.end = function (mode, pass, exercise, callback) {
         process.exit(pass ? 0 : -1)
       })
     }.bind(this))
-}
-
-Adventure.prototype.printVersion = function () {
-  console.log(
-      this.appName
-    + '@'
-    + require(path.join(this.appDir, 'package.json')).version
-  )
-  process.exit()
 }
 
 // overall exercise fail
@@ -498,33 +544,6 @@ Adventure.prototype.selectLanguage = function (lang) {
   this.lang = lang
 }
 
-Adventure.prototype.printLanguageMenu = function () {
-  var __ = this.i18n.__
-    , menu = createMenu(this.menuOptions)
-    , completed = this.getData('completed') || []
-
-  menu.writeLine(chalk.bold(__('title')))
-
-  if (this.i18n.has('subtitle'))
-    menu.writeLine(chalk.italic(__('subtitle')))
-
-  menu.writeSeparator()
-
-  this.i18n.languages.forEach(function (language) {
-    var label = chalk.bold('»') + ' ' + __('language.' + language)
-      , marker = (this.lang === language) ? '[' + __('language._current') + ']' : ''
-    menu.add(label, marker, function () {
-      this.selectLanguage(language)
-      this.printMenu()
-    }.bind(this))
-  }.bind(this))
-
-  menu.writeSeparator()
-
-  menu.add(chalk.bold(__('menu.cancel')), this.printMenu.bind(this))
-  menu.add(chalk.bold(__('menu.exit')), this._exit.bind(this))
-}
-
 Adventure.prototype._exit = function () {
   process.exit(0)
 }
@@ -586,31 +605,10 @@ Adventure.prototype.reset = function () {
   fs.unlink(path.resolve(this.dataDir, 'current.json'), function () {})
 }
 
-
 Adventure.prototype.dirFromName = function (name) {
   return util.dirFromName(this.exerciseDir, name)
 }
 
-
-Adventure.prototype._printHelp = function () {
-  var part
-    , stream = require("combined-stream").create()
-
-  if (this.helpFile)
-    part = print.localisedFileStream(this.appName, this.appDir, this.helpFile, this.lang)
-
-  if (part)
-    stream.append(part)
-
-  part = print.localisedFirstFileStream(this.appName, this.appDir, [
-          path.join(__dirname, './i18n/usage/{lang}.txt'),
-          path.join(__dirname, './i18n/usage/en.txt')
-        ], this.lang)
-  if (part)
-    stream.append(part)
-
-  stream.pipe(process.stdout)
-}
 
 Adventure.prototype.getExerciseMeta = function (name) {
   return this._meta[util.idFromName(name)]
