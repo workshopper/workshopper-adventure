@@ -27,10 +27,10 @@ function Adventure (options) {
     options = {name: options}
 
   if (typeof options !== 'object')
-    throw new TypeError('need to provide an options object')
+    return error('You need to provide an options object')
 
   if (typeof options.name !== 'string')
-    throw new TypeError('need to provide a `name` String option')
+    return error('You need to provide a `name` String option')
 
   this.name       = options.name
   this.appName    = options.name
@@ -109,17 +109,17 @@ function Adventure (options) {
   function langFilter(shop) {
     return shop.i18n.languages && shop.i18n.languages.length > 1
   }
-    this.modifiers.push({
-        name: 'lang'
+  this.modifiers.push({
+      name: 'lang'
     , filter: langFilter
-      , short: 'l'
-      , handler: require('./lib/modifiers/lang').handler
-    })
-    this.commands.unshift({
-        name: 'language'
+    , short: 'l'
+    , handler: require('./lib/modifiers/lang').handler
+  })
+  this.commands.unshift({
+      name: 'language'
     , filter: langFilter
-      , handler: require('./lib/commands/language').handler
-    }) 
+    , handler: require('./lib/commands/language').handler
+  })
   this.commands.unshift({
       name: 'help'
     , handler: require('./lib/commands/help').handler
@@ -128,19 +128,19 @@ function Adventure (options) {
   function appDirFilter(shop) {
     return typeof this.appDir === 'string'
   }
-    this.modifiers.push({
-        name: 'version'
+  this.modifiers.push({
+      name: 'version'
     , filter: appDirFilter
-      , short: 'v'
-      , handler: require('./lib/modifiers/version').handler
-    })
-    this.commands.push({
-        name: 'version'
-      , short: 'v'
+    , short: 'v'
+    , handler: require('./lib/modifiers/version').handler
+  })
+  this.commands.push({
+      name: 'version'
+    , short: 'v'
     , filter: appDirFilter
-      , menu: false
-      , handler: require('./lib/commands/version').handler
-    })
+    , menu: false
+    , handler: require('./lib/commands/version').handler
+  })
   this.commands.push({
       name: 'list'
     , menu: false
@@ -566,7 +566,7 @@ Adventure.prototype.printExercise = function printExercise (name) {
       if (exercise.problem)
         print.text(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem)
       else {
-        part = print.localisedFileStream(this.appName, this.appDir,  path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
+        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
         if (part)
           stream.append(part)
       }
