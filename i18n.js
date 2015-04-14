@@ -55,7 +55,7 @@ function createDefaultLookup(options, exercises) {
   return result
 }
 
-function chooseLang (globalDataDir, appDataDir, lang, defaultLang, availableLangs) {
+function chooseLang (globalDataDir, appDataDir, defaultLang, availableLangs, lang) {
   var globalPath = path.resolve(globalDataDir, 'lang.json')
     , appPath = path.resolve(appDataDir, 'lang.json')
     , data
@@ -103,8 +103,7 @@ function chooseLang (globalDataDir, appDataDir, lang, defaultLang, availableLang
 }
 
 module.exports = {
-  chooseLang: chooseLang,
-  init: function(options, exercises, lang) {
+  init: function(options, exercises, globalDataDir, dataDir, defaultLang) {
     var generalTranslator = i18nChain(
           i18nFs(path.resolve(__dirname, './i18n'))
         , i18nObject(createDefaultLookup(options, exercises))
@@ -114,17 +113,19 @@ module.exports = {
             ? i18nChain( i18nFs(path.resolve(options.appDir, './i18n')), generalTranslator)
             : generalTranslator
         )
-      , result = translator.lang(lang, true)
+      , languages = options.languages || ['en']
+      , choose = chooseLang.bind(null, globalDataDir, dataDir, defaultLang, languages)
+      , result = translator.lang(choose(null), true)
     translator.fallback = function (key) {
       if (!key)
         return '(???)'
 
       return '?' + key + '?'
     }
-    result.languages = options.languages || ['en']
-    result.change = function (globalDataDir, appDataDir, lang, defaultLang, availableLangs) {
+    result.languages = languages
+    result.change = function (lang) {
+      lang = choose(lang)
       result.changeLang(lang)
-      chooseLang(globalDataDir, appDataDir, lang, defaultLang, availableLangs)
     }
     return result
   }
