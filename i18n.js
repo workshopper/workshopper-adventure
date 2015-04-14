@@ -115,7 +115,8 @@ module.exports = {
         )
       , languages = options.languages || ['en']
       , choose = chooseLang.bind(null, globalDataDir, dataDir, defaultLang, languages)
-      , result = translator.lang(choose(null), true)
+      , lang = choose(null)
+      , result = translator.lang(lang, true)
     translator.fallback = function (key) {
       if (!key)
         return '(???)'
@@ -126,6 +127,9 @@ module.exports = {
     result.change = function (lang) {
       lang = choose(lang)
       result.changeLang(lang)
+    }
+    result.lang = function () {
+      return lang
     }
     return result
   }
