@@ -427,9 +427,6 @@ Adventure.prototype.selectLanguage = function (lang) {
   this.lang = lang
 }
 
-Adventure.prototype._exit = function () {
-  process.exit(0)
-}
 
 Adventure.prototype.printMenu = function () {
   var __ = this.i18n.__
@@ -457,7 +454,7 @@ Adventure.prototype.printMenu = function () {
     menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
   }.bind(this))
 
-  menu.add(chalk.bold(__('menu.exit')), this._exit.bind(this))
+  menu.add(chalk.bold(__('menu.exit')), process.exit.bind(process, 0))
 }
 
 Adventure.prototype.getData = function (name) {
