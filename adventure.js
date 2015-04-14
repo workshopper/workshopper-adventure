@@ -91,8 +91,6 @@ function Adventure (options) {
   if (options.menuItems && !options.commands)
     options.commands = options.menuItems
 
-  this.modifiers = Array.isArray(options.modifiers) ? options.modifiers : []
-  this.commands = Array.isArray(options.commands) ? options.commands : []
   this.options = options
 
   this.i18n      = i18n.init(this.options, this.exercises, this.globalDataDir, this.dataDir, this.defaultLang)
@@ -110,7 +108,7 @@ function Adventure (options) {
 
   this.current = this.getData('current')
 
-  this.commands = this.commands.concat([
+  this.commands = (Array.isArray(options.commands) ? options.commands : []).concat([
       'help'
     , 'language'
     , 'version'
@@ -128,7 +126,7 @@ function Adventure (options) {
     return entry
   }))
 
-  this.modifiers = this.modifiers.concat([
+  this.modifiers = (Array.isArray(options.modifiers) ? options.modifiers : []).concat([
       'lang'
     , 'version'
   ].map(function (name) {
