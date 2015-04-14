@@ -86,9 +86,109 @@ function Adventure (options) {
   if (options.menuItems && !options.commands)
     options.commands = options.menuItems
 
+  this.modifiers = Array.isArray(options.modifiers) ? options.modifiers : []
   this.commands = Array.isArray(options.commands) ? options.commands : []
-
   this.options = options
+
+  this.i18n      = i18n.init(this.options, this.exercises, this.globalDataDir, this.dataDir, this.defaultLang)
+  if (this.i18n.languages && this.i18n.languages.length > 1) {
+    this.modifiers.push({
+        name: 'lang'
+      , short: 'l'
+      , handler: function (workshopper, lang) {
+          this.selectLanguage(lang)
+        }.bind(this)
+    })
+    this.commands.unshift({
+        name: 'language'
+      , handler: this.printLanguageMenu.bind(this)
+    }) 
+  }
+  this.commands.unshift({
+      name: 'help'
+    , handler: this._printHelp.bind(this)
+  })
+  this.modifiers.push({
+      name: 'version'
+    , short: 'v'
+    , handler: this.printVersion.bind(this)
+  })
+  this.commands.push({
+      name: 'version'
+    , short: 'v'
+    , menu: false
+    , handler: this.printVersion.bind(this)
+  })
+  this.commands.push({
+      name: 'list'
+    , menu: false
+    , handler: function () {
+        this.exercises.forEach(function (name) {
+          console.log(this.__('exercise.' + name))
+        }.bind(this))
+      }.bind(this)
+  })
+  this.commands.push({
+      name: 'current'
+    , menu: false
+    , handler: function () {
+        console.log(this.__('exercise.' + this.current))
+      }.bind(this)
+  })
+  this.commands.push({
+      name: 'print'
+    , menu: false
+    , handler: function () {
+      var selected = argv._.length > 1 ? argv._.slice(1).join(' ') : this.current
+      if (/[0-9]+/.test(selected)) {
+        selected = this.exercises[parseInt(selected-1, 10)] || selected
+      } else {
+        selected = this.exercises.filter(function (exercise) {
+          return selected === this.__('exercise.' + exercise)
+        }.bind(this))[0] || selected;
+      }
+      onselect.call(this, selected)
+    }.bind(this)
+  })
+  this.commands.push({
+      name: 'run'
+    , menu: false
+    , handler: this.runOrVerify.bind(this, 'run')
+  })
+  this.commands.push({
+      name: 'verify'
+    , menu: false
+    , handler: this.runOrVerify.bind(this, 'verify')
+  })
+  this.commands.push({
+      name: 'next'
+    , menu: false
+    , handler: function () {
+        var remainingAfterCurrent = this.exercises.slice(this.exercises.indexOf(this.current))
+
+        var completed = this.getData('completed')
+
+        if (!completed)
+          return error(this.__('error.exercise.none_active') + '\n')
+
+        var incompleteAfterCurrent = remainingAfterCurrent.filter(function (elem) {
+          return completed.indexOf(elem) < 0
+        })
+
+        if (incompleteAfterCurrent.length === 0)
+          return console.log(this.__('error.no_uncomplete_left') + '\n')
+
+        return onselect.call(this, incompleteAfterCurrent[0])
+      }.bind(this)
+  })
+  this.commands.push({
+      name: 'reset'
+    , menu: false
+    , handler: function () {
+      this.reset()
+      return console.log(this.__('progress.reset', {title: this.__('title')}))
+    }
+  })
 }
 
 inherits(Adventure, EventEmitter)
@@ -99,30 +199,11 @@ Adventure.prototype.execute = function (args) {
     , argv = minimist(args, {
         alias: {
           h: 'help',
-          l: 'lang',
-          v: 'version',
           select: 'print',
           selected: 'current'
         }
       })
 
-  try {
-    this.lang = i18n.chooseLang(
-        this.globalDataDir
-      , this.dataDir
-      , argv.lang
-      , this.defaultLang
-      , this.options.languages
-    )
-  } catch (e) {
-    if (e instanceof TypeError)  // In case the language couldn't be selected
-      console.log(e.message)
-    else
-      console.error(e.stack)
-    process.exit(1)
-  }
-
-  this.i18n      = i18n.init(this.options, this.exercises, this.lang, this.globalDataDir)
   this.__        = this.i18n.__
   this.__n       = this.i18n.__n
   this.languages = this.i18n.languages
@@ -136,91 +217,38 @@ Adventure.prototype.execute = function (args) {
 
   this.current = this.getData('current')
 
-  if (this.commands)
-    this.commands.forEach(function (item) {
-      if (mode == item.name
-          || argv[item.name]
-          || (item.short && argv[item.short])) {
-        handled = true
-        return item.handler(this)
-      }
-    }.bind(this))
+  this.modifiers.forEach(function (item) {
+    var value = argv[item.name] || argv[item.short]
+    if (value)
+      item.handler(this, value)
+  }.bind(this))
 
-
-  if (argv.version || mode == 'version')
-    return console.log(
-        this.appName
-      + '@'
-      + require(path.join(this.appDir, 'package.json')).version
-    )
-
-  if (handled)
-    return
-
-  if (argv.help || mode == 'help')
-    return this._printHelp()
-
-  if (mode == 'list') {
-    return this.exercises.forEach(function (name) {
-      console.log(this.__('exercise.' + name))
-    }.bind(this))
-  }
-
-  if (mode == 'current')
-    return console.log(this.__('exercise.' + this.current))
-
-  if (mode == 'print') {
-    var selected = argv._.length > 1 ? argv._.slice(1).join(' ') : this.current
-    if (/[0-9]+/.test(selected)) {
-      selected = this.exercises[parseInt(selected-1, 10)] || selected
-    } else {
-      selected = this.exercises.filter(function (exercise) {
-        return selected === this.__('exercise.' + exercise)
-      }.bind(this))[0] || selected;
+  this.commands.forEach(function (item) {
+    if (!handled && (
+            mode == item.name
+        || (mode == item.short))) {
+      handled = true
+      return item.handler(this, argv)
     }
-    onselect.call(this, selected)
-    return
-  }
+  }.bind(this))
 
-  if (mode == 'verify' || mode == 'run') {
-    if (!this.current)
-      return error(this.__('error.exercise.none_active'))
+  if (!handled)
+    this.printMenu()
+}
 
-    exercise = this.loadExercise(this.current)
+Adventure.prototype.runOrVerify = function (mode, workshopper, argv) {
+  if (!this.current)
+    return error(this.__('error.exercise.none_active'))
 
-    if (!exercise)
-      return error(this.__('error.exercise.missing', {name: name}))
+  exercise = this.loadExercise(this.current)
 
-    if (exercise.requireSubmission !== false && argv._.length == 1)
-      return error(this.__('ui.usage', {appName: this.appName, mode: mode}))
+  if (!exercise)
+    return error(this.__('error.exercise.missing', {name: name}))
 
-    return this.runExercise(exercise, mode, argv._.slice(1))
-  }
+  if (exercise.requireSubmission !== false && argv._.length == 1)
+    return error(this.__('ui.usage', {appName: this.appName, mode: mode}))
 
-  if (mode == 'next') {
-    var remainingAfterCurrent = this.exercises.slice(this.exercises.indexOf(this.current))
-
-    var completed = this.getData('completed')
-
-    if (!completed)
-      return error(this.__('error.exercise.none_active') + '\n')
-
-    var incompleteAfterCurrent = remainingAfterCurrent.filter(function (elem) {
-      return completed.indexOf(elem) < 0
-    })
-
-    if (incompleteAfterCurrent.length === 0)
-      return console.log(this.__('error.no_uncomplete_left') + '\n')
-
-    return onselect.call(this, incompleteAfterCurrent[0])
-  }
-
-  if (mode == 'reset') {
-    this.reset()
-    return console.log(this.__('progress.reset', {title: this.__('title')}))
-  }
-
-  this.printMenu()
+  return this.runExercise(exercise, mode, argv._.slice(1))
 }
 
 Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
@@ -232,7 +260,7 @@ Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
     ? name_or_object
     : (typeof fn_or_object === 'object')
       ? fn_or_object
-      : { name: name_or_object }
+      : {}
 
   if (typeof name_or_object === 'string')
     meta.name = name_or_object
@@ -292,6 +320,14 @@ Adventure.prototype.end = function (mode, pass, exercise, callback) {
     }.bind(this))
 }
 
+Adventure.prototype.printVersion = function () {
+  console.log(
+      this.appName
+    + '@'
+    + require(path.join(this.appDir, 'package.json')).version
+  )
+  process.exit()
+}
 
 // overall exercise fail
 Adventure.prototype.exerciseFail = function (mode, exercise) {
@@ -458,9 +494,8 @@ Adventure.prototype.runExercise = function (exercise, mode, args) {
 }
 
 Adventure.prototype.selectLanguage = function (lang) {
-  this.i18n.change(this.globalDataDir, this.dataDir, lang, this.defaultLang, this.i18n.languages)
+  this.i18n.change(lang)
   this.lang = lang
-  this.printMenu()
 }
 
 Adventure.prototype.printLanguageMenu = function () {
@@ -478,7 +513,10 @@ Adventure.prototype.printLanguageMenu = function () {
   this.i18n.languages.forEach(function (language) {
     var label = chalk.bold('»') + ' ' + __('language.' + language)
       , marker = (this.lang === language) ? '[' + __('language._current') + ']' : ''
-    menu.add(label, marker, this.selectLanguage.bind(this, language))
+    menu.add(label, marker, function () {
+      this.selectLanguage(language)
+      this.printMenu()
+    }.bind(this))
   }.bind(this))
 
   menu.writeSeparator()
@@ -510,11 +548,6 @@ Adventure.prototype.printMenu = function () {
   }.bind(this))
 
   menu.writeSeparator()
-
-  menu.add(chalk.bold(__('menu.help')), this._printHelp.bind(this))
-
-  if (this.i18n.languages && this.i18n.languages.length > 1)
-      menu.add(chalk.bold(__('menu.language')), this.printLanguageMenu.bind(this))
 
   this.commands.filter(function (extra) {
     return extra.menu !== false
