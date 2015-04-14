@@ -106,35 +106,41 @@ function Adventure (options) {
 
   this.current = this.getData('current')
 
-  if (this.i18n.languages && this.i18n.languages.length > 1) {
+  function langFilter(shop) {
+    return shop.i18n.languages && shop.i18n.languages.length > 1
+  }
     this.modifiers.push({
         name: 'lang'
+    , filter: langFilter
       , short: 'l'
       , handler: require('./lib/modifiers/lang').handler
     })
     this.commands.unshift({
         name: 'language'
+    , filter: langFilter
       , handler: require('./lib/commands/language').handler
     }) 
-  }
   this.commands.unshift({
       name: 'help'
     , handler: require('./lib/commands/help').handler
   })
   
-  if (this.appDir) {
+  function appDirFilter(shop) {
+    return typeof this.appDir === 'string'
+  }
     this.modifiers.push({
         name: 'version'
+    , filter: appDirFilter
       , short: 'v'
       , handler: require('./lib/modifiers/version').handler
     })
     this.commands.push({
         name: 'version'
       , short: 'v'
+    , filter: appDirFilter
       , menu: false
       , handler: require('./lib/commands/version').handler
     })
-  }
   this.commands.push({
       name: 'list'
     , menu: false
@@ -204,7 +210,9 @@ Adventure.prototype.execute = function (args) {
   if (!mode) 
     mode = 'menu'
 
-  this.commands.forEach(function (item) {
+  this.commands.filter(function (item) {
+    return typeof item.filter === 'function' ? item.filter(this) : true
+  }.bind(this)).forEach(function (item) {
     if (!handled && (mode == item.name || mode == item.short)) {
       handled = true
       return item.handler(this, argv)
@@ -477,8 +485,8 @@ Adventure.prototype.printMenu = function () {
   menu.writeSeparator()
 
   this.commands.filter(function (extra) {
-    return extra.menu !== false
-  }).forEach(function (extra) {
+    return extra.menu !== false && (typeof extra.filter === 'function' ? extra.filter(this) : true)
+  }.bind(this)).forEach(function (extra) {
     menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
   }.bind(this))
 
