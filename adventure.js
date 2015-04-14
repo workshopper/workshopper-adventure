@@ -133,7 +133,7 @@ function Adventure (options) {
     return entry
   }))
 
-  this.commands.sort(function (a, b) {
+  function orderSort(a, b) {
     var orderA = a.order || 0
       , orderB = b.order || 0
 
@@ -142,7 +142,10 @@ function Adventure (options) {
     else if (orderA < orderB)
       return 1
     return 0
-  })
+  }
+
+  this.commands.sort(orderSort)
+  this.modifiers.sort(orderSort)
 }
 
 inherits(Adventure, EventEmitter)
@@ -163,7 +166,9 @@ Adventure.prototype.execute = function (args) {
   if (mode === 'selected')
     mode = 'current'
 
-  this.modifiers.forEach(function (item) {
+  this.modifiers.filter(function (item) {
+    return typeof item.filter === 'function' ? item.filter(this) : true
+  }.bind(this)).forEach(function (item) {
     var value = argv[item.name] || argv[item.short]
     if (value)
       item.handler(this, value)
