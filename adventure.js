@@ -109,20 +109,22 @@ function Adventure (options) {
   function langFilter(shop) {
     return shop.i18n.languages && shop.i18n.languages.length > 1
   }
+  this.commands.push({
+      name: 'help'
+    , order: 2
+    , handler: require('./lib/commands/help').handler
+  })
   this.modifiers.push({
       name: 'lang'
     , filter: langFilter
     , short: 'l'
     , handler: require('./lib/modifiers/lang').handler
   })
-  this.commands.unshift({
+  this.commands.push({
       name: 'language'
     , filter: langFilter
+    , order: 1
     , handler: require('./lib/commands/language').handler
-  })
-  this.commands.unshift({
-      name: 'help'
-    , handler: require('./lib/commands/help').handler
   })
   
   function appDirFilter(shop) {
@@ -180,6 +182,17 @@ function Adventure (options) {
       name: 'completed'
     , menu: false
     , handler: require('./lib/commands/completed').handler
+  })
+
+  this.commands.sort(function (a, b) {
+    var orderA = a.order || 0
+      , orderB = b.order || 0
+
+    if (orderA > orderB)
+      return -1
+    else if (orderA < orderB)
+      return 1
+    return 0
   })
 }
 
