@@ -17,6 +17,10 @@ const createMenu  = require('simple-terminal-menu')
 
 const defaultWidth = 65
 
+function itemFilter (item) {
+  return typeof item.filter === 'function' ? item.filter(this) : true
+}
+
 function Adventure (options) {
   if (!(this instanceof Adventure))
     return new Adventure(options)
@@ -166,9 +170,7 @@ Adventure.prototype.execute = function (args) {
   if (mode === 'selected')
     mode = 'current'
 
-  this.modifiers.filter(function (item) {
-    return typeof item.filter === 'function' ? item.filter(this) : true
-  }.bind(this)).forEach(function (item) {
+  this.modifiers.filter(itemFilter.bind(this)).forEach(function (item) {
     var value = argv[item.name] || argv[item.short]
     if (value)
       item.handler(this, value)
@@ -177,9 +179,7 @@ Adventure.prototype.execute = function (args) {
   if (!mode) 
     mode = 'menu'
 
-  this.commands.filter(function (item) {
-    return typeof item.filter === 'function' ? item.filter(this) : true
-  }.bind(this)).forEach(function (item) {
+  this.commands.filter(itemFilter.bind(this)).forEach(function (item) {
     if (!handled && (mode == item.name || mode == item.short)) {
       handled = true
       return item.handler(this, argv)
@@ -452,7 +452,7 @@ Adventure.prototype.printMenu = function () {
   menu.writeSeparator()
 
   this.commands.filter(function (extra) {
-    return extra.menu !== false && (typeof extra.filter === 'function' ? extra.filter(this) : true)
+    return extra.menu !== false && itemFilter(extra)
   }.bind(this)).forEach(function (extra) {
     menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
   }.bind(this))
