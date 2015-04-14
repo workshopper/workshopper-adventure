@@ -418,12 +418,6 @@ Adventure.prototype.runExercise = function (exercise, mode, args) {
     print.text(this.appName, this.appDir, 'txt', result)
 }
 
-Adventure.prototype.selectLanguage = function (lang) {
-  this.i18n.change(lang)
-  this.lang = lang
-}
-
-
 Adventure.prototype.printMenu = function () {
   var __ = this.i18n.__
     , menu = createMenu(this.menuOptions)
