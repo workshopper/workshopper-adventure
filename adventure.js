@@ -8,10 +8,11 @@ const minimist     = require('minimist')
     , EventEmitter = require('events').EventEmitter
 
 /* jshint -W079 */
-const createMenu         = require('simple-terminal-menu')
-    , print            = require('./print-text')
-    , util             = require('./util')
-    , i18n             = require('./i18n')
+const createMenu  = require('simple-terminal-menu')
+    , print       = require('./lib/print')
+    , util        = require('./util')
+    , i18n        = require('./i18n')
+    , error       = print.error
 /* jshint +W079 */
 
 const defaultWidth = 65
@@ -109,167 +110,70 @@ function Adventure (options) {
     this.modifiers.push({
         name: 'lang'
       , short: 'l'
-      , handler: function (shop, lang) {
-          shop.selectLanguage(lang)
-        }
+      , handler: require('./lib/modifiers/lang').handler
     })
-
-    function printLanguageMenu(shop) {
-      var __ = shop.i18n.__
-        , menu = createMenu(shop.menuOptions)
-        , completed = shop.getData('completed') || []
-
-      menu.writeLine(chalk.bold(__('title')))
-
-      if (shop.i18n.has('subtitle'))
-        menu.writeLine(chalk.italic(__('subtitle')))
-
-      menu.writeSeparator()
-
-      shop.i18n.languages.forEach(function (language) {
-        var label = chalk.bold('»') + ' ' + __('language.' + language)
-          , marker = (shop.lang === language) ? '[' + __('language._current') + ']' : ''
-        menu.add(label, marker, function () {
-          shop.selectLanguage(language)
-          shop.printMenu()
-        })
-      })
-
-      menu.writeSeparator()
-
-      menu.add(chalk.bold(__('menu.cancel')), shop.printMenu.bind(shop))
-      menu.add(chalk.bold(__('menu.exit')), shop._exit.bind(shop))
-    }
     this.commands.unshift({
         name: 'language'
-      , handler: printLanguageMenu
+      , handler: require('./lib/commands/language').handler
     }) 
-  }
-  function printHelp(dir, shop) {
-    var part
-      , stream = require("combined-stream").create()
-
-    if (shop.helpFile)
-      part = print.localisedFileStream(shop.appName, shop.appDir, shop.helpFile, shop.lang)
-
-    if (part)
-      stream.append(part)
-
-    part = print.localisedFirstFileStream(shop.appName, shop.appDir, [
-            path.join(dir, './i18n/usage/{lang}.txt'),
-            path.join(dir, './i18n/usage/en.txt')
-          ], shop.lang)
-    if (part)
-      stream.append(part)
-
-    stream.pipe(process.stdout)
   }
   this.commands.unshift({
       name: 'help'
-    , handler: printHelp.bind(null, __dirname)
+    , handler: require('./lib/commands/help').handler
   })
-  function printVersion(shop) {
-    console.log(
-        shop.appName
-      + '@'
-      + require(path.join(shop.appDir, 'package.json')).version
-    )
-    process.exit()
+  
+  if (this.appDir) {
+    this.modifiers.push({
+        name: 'version'
+      , short: 'v'
+      , handler: require('./lib/modifiers/version').handler
+    })
+    this.commands.push({
+        name: 'version'
+      , short: 'v'
+      , menu: false
+      , handler: require('./lib/commands/version').handler
+    })
   }
-  this.modifiers.push({
-      name: 'version'
-    , short: 'v'
-    , handler: printVersion
-  })
-  this.commands.push({
-      name: 'version'
-    , short: 'v'
-    , menu: false
-    , handler: printVersion
-  })
   this.commands.push({
       name: 'list'
     , menu: false
-    , handler: function (shop) {
-        shop.exercises.forEach(function (name) {
-          console.log(shop.__('exercise.' + name))
-        })
-      }
+    , handler: require('./lib/commands/list').handler
   })
   this.commands.push({
       name: 'current'
     , menu: false
-    , handler: function (shop) {
-        console.log(shop.__('exercise.' + shop.current))
-      }
+    , handler: require('./lib/commands/current').handler
   })
   this.commands.push({
       name: 'print'
     , menu: false
-    , handler: function (shop) {
-        var selected = argv._.length > 1 ? argv._.slice(1).join(' ') : shop.current
-        if (/[0-9]+/.test(selected)) {
-          selected = shop.exercises[parseInt(selected-1, 10)] || selected
-        } else {
-          selected = shop.exercises.filter(function (exercise) {
-            return selected === shop.__('exercise.' + exercise)
-          }.bind(shop))[0] || selected;
-        }
-        onselect.call(shop, selected)
-      }
+    , handler: require('./lib/commands/print').handler
   })
-  function runOrVerify(mode, shop, argv) {
-    if (!shop.current)
-      return error(shop.__('error.exercise.none_active'))
-
-    exercise = shop.loadExercise(shop.current)
-
-    if (!exercise)
-      return error(shop.__('error.exercise.missing', {name: name}))
-
-    if (exercise.requireSubmission !== false && argv._.length == 1)
-      return error(shop.__('ui.usage', {appName: shop.appName, mode: mode}))
-
-    return shop.runExercise(exercise, mode, argv._.slice(1))
-  }
   this.commands.push({
       name: 'run'
     , menu: false
-    , handler: runOrVerify.bind(null, 'run')
+    , handler: require('./lib/commands/run').handler
   })
   this.commands.push({
       name: 'verify'
     , menu: false
-    , handler: runOrVerify.bind(null, 'verify')
+    , handler: require('./lib/commands/verify').handler
   })
   this.commands.push({
       name: 'next'
     , menu: false
-    , handler: function (shop) {
-        var remainingAfterCurrent = shop.exercises.slice(shop.exercises.indexOf(shop.current))
-
-        var completed = shop.getData('completed')
-
-        if (!completed)
-          return error(shop.__('error.exercise.none_active') + '\n')
-
-        var incompleteAfterCurrent = remainingAfterCurrent.filter(function (elem) {
-          return completed.indexOf(elem) < 0
-        })
-
-        if (incompleteAfterCurrent.length === 0)
-          return console.log(shop.__('error.no_uncomplete_left') + '\n')
-
-        return onselect.call(shop, incompleteAfterCurrent[0])
-      }
+    , handler: require('./lib/commands/next').handler
   })
   this.commands.push({
       name: 'reset'
     , menu: false
-    , handler: function (shop) {
-        shop.reset()
-        return console.log(shop.__('progress.reset', {title: shop.__('title')}))
-      }
+    , handler: require('./lib/commands/reset').handler
+  })
+  this.commands.push({
+      name: 'completed'
+    , menu: false
+    , handler: require('./lib/commands/completed').handler
   })
 }
 
@@ -280,11 +184,16 @@ Adventure.prototype.execute = function (args) {
     , handled = false
     , argv = minimist(args, {
         alias: {
-          h: 'help',
           select: 'print',
           selected: 'current'
         }
       })
+
+  if (mode === 'select')
+    mode = 'print'
+
+  if (mode === 'selected')
+    mode = 'current'
 
   this.modifiers.forEach(function (item) {
     var value = argv[item.name] || argv[item.short]
@@ -292,15 +201,15 @@ Adventure.prototype.execute = function (args) {
       item.handler(this, value)
   }.bind(this))
 
-  if (mode) 
-    this.commands.forEach(function (item) {
-      if (!handled && (
-              mode == item.name
-          || (mode == item.short))) {
-        handled = true
-        return item.handler(this, argv)
-      }
-    }.bind(this))
+  if (!mode) 
+    mode = 'menu'
+
+  this.commands.forEach(function (item) {
+    if (!handled && (mode == item.name || mode == item.short)) {
+      handled = true
+      return item.handler(this, argv)
+    }
+  }.bind(this))
 
   if (!handled)
     this.printMenu()
@@ -327,7 +236,7 @@ Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
     meta.id = util.idFromName(meta.name)
 
   if (!meta.dir)
-    meta.dir = this.dirFromName(meta.name)
+    meta.dir = util.dirFromName(this.exerciseDir, meta.name)
 
   if (meta.dir && !meta.exerciseFile)
     meta.exerciseFile = path.join(meta.dir, './exercise.js')
@@ -391,7 +300,7 @@ Adventure.prototype.exerciseFail = function (mode, exercise) {
 // overall exercise pass
 Adventure.prototype.exercisePass = function (mode, exercise) {
   var done = function done () {
-    var completed = this.getData('completed') || []
+    var completed
       , remaining
 
     this.updateData('completed', function (xs) {
@@ -411,8 +320,8 @@ Adventure.prototype.exercisePass = function (mode, exercise) {
       console.log('\n' + chalk.bold.green('# ' + this.__('solution.pass.title')) + '\n')
       console.log(chalk.bold(this.__('solution.pass.message', {name: this.__('exercise.' + exercise.meta.name)})) + '\n') 
     }
-    
-    if (exercise.solution)
+
+    if (typeof exercise.getSolutionFiles !== 'function' && exercise.solution)
       print.text(this.appName, this.appDir, exercise.solutionType || 'txt', exercise.solution)
 
     if (remaining === 0) {
@@ -428,6 +337,7 @@ Adventure.prototype.exercisePass = function (mode, exercise) {
 
     this.end(mode, true, exercise)
   }.bind(this)
+
 
   if (!exercise.hideSolutions && typeof exercise.getSolutionFiles === 'function') {
     exercise.getSolutionFiles(function (err, files) {
@@ -477,7 +387,6 @@ Adventure.prototype.exercisePass = function (mode, exercise) {
   }
 }
 
-
 // single 'pass' event for a validation
 function onpass (msg) {
   console.log(chalk.green.bold('\u2713 ') + msg)
@@ -488,7 +397,6 @@ function onpass (msg) {
 function onfail (msg) {
   console.log(chalk.red.bold('\u2717 ') + msg)
 }
-
 
 Adventure.prototype.runExercise = function (exercise, mode, args) {
   // individual validation events
@@ -563,7 +471,7 @@ Adventure.prototype.printMenu = function () {
   this.exercises.forEach(function (exercise) {
     var label = chalk.bold('»') + ' ' + __('exercise.' + exercise)
       , marker = (completed.indexOf(exercise) >= 0) ? '[' + __('menu.completed') + ']' : ''
-    menu.add(label, marker, onselect.bind(this, exercise))
+    menu.add(label, marker, this.printExercise.bind(this, exercise))
   }.bind(this))
 
   menu.writeSeparator()
@@ -577,7 +485,6 @@ Adventure.prototype.printMenu = function () {
   menu.add(chalk.bold(__('menu.exit')), this._exit.bind(this))
 }
 
-
 Adventure.prototype.getData = function (name) {
   var file = path.resolve(this.dataDir, name + '.json')
   try {
@@ -585,7 +492,6 @@ Adventure.prototype.getData = function (name) {
   } catch (e) {}
   return null
 }
-
 
 Adventure.prototype.updateData = function (id, fn) {
   var json = {}
@@ -599,23 +505,13 @@ Adventure.prototype.updateData = function (id, fn) {
   fs.writeFileSync(file, JSON.stringify(fn(json)))
 }
 
-
 Adventure.prototype.reset = function () {
   fs.unlink(path.resolve(this.dataDir, 'completed.json'), function () {})
   fs.unlink(path.resolve(this.dataDir, 'current.json'), function () {})
 }
 
-Adventure.prototype.dirFromName = function (name) {
-  return util.dirFromName(this.exerciseDir, name)
-}
-
-
-Adventure.prototype.getExerciseMeta = function (name) {
-  return this._meta[util.idFromName(name)]
-}
-
 Adventure.prototype.loadExercise = function (name) {
-  var meta = this.getExerciseMeta(name)
+  var meta = this._meta[util.idFromName(name)]
   
   if (!meta)
     return null
@@ -630,13 +526,7 @@ Adventure.prototype.loadExercise = function (name) {
   return exercise
 }
 
-function error () {
-  var pr = chalk.bold.red
-  console.log(pr.apply(pr, arguments))
-  process.exit(-1)
-}
-
-function onselect (name) {
+Adventure.prototype.printExercise = function printExercise (name) {
   var exercise = this.loadExercise(name)
     , afterPrepare
 
@@ -704,10 +594,5 @@ function onselect (name) {
     afterPreparation(null)
   }
 }
-
-
-Adventure.prototype.error = error
-Adventure.prototype.print = print
-
 
 module.exports = Adventure
