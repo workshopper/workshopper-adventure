@@ -164,18 +164,16 @@ Adventure.prototype.execute = function (args) {
 
   if (mode === 'select')
     mode = 'print'
-
-  if (mode === 'selected')
+  else if (mode === 'selected')
     mode = 'current'
+  else if (!mode) 
+    mode = 'menu'
 
   this.modifiers.filter(itemFilter.bind(this, this)).forEach(function (item) {
     var value = argv[item.name] || argv[item.short]
     if (value)
       item.handler(this, value)
   }.bind(this))
-
-  if (!mode) 
-    mode = 'menu'
 
   this.commands.filter(itemFilter.bind(this, this)).forEach(function (item) {
     if (!handled && (mode == item.name || mode == item.short)) {
