@@ -4,6 +4,7 @@ const minimist     = require('minimist')
     , map          = require('map-async')
     , msee         = require('msee')
     , chalk        = require('chalk')
+    , commandico   = require('commandico')
     , inherits     = require('util').inherits
     , EventEmitter = require('events').EventEmitter
 
@@ -17,8 +18,11 @@ const createMenu  = require('simple-terminal-menu')
 
 const defaultWidth = 65
 
-function itemFilter (scope, item) {
-  return typeof item.filter === 'function' ? item.filter(scope) : true
+function legacyCommands(item) {
+  if (item && item.name) {
+    item.aliases = [item.name]
+  }
+  return item
 }
 
 function Adventure (options) {
@@ -108,82 +112,18 @@ function Adventure (options) {
 
   this.current = this.getData('current')
 
-  this.commands = (Array.isArray(options.commands) ? options.commands : []).concat([
-      'help'
-    , 'language'
-    , 'version'
-    , 'list'
-    , 'current'
-    , 'print'
-    , 'run'
-    , 'verify'
-    , 'next'
-    , 'reset'
-    , 'completed'
-  ].map(function (name) {
-    var entry = require('./lib/commands/' + name)
-    entry.name = name
-    return entry
-  }))
-
-  this.modifiers = (Array.isArray(options.modifiers) ? options.modifiers : []).concat([
-      'lang'
-    , 'version'
-  ].map(function (name) {
-    var entry = require('./lib/modifiers/' + name)
-    entry.name = name
-    return entry
-  }))
-
-  function orderSort(a, b) {
-    var orderA = a.order || 0
-      , orderB = b.order || 0
-
-    if (orderA > orderB)
-      return -1
-    else if (orderA < orderB)
-      return 1
-    return 0
-  }
-
-  this.commands.sort(orderSort)
-  this.modifiers.sort(orderSort)
+  this.app = commandico(this, 'menu')
+    .loadCommands(path.join(__dirname, 'lib/commands'))
+    .loadModifiers(path.join(__dirname, 'lib/modifiers'))
+    .addCommands((options.commands || []).map(legacyCommands))
+    .addModifiers((options.modifiers || []).map(legacyCommands))
 }
 
 inherits(Adventure, EventEmitter)
 
+
 Adventure.prototype.execute = function (args) {
-  var mode = args[0]
-    , handled = false
-    , argv = minimist(args, {
-        alias: {
-          select: 'print',
-          selected: 'current'
-        }
-      })
-
-  if (mode === 'select')
-    mode = 'print'
-  else if (mode === 'selected')
-    mode = 'current'
-  else if (!mode) 
-    mode = 'menu'
-
-  this.modifiers.filter(itemFilter.bind(this, this)).forEach(function (item) {
-    var value = argv[item.name] || argv[item.short]
-    if (value)
-      item.handler(this, value)
-  }.bind(this))
-
-  this.commands.filter(itemFilter.bind(this, this)).forEach(function (item) {
-    if (!handled && (mode == item.name || mode == item.short)) {
-      handled = true
-      return item.handler(this, argv)
-    }
-  }.bind(this))
-
-  if (!handled)
-    this.printMenu()
+  return this.app.execute(args)
 }
 
 Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
@@ -438,8 +378,8 @@ Adventure.prototype.printMenu = function () {
 
   menu.writeSeparator()
 
-  this.commands.filter(function (extra) {
-    return extra.menu !== false && itemFilter(this, extra)
+  this.app.commands.reverse().filter(function (extra) {
+    return extra.menu !== false
   }.bind(this)).forEach(function (extra) {
     menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
   }.bind(this))

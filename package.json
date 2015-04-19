@@ -13,6 +13,7 @@
     "chalk": "~0.4.0",
     "colors-tmpl": "~0.1.0",
     "combined-stream": "0.0.7",
+    "commandico": "^1.0.0",
     "i18n-core": "^1.3.2",
     "map-async": "~0.1.1",
     "minimist": "^1.1.1",
