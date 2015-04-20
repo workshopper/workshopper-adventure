@@ -1,6 +1,5 @@
 const path   = require('path')
     , fs     = require('fs')
-    , mkdirp = require('mkdirp')
     , vw     = require('visualwidth')
 
 
@@ -21,13 +20,6 @@ function dirFromName (exerciseDir, name) {
     return null;
   }
   return path.join(exerciseDir, idFromName(name))
-}
-
-function userDir () {
-  var folders = [process.env.HOME || process.env.USERPROFILE].concat(Array.prototype.slice.apply(arguments))
-  var dir = path.join.apply(path, folders)
-  mkdirp.sync(dir)
-  return dir
 }
 
 function getFsObject(type, file, base) {
@@ -53,5 +45,4 @@ module.exports = {
   , repeat: repeat
   , getDir: getFsObject.bind(null, 'dir')
   , getFile: getFsObject.bind(null, 'file')
-  , userDir: userDir
 }
