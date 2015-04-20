@@ -19,9 +19,10 @@ const createMenu  = require('simple-terminal-menu')
 const defaultWidth = 65
 
 function legacyCommands(item) {
-  if (item && item.name) {
-    item.aliases = [item.name]
-  }
+  if (!item.aliases)
+    item.aliases = []
+  if (item && item.name)
+    item.aliases.unshift(item.name)
   return item
 }
 
