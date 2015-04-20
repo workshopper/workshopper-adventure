@@ -388,10 +388,6 @@ Adventure.prototype.printMenu = function () {
   menu.add(chalk.bold(__('menu.exit')), process.exit.bind(process, 0))
 }
 
-Adventure.prototype.reset = function () {
-  this.local.reset()
-}
-
 Adventure.prototype.loadExercise = function (name) {
   var meta = this._meta[util.idFromName(name)]
   
