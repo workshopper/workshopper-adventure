@@ -56,26 +56,7 @@ function createDefaultLookup(options, exercises) {
   return result
 }
 
-function chooseLang (globalDataDir, appDataDir, defaultLang, availableLangs, lang) {
-  var globalPath = path.resolve(globalDataDir, 'lang.json')
-    , appPath = path.resolve(appDataDir, 'lang.json')
-    , data
-  try {
-    // Lets see if we find some stored language in the app's config
-    data = require(appPath)
-  } catch (e) {
-    // Without a file an error will occur here, but thats okay
-  }
-  if (!data) {
-    // Lets see if some other workshopper stored language settings
-    try {
-      data = require(globalPath)
-    } catch (e) {
-      data = {}
-      // Without a file an error will occur here, but thats okay
-    }
-  }
-
+function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
   if (!!lang && typeof lang != 'string')
     return error('Please supply a language. Available languages are: ' + availableLangs.join(', '))
 
@@ -88,23 +69,22 @@ function chooseLang (globalDataDir, appDataDir, defaultLang, availableLangs, lan
   if (lang && availableLangs.indexOf(lang) === -1)
     return error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
 
+  var data = (appData.get('lang') || globalData.get('lang') || {})
+
   if (availableLangs.indexOf(data.selected) === -1)
     // The stored data is not available so lets use one of the other languages
     data.selected = lang || defaultLang
   else
     data.selected = lang || data.selected || defaultLang
 
-  try {
-    fs.writeFileSync(globalPath, JSON.stringify(data))
-    fs.writeFileSync(appPath, JSON.stringify(data))
-  } catch(e) {
-    // It is not good if an error occurs but it shouldn't really matter
-  }
+  globalData.save('lang', data)
+  appData.save('lang', data)
+
   return data.selected
 }
 
 module.exports = {
-  init: function(options, exercises, globalDataDir, dataDir, defaultLang) {
+  init: function(options, exercises, globalData, appData, defaultLang) {
     var generalTranslator = i18nChain(
           i18nFs(path.resolve(__dirname, './i18n'))
         , i18nObject(createDefaultLookup(options, exercises))
@@ -115,7 +95,7 @@ module.exports = {
             : generalTranslator
         )
       , languages = options.languages || ['en']
-      , choose = chooseLang.bind(null, globalDataDir, dataDir, defaultLang, languages)
+      , choose = chooseLang.bind(null, globalData, appData, defaultLang, languages)
       , lang = choose(null)
       , result = translator.lang(lang, true)
     translator.fallback = function (key) {

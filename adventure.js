@@ -13,6 +13,7 @@ const createMenu  = require('simple-terminal-menu')
     , print       = require('./lib/print')
     , util        = require('./util')
     , i18n        = require('./i18n')
+    , storage     = require('./lib/storage')
     , error       = print.error
 /* jshint +W079 */
 
@@ -49,8 +50,11 @@ function Adventure (options) {
     this.exerciseDir = util.getDir(options.exerciseDir, this.appDir)
                     || util.getDir('exercises', this.appDir)
 
-  this.globalDataDir = util.userDir('.config', 'workshopper')
-  this.dataDir       = util.userDir('.config', this.appName)
+  this.global        = storage(storage.userDir, '.config', 'workshopper')
+  this.local         = storage(storage.userDir, '.config', this.appName)
+
+  this.globalDataDir = this.global.dir
+  this.dataDir       = this.local.dir
   
   // Backwards compatibility with adventure
   this.datadir       = this.dataDir
@@ -98,7 +102,7 @@ function Adventure (options) {
 
   this.options = options
 
-  this.i18n      = i18n.init(this.options, this.exercises, this.globalDataDir, this.dataDir, this.defaultLang)
+  this.i18n      = i18n.init(this.options, this.exercises, this.global, this.local, this.defaultLang)
   this.__        = this.i18n.__
   this.__n       = this.i18n.__n
   this.languages = this.i18n.languages
@@ -111,7 +115,7 @@ function Adventure (options) {
     return this.menuOptions.width
   }.bind(this))
 
-  this.current = this.getData('current')
+  this.current = this.local.get('current')
 
   this.app = commandico(this, 'menu')
     .loadCommands(path.join(__dirname, 'lib/commands'))
@@ -212,17 +216,13 @@ Adventure.prototype.exerciseFail = function (mode, exercise) {
 // overall exercise pass
 Adventure.prototype.exercisePass = function (mode, exercise) {
   var done = function done () {
-    var completed
+    var completed = this.local.get('completed') || []
       , remaining
 
-    this.updateData('completed', function (xs) {
-      if (!xs)
-        xs = []
+    if (completed.indexOf(exercise.meta.name) === -1) 
+      completed.push(exercise.meta.name)
 
-      return xs.indexOf(exercise.meta.name) >= 0 ? xs : xs.concat(exercise.meta.name)
-    })
-
-    completed = this.getData('completed') || []
+    this.local.save('completed', completed)
 
     remaining = this.exercises.length - completed.length
 
@@ -362,7 +362,7 @@ Adventure.prototype.runExercise = function (exercise, mode, args) {
 Adventure.prototype.printMenu = function () {
   var __ = this.i18n.__
     , menu = createMenu(this.menuOptions)
-    , completed = this.getData('completed') || []
+    , completed = this.local.get('completed') || []
 
   menu.writeLine(chalk.bold(__('title')))
 
@@ -388,29 +388,8 @@ Adventure.prototype.printMenu = function () {
   menu.add(chalk.bold(__('menu.exit')), process.exit.bind(process, 0))
 }
 
-Adventure.prototype.getData = function (name) {
-  var file = path.resolve(this.dataDir, name + '.json')
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'))
-  } catch (e) {}
-  return null
-}
-
-Adventure.prototype.updateData = function (id, fn) {
-  var json = {}
-    , file
-
-  try {
-    json = this.getData(id)
-  } catch (e) {}
-
-  file = path.resolve(this.dataDir, id + '.json')
-  fs.writeFileSync(file, JSON.stringify(fn(json)))
-}
-
 Adventure.prototype.reset = function () {
-  fs.unlink(path.resolve(this.dataDir, 'completed.json'), function () {})
-  fs.unlink(path.resolve(this.dataDir, 'current.json'), function () {})
+  this.local.reset()
 }
 
 Adventure.prototype.loadExercise = function (name) {
@@ -447,9 +426,7 @@ Adventure.prototype.printExercise = function printExercise (name) {
 
   this.current = exercise.meta.name
 
-  this.updateData('current', function () {
-    return exercise.meta.name
-  })
+  this.local.save('current', exercise.meta.name)
 
   afterPreparation = function (err) {
     if (err)
