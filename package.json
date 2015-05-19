@@ -3,7 +3,7 @@
   "version": "3.4.2",
   "description": "A terminal workshop runner framework (adventure compatible)",
   "main": "./index.js",
-  "author": "Rod Vagg <rod@vagg.org> (https://github.com/rvagg)",
+  "author": "Martin Heidegger <martin.heidegger@gmail.com> (https://github.com/martinheidegger)",
   "repository": {
     "type": "git",
     "url": "https://github.com/rvagg/workshopper.git"
@@ -26,9 +26,9 @@
     "xtend": "~3.0.0"
   },
   "bugs": {
-    "url": "https://github.com/rvagg/workshopper/issues"
+    "url": "https://github.com/workshopper/workshopper-adventure/issues"
   },
-  "homepage": "https://github.com/rvagg/workshopper",
+  "homepage": "https://github.com/workshopper/workshopper-adventure",
   "directories": {
     "example": "examples"
   },
