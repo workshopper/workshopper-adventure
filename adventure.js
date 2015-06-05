@@ -356,7 +356,7 @@ Adventure.prototype.runExercise = function (exercise, mode, args) {
         : method.bind(exercise)(args)
   
   if (result)
-    print.text(this.appName, this.appDir, 'txt', result)
+    print.any(this.appName, this.appDir, 'txt', result)
 }
 
 Adventure.prototype.printMenu = function () {
