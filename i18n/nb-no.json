@@ -24,7 +24,7 @@
   },
   "error": {
     "exercise": {
-      "none_active": "Ingen valgte oppgaver. Velg en fra menyen.",
+      "none_active": "Ingen oppgave valgt. Velg en fra menyen.",
       "missing": "Fant ikke oppgaven: {{{name}}}",
       "unexpected_error": "Kunne ikke {{mode}}: {{{err}}}",
       "missing_file": "FEIL: {{{exerciseFile}}} finnes ikke!",
@@ -33,7 +33,7 @@
       "loading": "Feil ved lasting av oppgave: {{{err}}}"
     },
     "no_uncomplete_left": "Alle oppgaver er utført etter du har gjennomført denne oppgaven",
-    "cleanup": "Feil under opprensking: {{{err}}}",
+    "cleanup": "Feil under opprydding: {{{err}}}",
     "notty": "Vennligst start dette i et tty-kompatibel terminal program."
   },
   "solution": {
