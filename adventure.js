@@ -102,7 +102,7 @@ function Adventure (options) {
 
   this.options = options
 
-  this.i18n      = i18n.init(this.options, this.exercises, this.global, this.local, this.defaultLang)
+  this.i18n      = i18n.init(this.options, this.global, this.local, this.defaultLang)
   this.__        = this.i18n.__
   this.__n       = this.i18n.__n
   this.languages = this.i18n.languages
@@ -118,10 +118,16 @@ function Adventure (options) {
   this.current = this.local.get('current')
 
   this.app = commandico(this, 'menu')
-    .loadCommands(path.join(__dirname, 'lib/commands'))
-    .loadModifiers(path.join(__dirname, 'lib/modifiers'))
+    .loadCommands(path.resolve(__dirname, './lib/commands'))
+    .loadModifiers(path.resolve(__dirname, './lib/modifiers'))
     .addCommands((options.commands || []).map(legacyCommands))
     .addModifiers((options.modifiers || []).map(legacyCommands))
+
+  if (options.execute === 'now') {
+    this.execute(process.argv.slice(2))
+  } else if (options.execute === 'immediatly') {
+    setImmediate(this.execute.bind(this, process.argv.slice(2))) 
+  }
 }
 
 inherits(Adventure, EventEmitter)
@@ -183,6 +189,7 @@ Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
 
 
   this.exercises.push(meta.name)
+  this.i18n.updateExercises(this.exercises)
   this._meta[meta.id] = meta
   meta.number = this.exercises.length
   return this
@@ -363,6 +370,7 @@ Adventure.prototype.printMenu = function () {
   var __ = this.i18n.__
     , menu = createMenu(this.menuOptions)
     , completed = this.local.get('completed') || []
+
 
   menu.writeLine(chalk.bold(__('title')))
 
