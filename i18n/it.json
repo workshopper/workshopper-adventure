@@ -27,9 +27,9 @@
     "exercise": {
       "none_active": "Nessun esercizio attivo. Seleziona uno dal menu.",
       "missing": "Esercizio mancante: {{{name}}}",
-      "unexpected_error": "Could not {{mode}}: {{{err}}}",
+      "unexpected_error": "Impossibile completare {{mode}}: {{{err}}}",
       "missing_file": "ERRORE: {{{exerciseFile}}} non esiste!",
-      "not_a_workshopper": "ERROR: {{{exerciseFile}}} non è un valido esercizio di workshopper",
+      "not_a_workshopper": "ERRORE: {{{exerciseFile}}} non è un valido esercizio di workshopper",
       "preparing": "Errore durante la preparazione dell'esercizio: {{{err}}}",
       "loading": "Errore durante il caricamento del testo dell'esercizio: {{{err}}}"
     },
