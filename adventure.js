@@ -389,6 +389,9 @@ Adventure.prototype.printMenu = function () {
   menu.writeSeparator()
 
   this.app.commands.reverse().filter(function (extra) {
+    if (typeof extra.filter === 'function' && !extra.filter(this)) {
+      return false
+    } 
     return extra.menu !== false
   }.bind(this)).forEach(function (extra) {
     menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
