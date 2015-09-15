@@ -17,11 +17,11 @@
     "es": "Espagnol (Español)",
     "pt-br": "Portugais brésilien (Português)",
     "vi": "Vietnamien (Tiếng Việt)",
-    "uk": "Ukrainien (Українська)",
     "ru": "Russe (Русский)",
     "ko": "Coréen (한국어)",
     "pl": "Polonais (Polski)",
-    "nb-no": "Norvégien (Norsk)"
+    "nb-no": "Norvégien (Norsk)",
+    "it": "Italien (Italiano)"
   },
   "error": {
     "exercise": {
