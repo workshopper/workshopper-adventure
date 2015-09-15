@@ -17,9 +17,11 @@
     "es": "Spanish (Español)",
     "pt-br": "Brazilian Portuguese (Português)",
     "vi": "Vietnamese (Tiếng Việt)",
+    "uk": "Ukrainian (Українська)",
     "ru": "Russian (Русский)",
     "ko": "Korean (한국어)",
-    "pl": "Polish (Polski)"
+    "pl": "Polish (Polski)",
+    "nb-no": "Norsk (Norsk)"
   },
   "error": {
     "exercise": {
