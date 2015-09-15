@@ -439,14 +439,8 @@ Adventure.prototype.printExercise = function printExercise (name) {
     afterProblem = function() {
       var stream = require('combined-stream').create()
         , part
-      if (exercise.problem)
-        print.text(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem)
-      else {
-        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
-        if (part)
-          stream.append(part)
-      }
 
+      function then() {
       if (exercise.footer || this.footer)
         print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
       else if (this.footerFile !== false) {
@@ -456,6 +450,15 @@ Adventure.prototype.printExercise = function printExercise (name) {
       }
 
       stream.pipe(process.stdout)
+      }
+      if (exercise.problem)
+        print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem, then.bind(this))
+      else {
+        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
+        if (part)
+          stream.append(part)
+        then.apply(this)
+      }
     }.bind(this)
 
     if (!exercise.problem && typeof exercise.getExerciseText === 'function') {
