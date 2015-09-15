@@ -90,16 +90,6 @@ function Adventure (options) {
   this.exercises = []
   this._meta = {}
 
-  var menuJson = util.getFile(options.menuJson || 'menu.json', this.exerciseDir)
-  if (menuJson) {
-    require(menuJson).forEach((function (entry) {
-      this.add(entry)
-    }).bind(this))
-  }
-
-  if (options.menuItems && !options.commands)
-    options.commands = options.menuItems
-
   this.options = options
 
   this.i18n      = i18n.init(this.options, this.global, this.local, this.defaultLang)
@@ -123,11 +113,22 @@ function Adventure (options) {
     .addCommands((options.commands || []).map(legacyCommands))
     .addModifiers((options.modifiers || []).map(legacyCommands))
 
+
+  var menuJson = util.getFile(options.menuJson || 'menu.json', this.exerciseDir)
+  if (menuJson) {
+    require(menuJson).forEach((function (entry) {
+      this.add(entry)
+    }).bind(this))
+  }
+  
   if (options.execute === 'now') {
     this.execute(process.argv.slice(2))
   } else if (options.execute === 'immediatly') {
     setImmediate(this.execute.bind(this, process.argv.slice(2))) 
   }
+
+  if (options.menuItems && !options.commands)
+    options.commands = options.menuItems
 }
 
 inherits(Adventure, EventEmitter)
