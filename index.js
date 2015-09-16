@@ -10,8 +10,8 @@ function LegacyWorkshopper(options) {
   if (options.showHeader === undefined)
     options.showHeader = true
 
-  if (options.executeImmediately === undefined)
-  	options.executeImmediately = true
+  if (options.execute === undefined)
+  	options.execute = 'immediatly'
 
   Adventure.apply(this, [options])
 }
