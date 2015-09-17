@@ -1,5 +1,4 @@
-const minimist     = require('minimist')
-    , fs           = require('fs')
+const fs           = require('fs')
     , path         = require('path')
     , map          = require('map-async')
     , msee         = require('msee')
