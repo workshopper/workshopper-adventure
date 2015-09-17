@@ -14,6 +14,7 @@ const createMenuFactory  = require('simple-terminal-menu/factory')
     , util               = require('./util')
     , i18n               = require('./i18n')
     , storage            = require('./lib/storage')
+    , createExerciseMeta = require('./lib/createExerciseMeta')
     , error              = print.error
 /* jshint +W079 */
 
@@ -131,55 +132,15 @@ Adventure.prototype.execute = function (args) {
 
 Adventure.prototype.add = function (name_or_object, fn_or_object, fn) {
   var meta
-    , dir
-    , stat
-
-  meta = (typeof name_or_object === 'object')
-    ? name_or_object
-    : (typeof fn_or_object === 'object')
-      ? fn_or_object
-      : {}
-
-  if (typeof name_or_object === 'string')
-    meta.name = name_or_object
-
-  if (/^\/\//.test(meta.name))
-    return
-
-  if (!meta.id)
-    meta.id = util.idFromName(meta.name)
-
-  if (!meta.dir)
-    meta.dir = util.dirFromName(this.exerciseDir, meta.name)
-
-  if (meta.dir && !meta.exerciseFile)
-    meta.exerciseFile = path.join(meta.dir, './exercise.js')
-
-  if (typeof fn_or_object === 'function')
-    meta.fn = fn_or_object
-
-  if (typeof fn === 'function')
-    meta.fn = fn
-
-  if (!meta.fn && meta.exerciseFile) {
-    try {
-      stat = fs.statSync(meta.exerciseFile)
-    } catch (err) {
-      return error(this.__('error.exercise.missing_file', {exerciseFile: meta.exerciseFile}))
-    }
-
-    if (!stat || !stat.isFile())
-      return error(this.__('error.exercise.missing_file', {exerciseFile: meta.exerciseFile}))
-
-    meta.fn = (function () {
-      return require(meta.exerciseFile)
-    }).bind(meta) 
+  try {
+    meta = createExerciseMeta(this.exerciseDir, name_or_object, fn_or_object)
+  } catch(e) {
+    return error(this.__('error.exercise.' + e.id, e))
   }
+  return this.addMeta(meta)
+}
 
-  if (!meta.fn)
-    return error(this.__('error.exercise.not_a_workshopper', {exerciseFile: meta.exerciseFile}))
-
-
+Adventure.prototype.addMeta = function (meta) {
   this.exercises.push(meta.name)
   this.i18n.updateExercises(this.exercises)
   this._meta[meta.id] = meta
