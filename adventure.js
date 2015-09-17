@@ -9,15 +9,13 @@ const minimist     = require('minimist')
     , EventEmitter = require('events').EventEmitter
 
 /* jshint -W079 */
-const createMenu  = require('simple-terminal-menu')
-    , print       = require('./lib/print')
-    , util        = require('./util')
-    , i18n        = require('./i18n')
-    , storage     = require('./lib/storage')
-    , error       = print.error
+const createMenuFactory  = require('simple-terminal-menu/factory')
+    , print              = require('./lib/print')
+    , util               = require('./util')
+    , i18n               = require('./i18n')
+    , storage            = require('./lib/storage')
+    , error              = print.error
 /* jshint +W079 */
-
-const defaultWidth = 65
 
 function legacyCommands(item) {
   if (!item.aliases)
@@ -69,20 +67,10 @@ function Adventure (options) {
   }
 
   this.defaultLang = options.defaultLang
-  this.menuOptions = options.menu || {}
   this.helpFile    = options.helpFile
   this.footer      = options.footer
   this.showHeader  = options.showHeader || false
   this.footerFile  = [options.footerFile, path.join(__dirname, './i18n/footer/{lang}.md')]
-
-  if (typeof this.menuOptions.width !== 'number')
-    this.menuOptions.width = typeof options.width == 'number' ? options.width : defaultWidth
-
-  if (typeof this.menuOptions.x !== 'number')
-    this.menuOptions.x = 3
-
-  if (typeof this.menuOptions.y !== 'number')
-    this.menuOptions.y = 2
   
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   this.onComplete  = typeof options.onComplete == 'function' && options.onComplete
@@ -102,17 +90,20 @@ function Adventure (options) {
   this.__defineGetter__('subtitle', this.__.bind(this, 'subtitle'))
   this.__defineGetter__('lang', this.i18n.lang.bind(this.i18n, 'lang'))
   this.__defineGetter__('width', function () {
-    return this.menuOptions.width
+    return this.menuFactory.width
   }.bind(this))
 
   this.current = this.local.get('current')
+  this.menuFactory = createMenuFactory(options.menu || {}, {
+    title: this.i18n.__('title'),
+    subtitle: this.i18n.has('subtitle') && this.i18n.__('subtitle')
+  })
 
   this.app = commandico(this, 'menu')
     .loadCommands(path.resolve(__dirname, './lib/commands'))
     .loadModifiers(path.resolve(__dirname, './lib/modifiers'))
     .addCommands((options.commands || []).map(legacyCommands))
     .addModifiers((options.modifiers || []).map(legacyCommands))
-
 
   var menuJson = util.getFile(options.menuJson || 'menu.json', this.exerciseDir)
   if (menuJson) {
@@ -369,35 +360,38 @@ Adventure.prototype.runExercise = function (exercise, mode, args) {
 
 Adventure.prototype.printMenu = function () {
   var __ = this.i18n.__
-    , menu = createMenu(this.menuOptions)
     , completed = this.local.get('completed') || []
+    , isCommandInMenu = function (extra) {
+        if (typeof extra.filter === 'function' && !extra.filter(this)) {
+          return false
+        } 
+        return extra.menu !== false
+      }.bind(this)
+    , exitCommand = {
+        name: 'exit',
+        handler: process.exit.bind(process, 0)
+      }
 
-
-  menu.writeLine(chalk.bold(__('title')))
-
-  if (this.i18n.has('subtitle'))
-    menu.writeLine(chalk.italic(__('subtitle')))
-
-  menu.writeSeparator()
-
-  this.exercises.forEach(function (exercise) {
-    var label = chalk.bold('»') + ' ' + __('exercise.' + exercise)
-      , marker = (completed.indexOf(exercise) >= 0) ? '[' + __('menu.completed') + ']' : ''
-    menu.add(label, marker, this.printExercise.bind(this, exercise))
-  }.bind(this))
-
-  menu.writeSeparator()
-
-  this.app.commands.reverse().filter(function (extra) {
-    if (typeof extra.filter === 'function' && !extra.filter(this)) {
-      return false
-    } 
-    return extra.menu !== false
-  }.bind(this)).forEach(function (extra) {
-    menu.add(chalk.bold(__('menu.' + extra.name)), extra.handler.bind(extra, this))
-  }.bind(this))
-
-  menu.add(chalk.bold(__('menu.exit')), process.exit.bind(process, 0))
+  this.menuFactory.create({
+    menu: this.exercises.map(function (exercise) {
+        return {
+          label: chalk.bold('»') + ' ' + __('exercise.' + exercise),
+          marker: (completed.indexOf(exercise) >= 0) ? '[' + __('menu.completed') + ']' : '',
+          handler: this.printExercise.bind(this, exercise)
+        };
+      }.bind(this)),
+    extras: this.app.commands
+      .reverse()
+      .filter(isCommandInMenu)
+      .concat(exitCommand)
+      .map(function (command) {
+        return {
+          label: __('menu.' + command.name),
+          handler: command.handler.bind(command, this)
+        };
+      }.bind(this))
+    
+  });
 }
 
 Adventure.prototype.loadExercise = function (name) {
@@ -445,15 +439,15 @@ Adventure.prototype.printExercise = function printExercise (name) {
         , part
 
       function then() {
-      if (exercise.footer || this.footer)
-        print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
-      else if (this.footerFile !== false) {
-        part = print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
-        if (part)
-          stream.append(part)
-      }
+        if (exercise.footer || this.footer)
+          print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
+        else if (this.footerFile !== false) {
+          part = print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
+          if (part)
+            stream.append(part)
+        }
 
-      stream.pipe(process.stdout)
+        stream.pipe(process.stdout)
       }
       if (exercise.problem)
         print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem, then.bind(this))
