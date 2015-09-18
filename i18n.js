@@ -1,36 +1,10 @@
 const i18n       = require('i18n-core')
     , i18nFs     = require('i18n-core/lookup/fs')
     , i18nObject = require('i18n-core/lookup/object')
+    , i18nChain  = require('i18n-core/lookup/chain')
     , path       = require('path')
     , error      = require('./lib/print').error
     , fs         = require('fs')
-
-function i18nChain() {
-  var linked = {
-        handler: arguments[0]
-      , next: null
-    }
-    , current = linked
-  for (var i = 1; i<arguments.length; i++) {
-    var next = {
-      handler: arguments[i]
-    }
-    current.next = next
-    current = next
-  }
-  return {
-    get: function (key) {
-      var current = linked
-        , result
-      while (!result && current) {
-        result = current.handler.get(key)
-        current = current.next
-      }
-
-      return result
-    }
-  }
-}
 
 function createDefaultLookup(options) {
   var result = {}
@@ -38,7 +12,6 @@ function createDefaultLookup(options) {
   result[options.defaultLang] = {
       title: options.title
     , subtitle: options.subtitle
-    , exercise: {}
   }
 
   options.languages.forEach(function (language) {
@@ -74,22 +47,19 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
     data.selected = lang || data.selected || defaultLang
 
   globalData.save('lang', data)
-  appData.save('lang', data)
+    appData.save('lang', data)
 
   return data.selected
 }
 
 module.exports = {
   init: function(options, globalData, appData, defaultLang) {
-    var generalTranslator = i18nChain(
-          i18nFs(path.resolve(__dirname, './i18n'))
+    var lookup = i18nChain(
+          options.appDir ? i18nFs(path.resolve(options.appDir, './i18n')) : null
+        , i18nFs(path.resolve(__dirname, './i18n'))
         , i18nObject(createDefaultLookup(options))
       )
-      , translator = i18n(
-          options.appDir
-            ? i18nChain( i18nFs(path.resolve(options.appDir, './i18n')), generalTranslator)
-            : generalTranslator
-        )
+      , translator = i18n(lookup)
       , languages = options.languages || ['en']
       , choose = chooseLang.bind(null, globalData, appData, defaultLang, languages)
       , lang = choose(null)
