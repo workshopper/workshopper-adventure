@@ -311,7 +311,7 @@ Core.prototype.loadExercise = function (name) {
 
 Core.prototype.printExercise = function printExercise (name) {
   var exercise = this.loadExercise(name)
-    , afterPrepare
+    , afterPreparation
 
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
