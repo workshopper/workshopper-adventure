@@ -328,6 +328,10 @@ Core.prototype.printExercise = function printExercise (name) {
       return error(this.__('error.exercise.preparing', {err: err.message || err}))
 
     afterProblem = function() {
+
+      if (!exercise.problem)
+          return error('The exercise "' + name + '" is missing a problem definition!')
+
       var stream = combinedStream.create()
 
       if (this.showHeader)
@@ -339,15 +343,16 @@ Core.prototype.printExercise = function printExercise (name) {
           + '\n\n'
         ))
 
-      if (exercise.problem)
         stream.append(print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem))
-      else
-        stream.append(print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang))
 
-      if (exercise.footer || this.footer)
-        stream.append(print.textStream(this.appName, this.appDir, exercise.footer || this.footer, this.lang))
-      else if (this.footerFile !== false)
-        stream.append(print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang))
+      var footer = (exercise.footer !== undefined) ? exercise.footer || this.options.footer : undefined
+      if (footer)
+        stream.append(print.any(this.appName, this.appDir, exercise.footerType || 'txt', exercise.footer))
+      else {
+        var footerFile = (footerFile !== undefined) ? exercise.footerFile || this.options.footerFile : undefined
+        if (footerFile)
+          stream.append(print.localisedFirstFileStream(this.appName, this.appDir, footerFile, this.lang))
+      } 
       
       stream.pipe(process.stdout)
     }.bind(this)
