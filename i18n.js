@@ -53,7 +53,7 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
 }
 
 module.exports = {
-  init: function(options, globalData, appData, defaultLang) {
+  init: function(options, globalData, appData) {
     var lookup = i18nChain(
           options.appDir ? i18nFs(path.resolve(options.appDir, './i18n')) : null
         , i18nFs(path.resolve(__dirname, './i18n'))
@@ -61,12 +61,12 @@ module.exports = {
       )
       , translator = i18n(lookup)
       , languages = options.languages || ['en']
-      , choose = chooseLang.bind(null, globalData, appData, defaultLang, languages)
+      , choose = chooseLang.bind(null, globalData, appData, options.defaultLang, languages)
       , lang = choose(null)
       , result = translator.lang(lang, true)
       , _exercises = []
     translator.fallback = function (key) {
-      var exercisePrefix = defaultLang + '.exercise.'
+      var exercisePrefix = options.defaultLang + '.exercise.'
       if (key.indexOf(exercisePrefix) === 0)
         return exerciseName = key.substr(exercisePrefix.length)
 
