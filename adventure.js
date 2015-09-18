@@ -51,10 +51,7 @@ function LegacyAdventure (options) {
 
   var menuJson = util.getFile(options.menuJson || 'menu.json', this.exerciseDir)
   if (menuJson) {
-    require(menuJson).forEach((function (entry) {
-      console.log(entry)
-      this.add(entry)
-    }).bind(this))
+    require(menuJson).forEach(this.add.bind(this))
   }
   
   if (options.execute === 'now') {
