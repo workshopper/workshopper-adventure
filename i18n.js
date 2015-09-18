@@ -25,7 +25,7 @@ function createDefaultLookup(options) {
   return result
 }
 
-function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
+function chooseLang (globalStorage, appStorage, defaultLang, availableLangs, lang) {
   if (!!lang && typeof lang != 'string')
     return error('Please supply a language. Available languages are: ' + availableLangs.join(', '))
 
@@ -38,7 +38,7 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
   if (lang && availableLangs.indexOf(lang) === -1)
     return error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
 
-  var data = ((appData && appData.get('lang')) || globalData.get('lang') || {})
+  var data = ((appStorage && appStorage.get('lang')) || globalStorage.get('lang') || {})
 
   if (availableLangs.indexOf(data.selected) === -1)
     // The stored data is not available so lets use one of the other languages
@@ -46,15 +46,15 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
   else
     data.selected = lang || data.selected || defaultLang
 
-  globalData.save('lang', data)
-  if (appData)
-    appData.save('lang', data)
+  globalStorage.save('lang', data)
+  if (appStorage)
+    appStorage.save('lang', data)
 
   return data.selected
 }
 
 module.exports = {
-  init: function(options, globalData, appData) {
+  init: function(options, globalStorage, appStorage) {
     var lookup = i18nChain(
           options.appDir ? i18nFs(path.resolve(options.appDir, './i18n')) : null
         , i18nFs(path.resolve(__dirname, './i18n'))
@@ -62,7 +62,7 @@ module.exports = {
       )
       , translator = i18n(lookup)
       , languages = options.languages || ['en']
-      , choose = chooseLang.bind(null, globalData, appData, options.defaultLang, languages)
+      , choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, languages)
       , lang = choose(null)
       , result = translator.lang(lang, true)
       , _exercises = []

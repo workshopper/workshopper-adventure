@@ -41,19 +41,19 @@ function Core (options) {
   this.appDir      = options.appDir
   this.exerciseDir = options.exerciseDir
 
-  this.global      = storage(storage.userDir, '.config', 'workshopper')
+  this.globalStorage = storage(storage.userDir, '.config', 'workshopper')
   if (this.name)
-    this.local       = storage(storage.userDir, '.config', this.name)
+    this.appStorage  = storage(storage.userDir, '.config', this.name)
 
   this.exercises   = []
   this._meta       = {}
 
-  this.i18n        = i18n.init(options, this.global, this.local)
+  this.i18n        = i18n.init(options, this.globalStorage, this.appStorage)
   this.__          = this.i18n.__
   this.__n         = this.i18n.__n
 
-  if (this.local)
-    this.current = this.local.get('current')
+  if (this.appStorage)
+    this.current = this.appStorage.get('current')
   this.menuFactory = createMenuFactory(options.menu || {}, {
     title: this.i18n.__('title'),
     subtitle: this.i18n.has('subtitle') && this.i18n.__('subtitle')
@@ -113,14 +113,14 @@ Core.prototype.exerciseFail = function (mode, exercise) {
 // overall exercise pass
 Core.prototype.exercisePass = function (mode, exercise) {
   var done = function done () {
-    var completed = (this.local && this.local.get('completed')) || []
+    var compappStorage = (this.local && this.local.get('completed')) || []
       , remaining
 
     if (completed.indexOf(exercise.meta.name) === -1) 
       completed.push(exercise.meta.name)
 
-    if (this.local)
-      this.local.save('completed', completed)
+    if (this.appStorage)
+      this.appStorage.save('completed', completed)
 
     remaining = this.exercises.length - completed.length
 
@@ -259,7 +259,7 @@ Core.prototype.runExercise = function (exercise, mode, args) {
 
 Core.prototype.printMenu = function () {
   var __ = this.i18n.__
-    , completed = (this.local && this.local.get('completed')) || []
+    , completed = (this.appStorage && this.appStorage.get('completed')) || []
     , isCommandInMenu = function (extra) {
         if (typeof extra.filter === 'function' && !extra.filter(this)) {
           return false
@@ -327,8 +327,8 @@ Core.prototype.printExercise = function printExercise (name) {
 
   this.current = exercise.meta.name
 
-  if (this.local)
-    this.local.save('current', exercise.meta.name)
+  if (this.appStorage)
+    this.appStorage.save('current', exercise.meta.name)
 
   afterPreparation = function (err) {
     if (err)
@@ -342,7 +342,7 @@ Core.prototype.printExercise = function printExercise (name) {
         if (exercise.footer || this.footer)
           print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
         else if (this.footerFile !== false) {
-          part = print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
+          part = print.appStorageisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
           if (part)
             stream.append(part)
         }
@@ -352,7 +352,7 @@ Core.prototype.printExercise = function printExercise (name) {
       if (exercise.problem)
         print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem, then.bind(this))
       else {
-        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
+        part = print.appStorageisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
         if (part)
           stream.append(part)
         then.apply(this)
