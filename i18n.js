@@ -38,7 +38,7 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
   if (lang && availableLangs.indexOf(lang) === -1)
     return error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
 
-  var data = (appData.get('lang') || globalData.get('lang') || {})
+  var data = ((appData && appData.get('lang')) || globalData.get('lang') || {})
 
   if (availableLangs.indexOf(data.selected) === -1)
     // The stored data is not available so lets use one of the other languages
@@ -47,6 +47,7 @@ function chooseLang (globalData, appData, defaultLang, availableLangs, lang) {
     data.selected = lang || data.selected || defaultLang
 
   globalData.save('lang', data)
+  if (appData)
     appData.save('lang', data)
 
   return data.selected
