@@ -342,7 +342,7 @@ Core.prototype.printExercise = function printExercise (name) {
         if (exercise.footer || this.footer)
           print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
         else if (this.footerFile !== false) {
-          part = print.appStorageisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
+          part = print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
           if (part)
             stream.append(part)
         }
@@ -352,7 +352,7 @@ Core.prototype.printExercise = function printExercise (name) {
       if (exercise.problem)
         print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem, then.bind(this))
       else {
-        part = print.appStorageisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
+        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
         if (part)
           stream.append(part)
         then.apply(this)
