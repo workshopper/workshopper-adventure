@@ -6,6 +6,8 @@ const fs           = require('fs')
     , commandico   = require('commandico')
     , inherits     = require('util').inherits
     , EventEmitter = require('events').EventEmitter
+    , combinedStream = require('combined-stream')
+    , StringStream = require('string-to-stream')
 
 /* jshint -W079 */
 const createMenuFactory  = require('simple-terminal-menu/factory')
@@ -254,7 +256,7 @@ Core.prototype.runExercise = function (exercise, mode, args) {
         : method.bind(exercise)(args)
   
   if (result)
-    print.any(this.appName, this.appDir, 'txt', result)
+    print.any(this.appName, this.appDir, 'txt', result).pipe(process.stdout)
 }
 
 Core.prototype.printMenu = function () {
@@ -316,15 +318,6 @@ Core.prototype.printExercise = function printExercise (name) {
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
 
-  if (this.showHeader)
-    console.log(
-        '\n ' + chalk.green.bold(this.__('title'))
-      + '\n' + chalk.green.bold(util.repeat('\u2500', chalk.stripColor(this.__('title')).length + 2))
-      + '\n ' + chalk.yellow.bold(this.__('exercise.' + exercise.meta.name))
-      + '\n ' + chalk.yellow.italic(this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length}))
-      + '\n'
-    )
-
   this.current = exercise.meta.name
 
   if (this.appStorage)
@@ -335,28 +328,28 @@ Core.prototype.printExercise = function printExercise (name) {
       return error(this.__('error.exercise.preparing', {err: err.message || err}))
 
     afterProblem = function() {
-      var stream = require('combined-stream').create()
-        , part
+      var stream = combinedStream.create()
 
-      function then() {
-        if (exercise.footer || this.footer)
-          print.text(this.appName, this.appDir, exercise.footer || this.footer, this.lang)
-        else if (this.footerFile !== false) {
-          part = print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang)
-          if (part)
-            stream.append(part)
-        }
+      if (this.showHeader)
+        stream.append(new StringStream(
+            '\n ' + chalk.green.bold(this.__('title'))
+          + '\n' + chalk.green.bold(util.repeat('\u2500', chalk.stripColor(this.__('title')).length + 2))
+          + '\n ' + chalk.yellow.bold(this.__('exercise.' + exercise.meta.name))
+          + '\n ' + chalk.yellow.italic(this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length}))
+          + '\n\n'
+        ))
 
-        stream.pipe(process.stdout)
-      }
       if (exercise.problem)
-        print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem, then.bind(this))
-      else {
-        part = print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang)
-        if (part)
-          stream.append(part)
-        then.apply(this)
-      }
+        stream.append(print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem))
+      else
+        stream.append(print.localisedFileStream(this.appName, this.appDir, path.resolve(__dirname, 'i18n/missing_problem/{lang}.md'), this.lang))
+
+      if (exercise.footer || this.footer)
+        stream.append(print.textStream(this.appName, this.appDir, exercise.footer || this.footer, this.lang))
+      else if (this.footerFile !== false)
+        stream.append(print.localisedFirstFileStream(this.appName, this.appDir, this.footerFile || [], this.lang))
+      
+      stream.pipe(process.stdout)
     }.bind(this)
 
     if (!exercise.problem && typeof exercise.getExerciseText === 'function') {
