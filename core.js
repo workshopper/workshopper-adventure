@@ -17,7 +17,7 @@ const createMenuFactory  = require('simple-terminal-menu/factory')
     , storage            = require('./lib/storage')
     , error              = print.error
 /* jshint +W079 */
-
+  
 
 function Core (options) {
   if (!(this instanceof Core))
@@ -48,10 +48,6 @@ function Core (options) {
   EventEmitter.call(this)
 
   this.options     = options
-
-  this.name        = options.name
-  this.appDir      = options.appDir
-  this.exerciseDir = options.exerciseDir
 
   this.globalStorage = storage(storage.userDir, '.config', 'workshopper')
   if (this.name)
@@ -107,13 +103,13 @@ Core.prototype.end = function (mode, pass, exercise, callback) {
 
 // overall exercise fail
 Core.prototype.exerciseFail = function (mode, exercise) {
-  if (exercise.fail) {
-    print.text(this.appName, this.appDir, exercise.failType || 'txt', exercise.fail)
-    console.log()
-  } else {
-    console.log('\n' + chalk.bold.red('# ' + this.__('solution.fail.title')) + '\n')
-    console.log(this.__('solution.fail.message', {name: this.__('exercise.' + exercise.meta.name)})) 
+  if (!exercise.fail) {
+    exercise.fail = '\n' +
+      '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
+      '{solution.fail.message}\n'
+    exercise.failType = 'txt'
   }
+  print.text(this.i18n, exercise.fail, exercise.failType)
   this.end(mode, false, exercise)
 }
 
@@ -132,15 +128,17 @@ Core.prototype.exercisePass = function (mode, exercise) {
 
     remaining = this.exercises.length - completed.length
 
-    if (exercise.pass) {
-      print.text(this.appName, this.appDir, exercise.passType || 'txt', exercise.pass)
-    } else {
-      console.log('\n' + chalk.bold.green('# ' + this.__('solution.pass.title')) + '\n')
-      console.log(chalk.bold(this.__('solution.pass.message', {name: this.__('exercise.' + exercise.meta.name)})) + '\n') 
+    if (!exercise.pass) {
+      exercise.pass = '\n' +
+        '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
+        '{bold}{solution.pass.message}{/bold}\n'
+      exercise.passType = 'txt'
     }
 
+    print.text(this.i18n, exercise.pass, exercise.passType)
+
     if (typeof exercise.getSolutionFiles !== 'function' && exercise.solution)
-      print.text(this.appName, this.appDir, exercise.solutionType || 'txt', exercise.solution)
+      print.text(this.i18n, exercise.solution, exercise.solutionType)
 
     if (remaining === 0) {
       if (this.onComplete)
@@ -262,7 +260,7 @@ Core.prototype.runExercise = function (exercise, mode, args) {
         : method.bind(exercise)(args)
   
   if (result)
-    print.any(this.appName, this.appDir, 'txt', result).pipe(process.stdout)
+    print.any(this.i18n, result).pipe(process.stdout)
 }
 
 Core.prototype.printMenu = function () {
@@ -341,27 +339,26 @@ Core.prototype.printExercise = function printExercise (name) {
           return error('The exercise "' + name + '" is missing a problem definition!')
 
       var stream = combinedStream.create()
+        , i18nContext = this.i18n.extend({
+            "currentExercise.name" : exercise.meta.name
+          , "progress.count" : exercise.meta.number
+          , "progress.total" : this.exercises.length
+          , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
+        })
 
-      if (this.showHeader)
-        stream.append(new StringStream(
-            '\n ' + chalk.green.bold(this.__('title'))
-          + '\n' + chalk.green.bold(util.repeat('\u2500', chalk.stripColor(this.__('title')).length + 2))
-          + '\n ' + chalk.yellow.bold(this.__('exercise.' + exercise.meta.name))
-          + '\n ' + chalk.yellow.italic(this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length}))
-          + '\n\n'
-        ))
+      stream.append(
+           print.stringOrFile(i18nContext, exercise.header, exercise.headerType, exercise.headerFile, this.lang)
+        || print.stringOrFile(i18nContext, this.options.header, this.options.headerType, this.options.headerFile, this.lang)
+        || new StringStream("")
+      )
 
-        stream.append(print.any(this.appName, this.appDir, exercise.problemType || 'txt', exercise.problem))
+      stream.append(print.any(i18nContext, exercise.problem, exercise.problemType))
 
-      var footer = (exercise.footer !== undefined) ? exercise.footer || this.options.footer : undefined
-      if (footer)
-        stream.append(print.any(this.appName, this.appDir, exercise.footerType || 'txt', exercise.footer))
-      else {
-        var footerFile = (footerFile !== undefined) ? exercise.footerFile || this.options.footerFile : undefined
-        if (footerFile)
-          stream.append(print.localisedFirstFileStream(this.appName, this.appDir, footerFile, this.lang))
-      } 
-      
+      stream.append(
+           print.stringOrFile(i18nContext, exercise.footer, exercise.footerType, exercise.footerFile, this.lang)
+        || print.stringOrFile(i18nContext, this.options.footer, this.options.footerType, this.options.footerFile, this.lang)
+        || new StringStream("")
+      )
       stream.pipe(process.stdout)
     }.bind(this)
 

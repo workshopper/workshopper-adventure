@@ -2,27 +2,16 @@ const i18n       = require('i18n-core')
     , i18nFs     = require('i18n-core/lookup/fs')
     , i18nObject = require('i18n-core/lookup/object')
     , i18nChain  = require('i18n-core/lookup/chain')
+    , i18nExtend = require('i18n-core/lookup/extend')
     , path       = require('path')
     , error      = require('./lib/print').error
     , fs         = require('fs')
+    , UNDERLINE  = 'Underline'
+    , chalk      = require('chalk')
+    , util       = require('./util')
 
-function createDefaultLookup(options) {
-  var result = {}
-
-  result[options.defaultLang] = {
-      title: options.title
-    , subtitle: options.subtitle
-  }
-
-  options.languages.forEach(function (language) {
-    if (!result[language])
-      result[language] = {}
-
-    if (!result[language].title)
-      result[language].title = options.name.toUpperCase()
-  })
-
-  return result
+function commandify (s) {
+    return String(s).toLowerCase().replace(/\s+/g, '-');
 }
 
 function chooseLang (globalStorage, appStorage, defaultLang, availableLangs, lang) {
@@ -58,28 +47,51 @@ module.exports = {
     var lookup = i18nChain(
           options.appDir ? i18nFs(path.resolve(options.appDir, './i18n')) : null
         , i18nFs(path.resolve(__dirname, './i18n'))
-        , i18nObject(createDefaultLookup(options))
       )
-      , translator = i18n(lookup)
-      , languages = options.languages || ['en']
-      , choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, languages)
+      , root = i18n(lookup)
+      , choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, options.languages)
       , lang = choose(null)
-      , result = translator.lang(lang, true)
+      , translator = root.lang(lang, true)
+      , result = i18n(i18nExtend(translator, {
+          get: function (key) {
+            if (options[key])
+              return options[key]
+
+            if (key === 'title')
+              return options.name.toUpperCase()
+
+            if (key === 'appName' || key === 'appname' || key === 'ADVENTURE_NAME')
+              return options.name
+
+            if (key === 'rootdir')
+              return options.appDir
+
+            if (key === 'COMMAND' || key === 'ADVENTURE_COMMAND')
+              return commandify(options.name)
+
+            var exercisePrefix = 'exercise.'
+            if (key.indexOf(exercisePrefix) === 0)
+              return key.substr(exercisePrefix.length)
+
+            var end = key.length-UNDERLINE.length
+            if (key.indexOf(UNDERLINE) === end)
+              return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
+          }
+        }))
       , _exercises = []
-    translator.fallback = function (key) {
-      var exercisePrefix = options.defaultLang + '.exercise.'
-      if (key.indexOf(exercisePrefix) === 0)
-        return exerciseName = key.substr(exercisePrefix.length)
-
-      if (!key)
-        return '(???)'
-
+    root.fallback = function (key) {
       return '?' + key + '?'
     }
-    result.languages = languages
     result.change = function (lang) {
       lang = choose(lang)
-      result.changeLang(lang)
+      translator.changeLang(lang)
+    }
+    result.extend = function (obj) {
+      return i18n(i18nExtend(result, {
+        get: function (key) {
+          return obj[key]
+        }
+      }));
     }
     result.updateExercises = function(exercises) {
       _exercises = exercises;

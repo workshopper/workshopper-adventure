@@ -39,8 +39,14 @@ function LegacyAdventure (options) {
   if (options.modifiers)
     options.modifiers = option.modifiers.map(legacyCommands)
 
+  if (options.showHeader)
+    options.header = '\n {green}{bold}{title}{/bold}{/green}'
+          + '\n{green}{bold}{titleUnderline}{/bold}{/green}'
+          + '\n {yellow}{bold}{currentExercise.name}{/bold}{/yellow}'
+          + '\n {yellow}{italic}{progress.state_resolved}{/italic}{/yellow}'
+          + '\n\n'
+
   this.helpFile    = options.helpFile
-  this.showHeader  = options.showHeader || false
   this.footer      = options.footer
   this.footerFile  = [options.footerFile, path.join(__dirname, './i18n/footer/{lang}.md')]
 
@@ -49,11 +55,11 @@ function LegacyAdventure (options) {
 
   Core.call(this, options)
 
-  var menuJson = util.getFile(options.menuJson || 'menu.json', this.exerciseDir)
+  var menuJson = util.getFile(options.menuJson || 'menu.json', this.options.exerciseDir)
   if (menuJson) {
     require(menuJson).forEach(this.add.bind(this))
   }
-  
+
   if (options.execute === 'now') {
     this.execute(process.argv.slice(2))
   } else if (options.execute === 'immediatly') {
@@ -63,14 +69,18 @@ function LegacyAdventure (options) {
   // backwards compatibility support
   this.__defineGetter__('title', this.__.bind(this, 'title'))
   this.__defineGetter__('subtitle', this.__.bind(this, 'subtitle'))
+  this.__defineGetter__('name', this.__.bind(this, 'name'))
+  this.__defineGetter__('appName', this.__.bind(this, 'name'))
+  this.__defineGetter__('appname', this.__.bind(this, 'name'))
   this.__defineGetter__('lang', this.i18n.lang.bind(this.i18n, 'lang'))
-  this.__defineGetter__('appName', function () { return this.name }.bind(this))
-  this.__defineGetter__('width', function () { return this.menuFactory.width }.bind(this))
-  this.__defineGetter__('datadir', function () { return this.dataDir }.bind(this)) // adventure
-  this.__defineGetter__('defaultLang', function () { return options.defaultLang }.bind(this))
-  this.__defineGetter__('languages', function () { return this.i18n.languages }.bind(this))
-  this.__defineGetter__('globalDataDir', function () { return this.global.dir }.bind(this))
-  this.__defineGetter__('dataDir', function () { return this.local.dir }.bind(this))
+  this.__defineGetter__('width', function () { return this.menuFactory.options.width }.bind(this))
+  this.__defineGetter__('defaultLang', function () { return this.options.defaultLang }.bind(this))
+  this.__defineGetter__('languages', function () { return this.options.languages }.bind(this))
+  this.__defineGetter__('globalDataDir', function () { return this.globalStorage.dir }.bind(this))
+  this.__defineGetter__('dataDir', function () { return this.localStorage.dir }.bind(this))
+  this.__defineGetter__('datadir', function () { return this.localStorage.dir }.bind(this)) // adventure
+  this.__defineGetter__('appDir', function () { return this.options.appDir }.bind(this))
+  this.__defineGetter__('exerciseDir', function () { return this.options.exerciseDir }.bind(this))
 }
 
 inherits(LegacyAdventure, Core)
@@ -78,8 +88,9 @@ inherits(LegacyAdventure, Core)
 LegacyAdventure.prototype.add = function (name_or_object, fn_or_object, fn) {
   var meta
   try {
-    meta = createExerciseMeta(this.exerciseDir, name_or_object, fn_or_object)
+    meta = createExerciseMeta(this.options.exerciseDir, name_or_object, fn_or_object)
   } catch(e) {
+    console.log(e)
     return error(this.__('error.exercise.' + e.id, e))
   }
   return this.addExercise(meta)
