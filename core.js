@@ -50,8 +50,8 @@ function Core (options) {
   this.options     = options
 
   this.globalStorage = storage(storage.userDir, '.config', 'workshopper')
-  if (this.name)
-    this.appStorage  = storage(storage.userDir, '.config', this.name)
+  if (options.name)
+    this.appStorage  = storage(storage.userDir, '.config', options.name)
 
   this.exercises   = []
   this._meta       = {}
@@ -117,7 +117,7 @@ Core.prototype.exerciseFail = function (mode, exercise) {
 // overall exercise pass
 Core.prototype.exercisePass = function (mode, exercise) {
   var done = function done () {
-    var compappStorage = (this.local && this.local.get('completed')) || []
+    var completed = (this.localStorage && this.localStorage.get('completed')) || []
       , remaining
 
     if (completed.indexOf(exercise.meta.name) === -1) 
