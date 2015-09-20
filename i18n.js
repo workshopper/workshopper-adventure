@@ -82,8 +82,8 @@ module.exports = {
     root.fallback = function (key) {
       return '?' + key + '?'
     }
-    result.change = function (lang) {
-      lang = choose(lang)
+    result.change = function (lng) {
+      lang = choose(lng)
       translator.changeLang(lang)
     }
     result.extend = function (obj) {
