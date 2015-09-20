@@ -35,6 +35,16 @@ function Core (options) {
   if (options.appDir)
     options.exerciseDir = util.getDir(options.exerciseDir || 'exercises', options.appDir)
 
+  if (!options.menu)
+    options.menu = {
+        width: 65
+      , x: 3
+      , y: 2
+    }
+
+  if (!options.menuFactory)
+    options.menuFactory = createMenuFactory(options.menu, {})
+
   EventEmitter.call(this)
 
   this.options     = options
@@ -56,10 +66,6 @@ function Core (options) {
 
   if (this.appStorage)
     this.current = this.appStorage.get('current')
-  this.menuFactory = createMenuFactory(options.menu || {}, {
-    title: this.i18n.__('title'),
-    subtitle: this.i18n.has('subtitle') && this.i18n.__('subtitle')
-  })
 
   this.cli = commandico(this, 'menu')
     .loadCommands(path.resolve(__dirname, './lib/commands'))
@@ -273,7 +279,9 @@ Core.prototype.printMenu = function () {
         handler: process.exit.bind(process, 0)
       }
 
-  this.menuFactory.create({
+  this.options.menuFactory.create({
+    title: this.i18n.__('title'),
+    subtitle: this.i18n.has('subtitle') && this.i18n.__('subtitle'),
     menu: this.exercises.map(function (exercise) {
         return {
           label: chalk.bold('»') + ' ' + __('exercise.' + exercise),
