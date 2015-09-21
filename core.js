@@ -52,13 +52,13 @@ function Core (options) {
 
   this.options     = options
 
-  this.globalStorage = storage(storage.userDir, '.config', 'workshopper')
+  var globalStorage = storage(storage.userDir, '.config', 'workshopper')
   this.appStorage    = storage(storage.userDir, '.config', options.name)
 
   this.exercises   = []
   this._meta       = {}
 
-  this.i18n        = i18n.init(options, this.globalStorage, this.appStorage)
+  this.i18n        = i18n.init(options, globalStorage, this.appStorage)
   this.__          = this.i18n.__
   this.__n         = this.i18n.__n
 
