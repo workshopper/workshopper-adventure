@@ -116,13 +116,12 @@ Core.prototype.exerciseFail = function (mode, exercise) {
 // overall exercise pass
 Core.prototype.exercisePass = function (mode, exercise) {
   var done = function done () {
-    var completed = (this.appStorage.get('completed')) || []
+    var completed = this.appStorage.get('completed') || []
       , remaining
 
     if (completed.indexOf(exercise.meta.name) === -1) 
       completed.push(exercise.meta.name)
 
-    if (this.appStorage)
       this.appStorage.save('completed', completed)
 
     remaining = this.exercises.length - completed.length
@@ -264,7 +263,7 @@ Core.prototype.runExercise = function (exercise, mode, args) {
 
 Core.prototype.printMenu = function () {
   var __ = this.i18n.__
-    , completed = (this.appStorage && this.appStorage.get('completed')) || []
+    , completed = this.appStorage.get('completed') || []
     , isCommandInMenu = function (extra) {
         if (typeof extra.filter === 'function' && !extra.filter(this)) {
           return false
@@ -323,7 +322,6 @@ Core.prototype.printExercise = function printExercise (name) {
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
 
-  if (this.appStorage)
     this.appStorage.save('current', exercise.meta.name)
 
   afterPreparation = function (err) {
