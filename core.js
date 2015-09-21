@@ -60,9 +60,6 @@ function Core (options) {
   this.__          = this.i18n.__
   this.__n         = this.i18n.__n
 
-  if (this.appStorage)
-    this.current = this.appStorage.get('current')
-
   this.cli = commandico(this, 'menu')
     .loadCommands(path.resolve(__dirname, './lib/commands'))
     .loadModifiers(path.resolve(__dirname, './lib/modifiers'))
@@ -323,8 +320,6 @@ Core.prototype.printExercise = function printExercise (name) {
 
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
-
-  this.current = exercise.meta.name
 
   if (this.appStorage)
     this.appStorage.save('current', exercise.meta.name)
