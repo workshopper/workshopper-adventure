@@ -77,8 +77,8 @@ function LegacyAdventure (options) {
   this.__defineGetter__('defaultLang', function () { return this.options.defaultLang }.bind(this))
   this.__defineGetter__('languages', function () { return this.options.languages }.bind(this))
   this.__defineGetter__('globalDataDir', function () { return this.globalStorage.dir }.bind(this))
-  this.__defineGetter__('dataDir', function () { return this.localStorage.dir }.bind(this))
-  this.__defineGetter__('datadir', function () { return this.localStorage.dir }.bind(this)) // adventure
+  this.__defineGetter__('dataDir', function () { return this.appStorage.dir }.bind(this))
+  this.__defineGetter__('datadir', function () { return this.appStorage.dir }.bind(this)) // adventure
   this.__defineGetter__('appDir', function () { return this.options.appDir }.bind(this))
   this.__defineGetter__('exerciseDir', function () { return this.options.exerciseDir }.bind(this))
   this.__defineGetter__('current', function () { return this.appStorage.get('current') }.bind(this))
