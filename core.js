@@ -108,7 +108,7 @@ Core.prototype.exerciseFail = function (mode, exercise) {
       '{solution.fail.message}\n'
     exercise.failType = 'txt'
   }
-  print.text(this.i18n, exercise.fail, exercise.failType)
+  print.any(this.i18n, exercise.fail, exercise.failType).pipe(process.stdout)
   this.end(mode, false, exercise)
 }
 
@@ -139,24 +139,24 @@ Core.prototype.exercisePass = function (mode, exercise) {
     }
 
     var stream = combinedStream.create()
-    stream.append(print.textStream(this.i18n, exercise.pass, exercise.passType))
+    stream.append(print.any(this.i18n, exercise.pass, exercise.passType))
 
     if (!exercise.hideSolutions) {
       if (files.length > 0 || exercise.solution)
         stream.append(new StringStream(this.__('solution.notes.compare')))
       
-      stream.append(print.textStream(this.i18n, exercise.solution, exercise.solutionType))
+      stream.append(print.any(this.i18n, exercise.solution, exercise.solutionType))
       stream.append(print.localisedFilesStream(this.i18n, files, this.i18n.lang()))
     }
 
     var remaining = this.countRemaining()
     if (remaining !== 0)
-      stream.append(print.textStream(this.i18n,
+      stream.append(print.any(this.i18n,
           this.__n('progress.remaining', remaining) + '\n'
         + this.__('ui.return', {appName: this.name}) + '\n'
       ))
     else if (!this.onComplete)
-      stream.append(print.textStream(this.i18n,
+      stream.append(print.any(this.i18n,
         this.__('progress.finished') + '\n'
       ))
 
@@ -321,16 +321,16 @@ Core.prototype.printExercise = function printExercise (name) {
         })
 
       stream.append(
-           print.stringOrFile(i18nContext, exercise.header, exercise.headerType, exercise.headerFile, this.lang)
-        || print.stringOrFile(i18nContext, this.options.header, this.options.headerType, this.options.headerFile, this.lang)
+           print.stringOrFile(i18nContext, exercise.header, exercise.headerType, exercise.headerFile, this.i18n.lang())
+        || print.stringOrFile(i18nContext, this.options.header, this.options.headerType, this.options.headerFile, this.i18n.lang())
         || new StringStream("")
       )
 
       stream.append(print.any(i18nContext, exercise.problem, exercise.problemType))
 
       stream.append(
-           print.stringOrFile(i18nContext, exercise.footer, exercise.footerType, exercise.footerFile, this.lang)
-        || print.stringOrFile(i18nContext, this.options.footer, this.options.footerType, this.options.footerFile, this.lang)
+           print.stringOrFile(i18nContext, exercise.footer, exercise.footerType, exercise.footerFile, this.i18n.lang())
+        || print.stringOrFile(i18nContext, this.options.footer, this.options.footerType, this.options.footerFile, this.i18n.lang())
         || new StringStream("")
       )
       stream.pipe(process.stdout)
