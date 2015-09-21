@@ -53,7 +53,7 @@ function Core (options) {
   this.options     = options
 
   var globalStorage = storage(storage.userDir, '.config', 'workshopper')
-  this.appStorage    = storage(storage.userDir, '.config', options.name)
+  this.appStorage   = storage(storage.userDir, '.config', options.name)
 
   this.exercises   = []
   this._meta       = {}
@@ -112,19 +112,24 @@ Core.prototype.exerciseFail = function (mode, exercise) {
   this.end(mode, false, exercise)
 }
 
+Core.prototype.countRemaining = function () {
+  var completed = this.appStorage.get('completed')
+  return this.exercises.length - completed ? completed.length : 0
+}
+
+Core.prototype.markCompleted = function (exerciseName) {
+  var completed = this.appStorage.get('completed') || []
+
+  if (completed.indexOf(exerciseName) === -1) 
+    completed.push(exerciseName)
+
+  this.appStorage.save('completed', completed)
+}
 
 // overall exercise pass
 Core.prototype.exercisePass = function (mode, exercise) {
-  var done = function done () {
-    var completed = this.appStorage.get('completed') || []
-      , remaining
-
-    if (completed.indexOf(exercise.meta.name) === -1) 
-      completed.push(exercise.meta.name)
-
-      this.appStorage.save('completed', completed)
-
-    remaining = this.exercises.length - completed.length
+  var done = function done (files) {
+    this.markCompleted(exercise.meta.name)
 
     if (!exercise.pass) {
       exercise.pass = '\n' +
@@ -133,23 +138,34 @@ Core.prototype.exercisePass = function (mode, exercise) {
       exercise.passType = 'txt'
     }
 
-    print.text(this.i18n, exercise.pass, exercise.passType)
+    var stream = combinedStream.create()
+    stream.append(print.textStream(this.i18n, exercise.pass, exercise.passType))
 
-    if (typeof exercise.getSolutionFiles !== 'function' && exercise.solution)
-      print.text(this.i18n, exercise.solution, exercise.solutionType)
-
-    if (remaining === 0) {
-      if (this.onComplete)
-        return this.onComplete(this.end.bind(this, mode, true, exercise))
-      else
-        console.log(this.__('progress.finished'))
-    } else {
-      console.log(this.__n('progress.remaining', remaining))
-      console.log(this.__('ui.return', {appName: this.appName}))
+    if (!exercise.hideSolutions) {
+      if (files.length > 0 || exercise.solution)
+        stream.append(new StringStream(this.__('solution.notes.compare')))
+      
+      stream.append(print.textStream(this.i18n, exercise.solution, exercise.solutionType))
+      stream.append(print.localisedFilesStream(this.i18n, files, this.i18n.lang()))
     }
 
+    var remaining = this.countRemaining()
+    if (remaining !== 0)
+      stream.append(print.textStream(this.i18n,
+          this.__n('progress.remaining', remaining) + '\n'
+        + this.__('ui.return', {appName: this.name}) + '\n'
+      ))
+    else if (!this.onComplete)
+      stream.append(print.textStream(this.i18n,
+        this.__('progress.finished') + '\n'
+      ))
 
-    this.end(mode, true, exercise)
+    stream.pipe(process.stdout).on("end", function () {
+      if (this.onComplete) 
+        return this.onComplete(this.end.bind(this, mode, true, exercise))
+      this.end(mode, true, exercise)
+    }.bind(this))
+
   }.bind(this)
 
 
@@ -157,47 +173,10 @@ Core.prototype.exercisePass = function (mode, exercise) {
     exercise.getSolutionFiles(function (err, files) {
       if (err)
         return error(this.__('solution.notes.load_error', {err: err.message || err}))
-      if (!files.length)
-        return done()
-
-      console.log(this.__('solution.notes.compare'))
-
-      function processSolutionFile (file, callback) {
-        fs.readFile(file, 'utf8', function (err, content) {
-          if (err)
-            return callback(err)
-
-          var filename = path.basename(file)
-
-          // code fencing is necessary for msee to render the solution as code
-          content = msee.parse('```js\n' + content + '\n```')
-          callback(null, { name: filename, content: content })
-        })
-      }
-
-      function printSolutions (err, solutions) {
-        if (err)
-          return error(this.__('solution.notes.load_error', {err: err.message || err}))
-
-        solutions.forEach(function (file, i) {
-          console.log(chalk.yellow(util.repeat('\u2500', 80)))
-
-          if (solutions.length > 1)
-            console.log(chalk.bold.yellow(file.name + ':') + '\n')
-
-          console.log(file.content.replace(/^\n/m, '').replace(/\n$/m, ''))
-
-          if (i == solutions.length - 1)
-            console.log(chalk.yellow(util.repeat('\u2500', 80)) + '\n')
-        }.bind(this))
-
-        done()
-      }
-
-      map(files, processSolutionFile, printSolutions.bind(this))
+      done(files)
     }.bind(this))
   } else {
-    done()
+    done([])
   }
 }
 
@@ -322,7 +301,7 @@ Core.prototype.printExercise = function printExercise (name) {
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
 
-    this.appStorage.save('current', exercise.meta.name)
+  this.appStorage.save('current', exercise.meta.name)
 
   afterPreparation = function (err) {
     if (err)
