@@ -23,6 +23,9 @@ function Core (options) {
   if (!(this instanceof Core))
     return new Core(options)
 
+  if (!options.name)
+    throw new Error('The workshopper needs a name to store the progress.');
+
   if (!options.languages) 
     options.languages = ['en']
 
@@ -50,7 +53,6 @@ function Core (options) {
   this.options     = options
 
   this.globalStorage = storage(storage.userDir, '.config', 'workshopper')
-  if (options.name)
     this.appStorage  = storage(storage.userDir, '.config', options.name)
 
   this.exercises   = []
