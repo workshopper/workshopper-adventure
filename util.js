@@ -9,7 +9,10 @@ function repeat (ch, sz) {
 
 
 function idFromName (id) {
-  return id.toLowerCase()
+  if (id === null || id === undefined)
+    id = ""
+  
+  return id.toString().toLowerCase()
     .replace(/\s/g, '_')
     .replace(/[^\w]/gi, '')
 }
