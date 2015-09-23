@@ -46,9 +46,17 @@ function LegacyAdventure (options) {
           + '\n {yellow}{italic}{progress.state_resolved}{/italic}{/yellow}'
           + '\n\n'
 
+  if (options.footerFile) {
+    if (!Array.isArray(options.footerFile))
+      options.footerFile = [options.footerFile]
+  } else {
+    options.footerFile = []
+  }
+  options.footerFile.push(path.join(__dirname, './i18n/footer/{lang}.md'))
+
+
   this.helpFile    = options.helpFile
   this.footer      = options.footer
-  this.footerFile  = [options.footerFile, path.join(__dirname, './i18n/footer/{lang}.md')]
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   this.onComplete  = typeof options.onComplete == 'function' && options.onComplete
