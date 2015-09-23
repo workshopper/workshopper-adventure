@@ -18,6 +18,7 @@
     "i18n-core": "^2.1.1",
     "mkdirp": "~0.3.5",
     "msee": "~0.1.1",
+    "rimraf": "^2.4.3",
     "simple-terminal-menu": "^1.1.1",
     "split": "^1.0.0",
     "string-to-stream": "^1.0.1",
