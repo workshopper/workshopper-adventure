@@ -187,7 +187,31 @@ function onfail (msg) {
   console.log(chalk.red.bold('\u2717 ') + msg)
 }
 
-Core.prototype.runExercise = function (exercise, mode, args) {
+Core.prototype.verify = function (args) {
+  return this.processCurrent('verify', args)
+}
+
+Core.prototype.run = function (args) {
+  return this.processCurrent('run', args)
+}
+
+Core.prototype.processCurrent = function (mode, args) {
+  var currentName = this.appStorage.get('current')
+  if (!currentName)
+    return error(this.__('error.exercise.none_active'))
+
+  return this.processExercise(currentName, mode, args)
+}
+
+Core.prototype.processExercise = function (exerciseName, mode, args) {
+  exercise = this.loadExercise(exerciseName)
+
+  if (!exercise)
+      return error(this.__('error.exercise.missing', {name: name}))
+
+  if (exercise.requireSubmission !== false && args.length == 0)
+    return error(this.__('ui.usage', {appName: this.options.name, mode: mode}))
+  
   // individual validation events
   if (typeof exercise.on === 'function') {
     exercise.on('pass', onpass)
