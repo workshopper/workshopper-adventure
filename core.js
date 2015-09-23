@@ -275,14 +275,22 @@ Core.prototype.loadExercise = function (name) {
   return exercise
 }
 
+Core.prototype.selectExercise = function (name) {
+  if (!this._meta[util.idFromName(name)])
+    return error(this.__('error.exercise.missing', {name: name}))
+
+  this.appStorage.save('current', name)
+  return name
+}
+
 Core.prototype.printExercise = function printExercise (name) {
+  this.selectExercise(name)
+
   var exercise = this.loadExercise(name)
     , prepare
 
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
-
-  this.appStorage.save('current', exercise.meta.name)
 
   prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate;
   prepare(function(err) {
