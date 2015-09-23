@@ -1,7 +1,5 @@
 const fs           = require('fs')
     , path         = require('path')
-    , map          = require('map-async')
-    , msee         = require('msee')
     , chalk        = require('chalk')
     , commandico   = require('commandico')
     , inherits     = require('util').inherits
@@ -15,7 +13,7 @@ const createMenuFactory  = require('simple-terminal-menu/factory')
     , util               = require('./util')
     , i18n               = require('./i18n')
     , storage            = require('./lib/storage')
-    , error              = print.error
+    , error              = require('./lib/error')
 /* jshint +W079 */
   
 
@@ -89,8 +87,8 @@ Core.prototype.addExercise = function (meta) {
 }
 
 Core.prototype.end = function (mode, pass, exercise, callback) {
-  if (typeof exercise.end == 'function')
-    exercise.end(mode, pass, function (err) {
+  var end = (typeof exercise.end == 'function') ? exercise.end.bind(exercise, mode, pass) : setImmediate;
+  end(function (err) {
       if (err)
         return error(this.__('error.cleanup', {err: err.message || err}))
 
@@ -108,7 +106,8 @@ Core.prototype.exerciseFail = function (mode, exercise) {
       '{solution.fail.message}\n'
     exercise.failType = 'txt'
   }
-  print.any(this.i18n, exercise.fail, exercise.failType).pipe(process.stdout)
+  var stream = print(this.i18n, this.i18n.lang())
+  stream.appendPlus(exercise.fail, exercise.failType).pipe(process.stdout)
   this.end(mode, false, exercise)
 }
 
@@ -138,32 +137,29 @@ Core.prototype.exercisePass = function (mode, exercise) {
       exercise.passType = 'txt'
     }
 
-    var stream = combinedStream.create()
-    stream.append(print.any(this.i18n, exercise.pass, exercise.passType))
+    var stream = print(this.i18n, this.i18n.lang())
+    stream.append(exercise.pass, exercise.passType)
 
     if (!exercise.hideSolutions) {
       if (files.length > 0 || exercise.solution)
-        stream.append(new StringStream(this.__('solution.notes.compare')))
+        stream.append(this.__('solution.notes.compare'))
       
-      stream.append(print.any(this.i18n, exercise.solution, exercise.solutionType))
-      stream.append(print.localisedFilesStream(this.i18n, files, this.i18n.lang()))
+      stream.append(exercise.solution, exercise.solutionType)
+      stream.append({ files: files })
     }
 
     var remaining = this.countRemaining()
     if (remaining !== 0)
-      stream.append(print.any(this.i18n,
+      stream.append(
           this.__n('progress.remaining', remaining) + '\n'
         + this.__('ui.return', {appName: this.name}) + '\n'
-      ))
+      )
     else if (!this.onComplete)
-      stream.append(print.any(this.i18n,
-        this.__('progress.finished') + '\n'
-      ))
+      stream.append(this.__('progress.finished') + '\n')
 
     stream.pipe(process.stdout).on("end", function () {
-      if (this.onComplete) 
-        return this.onComplete(this.end.bind(this, mode, true, exercise))
-      this.end(mode, true, exercise)
+      var complete = (this.onComplete === 'function') ? this.onComplete.bind(this) : setImmediate;
+      complete(this.end.bind(this, mode, true, exercise))
     }.bind(this))
 
   }.bind(this)
@@ -237,7 +233,7 @@ Core.prototype.runExercise = function (exercise, mode, args) {
         : method.bind(exercise)(args)
   
   if (result)
-    print.any(this.i18n, result).pipe(process.stdout)
+    print(this.i18n, this.i18n.lang()).appendPlus(result).pipe(process.stdout)
 }
 
 Core.prototype.printMenu = function () {
@@ -296,65 +292,49 @@ Core.prototype.loadExercise = function (name) {
 
 Core.prototype.printExercise = function printExercise (name) {
   var exercise = this.loadExercise(name)
-    , afterPreparation
+    , prepare
 
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
 
   this.appStorage.save('current', exercise.meta.name)
 
-  afterPreparation = function (err) {
+  prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate;
+  prepare(function(err) {
     if (err)
       return error(this.__('error.exercise.preparing', {err: err.message || err}))
 
-    afterProblem = function() {
+    var getExerciseText = (typeof exercise.getExerciseText === 'function') ? exercise.getExerciseText.bind(exercise) : setImmediate;
+    getExerciseText(function (err, exerciseTextType, exerciseText) {
+      if (err)
+        return error(this.__('error.exercise.loading', {err: err.message || err}))
 
-      if (!exercise.problem)
-          return error('The exercise "' + name + '" is missing a problem definition!')
-
-      var stream = combinedStream.create()
-        , i18nContext = this.i18n.extend({
+      var stream = print(this.i18n.extend({
             "currentExercise.name" : exercise.meta.name
           , "progress.count" : exercise.meta.number
           , "progress.total" : this.exercises.length
           , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
-        })
+        }), this.i18n.lang())
+        , found = false
+      stream.append(exercise.header, exercise.headerType)
+       || stream.append({file: exercise.headerFile})
+       || stream.append(this.options.header, this.options.headerType)
+       || stream.append({file: this.options.headerFile})
 
-      stream.append(
-           print.stringOrFile(i18nContext, exercise.header, exercise.headerType, exercise.headerFile, this.i18n.lang())
-        || print.stringOrFile(i18nContext, this.options.header, this.options.headerType, this.options.headerFile, this.i18n.lang())
-        || new StringStream("")
-      )
+      if (stream.append(exercise.problem, exercise.problemType))
+        found = true
+      if (stream.append(exerciseText, exerciseTextType))
+        found = true
+      if (!found)
+        return error('The exercise "' + name + '" is missing a problem definition!')
 
-      stream.append(print.any(i18nContext, exercise.problem, exercise.problemType))
-
-      stream.append(
-           print.stringOrFile(i18nContext, exercise.footer, exercise.footerType, exercise.footerFile, this.i18n.lang())
-        || print.stringOrFile(i18nContext, this.options.footer, this.options.footerType, this.options.footerFile, this.i18n.lang())
-        || new StringStream("")
-      )
+      stream.append(exercise.footer, exercise.footerType)
+       || stream.append({file: exercise.footerFile})
+       || stream.append(this.options.footer, this.options.footerType)
+       || stream.append({file: this.options.footerFile})
       stream.pipe(process.stdout)
-    }.bind(this)
-
-    if (!exercise.problem && typeof exercise.getExerciseText === 'function') {
-      exercise.getExerciseText(function (err, type, exerciseText) {
-        if (err)
-          return error(this.__('error.exercise.loading', {err: err.message || err}))
-        exercise.problem = exerciseText
-        exercise.problemType = type
-        afterProblem()
       }.bind(this))
-    } else {
-      afterProblem()
-    }
-
-  }.bind(this)
-
-  if (typeof exercise.prepare === 'function') {
-    exercise.prepare(afterPreparation)
-  } else {
-    afterPreparation(null)
-  }
+  }.bind(this))
 }
 
 module.exports = Core
