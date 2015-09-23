@@ -236,44 +236,6 @@ Core.prototype.runExercise = function (exercise, mode, args) {
     print(this.i18n, this.i18n.lang()).appendPlus(result).pipe(process.stdout)
 }
 
-Core.prototype.printMenu = function () {
-  var __ = this.i18n.__
-    , completed = this.appStorage.get('completed') || []
-    , isCommandInMenu = function (extra) {
-        if (typeof extra.filter === 'function' && !extra.filter(this)) {
-          return false
-        } 
-        return extra.menu !== false
-      }.bind(this)
-    , exitCommand = {
-        name: 'exit',
-        handler: process.exit.bind(process, 0)
-      }
-
-  this.options.menuFactory.create({
-    title: __('title'),
-    subtitle: this.i18n.has('subtitle') && __('subtitle'),
-    menu: this.exercises.map(function (exercise) {
-        return {
-          label: chalk.bold('»') + ' ' + __('exercise.' + exercise),
-          marker: (completed.indexOf(exercise) >= 0) ? '[' + __('menu.completed') + ']' : '',
-          handler: this.printExercise.bind(this, exercise)
-        };
-      }.bind(this)),
-    extras: this.cli.commands.concat()
-      .reverse()
-      .filter(isCommandInMenu)
-      .concat(exitCommand)
-      .map(function (command) {
-        return {
-          label: __('menu.' + command.name),
-          handler: command.handler.bind(command, this)
-        };
-      }.bind(this))
-    
-  });
-}
-
 Core.prototype.loadExercise = function (name) {
   var meta = this._meta[util.idFromName(name)]
   
