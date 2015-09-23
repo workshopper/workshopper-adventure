@@ -89,13 +89,13 @@ Core.prototype.addExercise = function (meta) {
 Core.prototype.end = function (mode, pass, exercise, callback) {
   var end = (typeof exercise.end == 'function') ? exercise.end.bind(exercise, mode, pass) : setImmediate;
   end(function (err) {
-      if (err)
-        return error(this.__('error.cleanup', {err: err.message || err}))
+    if (err)
+      return error(this.__('error.cleanup', {err: err.message || err}))
 
-      setImmediate(callback || function () {
-        process.exit(pass ? 0 : -1)
-      })
-    }.bind(this))
+    setImmediate(callback || function () {
+      process.exit(pass ? 0 : -1)
+    })
+  }.bind(this))
 }
 
 // overall exercise fail
@@ -281,11 +281,10 @@ Core.prototype.loadExercise = function (name) {
     return null
 
   exercise = meta.fn()
+  exercise.meta = meta
 
   if (typeof exercise.init === 'function')
     exercise.init(this, meta.id, meta.name, meta.dir, meta.number)
-  
-  exercise.meta = meta
 
   return exercise
 }
@@ -333,7 +332,7 @@ Core.prototype.printExercise = function printExercise (name) {
        || stream.append(this.options.footer, this.options.footerType)
        || stream.append({file: this.options.footerFile})
       stream.pipe(process.stdout)
-      }.bind(this))
+    }.bind(this))
   }.bind(this))
 }
 
