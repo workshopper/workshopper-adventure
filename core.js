@@ -251,8 +251,8 @@ Core.prototype.printMenu = function () {
       }
 
   this.options.menuFactory.create({
-    title: this.i18n.__('title'),
-    subtitle: this.i18n.has('subtitle') && this.i18n.__('subtitle'),
+    title: __('title'),
+    subtitle: this.i18n.has('subtitle') && __('subtitle'),
     menu: this.exercises.map(function (exercise) {
         return {
           label: chalk.bold('»') + ' ' + __('exercise.' + exercise),
