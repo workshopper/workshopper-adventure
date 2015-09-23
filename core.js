@@ -260,7 +260,7 @@ Core.prototype.printMenu = function () {
           handler: this.printExercise.bind(this, exercise)
         };
       }.bind(this)),
-    extras: this.cli.commands
+    extras: this.cli.commands.concat()
       .reverse()
       .filter(isCommandInMenu)
       .concat(exitCommand)
