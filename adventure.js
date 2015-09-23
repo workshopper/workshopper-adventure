@@ -56,7 +56,6 @@ function LegacyAdventure (options) {
 
 
   this.helpFile    = options.helpFile
-  this.footer      = options.footer
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   this.onComplete  = typeof options.onComplete == 'function' && options.onComplete
@@ -82,6 +81,8 @@ function LegacyAdventure (options) {
   this.__defineGetter__('appname', this.__.bind(this, 'name'))
   this.__defineGetter__('lang', this.i18n.lang.bind(this.i18n, 'lang'))
   this.__defineGetter__('width', function () { return this.menuFactory.options.width }.bind(this))
+  this.__defineGetter__('helpFile', function () { return this.options.helpFile }.bind(this))
+  this.__defineGetter__('footer', function () { return this.options.footer }.bind(this))
   this.__defineGetter__('defaultLang', function () { return this.options.defaultLang }.bind(this))
   this.__defineGetter__('languages', function () { return this.options.languages }.bind(this))
   this.__defineGetter__('globalDataDir', function () { return this.globalStorage.dir }.bind(this))
