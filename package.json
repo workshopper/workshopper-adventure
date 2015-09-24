@@ -1,12 +1,12 @@
 {
   "name": "workshopper-adventure",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "A terminal workshop runner framework (adventure compatible)",
   "main": "./index.js",
   "author": "Martin Heidegger <martin.heidegger@gmail.com> (https://github.com/martinheidegger)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rvagg/workshopper.git"
+    "url": "https://github.com/workshopper/workshopper-adventure.git"
   },
   "license": "MIT",
   "dependencies": {
