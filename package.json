@@ -1,6 +1,6 @@
 {
   "name": "workshopper-adventure",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "A terminal workshop runner framework (adventure compatible)",
   "main": "./index.js",
   "author": "Martin Heidegger <martin.heidegger@gmail.com> (https://github.com/martinheidegger)",
