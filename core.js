@@ -107,7 +107,7 @@ Core.prototype.exerciseFail = function (mode, exercise) {
     exercise.failType = 'txt'
   }
   var stream = print(this.i18n, this.i18n.lang())
-  stream.appendPlus(exercise.fail, exercise.failType).pipe(process.stdout)
+  stream.appendChain(exercise.fail, exercise.failType).pipe(process.stdout)
   this.end(mode, false, exercise)
 }
 
@@ -257,7 +257,7 @@ Core.prototype.processExercise = function (exerciseName, mode, args) {
         : method.bind(exercise)(args)
   
   if (result)
-    print(this.i18n, this.i18n.lang()).appendPlus(result).pipe(process.stdout)
+    print(this.i18n, this.i18n.lang()).appendChain(result).pipe(process.stdout)
 }
 
 Core.prototype.loadExercise = function (name) {
