@@ -2,7 +2,7 @@ const path = require('path')
     , inherits     = require('util').inherits
 
 /* jshint -W079 */
-const Core  = require('./core')
+const Core  = require('./index')
     , util  = require('./util')
     , error = require('./lib/print').error
     , createExerciseMeta = require('./lib/createExerciseMeta')

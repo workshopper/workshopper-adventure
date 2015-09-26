@@ -17,9 +17,9 @@ const createMenuFactory  = require('simple-terminal-menu/factory')
 /* jshint +W079 */
   
 
-function Core (options) {
-  if (!(this instanceof Core))
-    return new Core(options)
+function WA (options) {
+  if (!(this instanceof WA))
+    return new WA(options)
 
   if (!options.name)
     throw new Error('The workshopper needs a name to store the progress.');
@@ -71,14 +71,14 @@ function Core (options) {
     this.cli.addModifiers(options.modifiers)
 }
 
-inherits(Core, EventEmitter)
+inherits(WA, EventEmitter)
 
 
-Core.prototype.execute = function (args) {
+WA.prototype.execute = function (args) {
   return this.cli.execute(args)
 }
 
-Core.prototype.addExercise = function (meta) {
+WA.prototype.addExercise = function (meta) {
   this.exercises.push(meta.name)
   this.i18n.updateExercises(this.exercises)
   this._meta[meta.id] = meta
@@ -86,7 +86,7 @@ Core.prototype.addExercise = function (meta) {
   return this
 }
 
-Core.prototype.end = function (mode, pass, exercise, callback) {
+WA.prototype.end = function (mode, pass, exercise, callback) {
   var end = (typeof exercise.end == 'function') ? exercise.end.bind(exercise, mode, pass) : setImmediate;
   end(function (err) {
     if (err)
@@ -99,7 +99,7 @@ Core.prototype.end = function (mode, pass, exercise, callback) {
 }
 
 // overall exercise fail
-Core.prototype.exerciseFail = function (mode, exercise) {
+WA.prototype.exerciseFail = function (mode, exercise) {
   if (!exercise.fail) {
     exercise.fail = '\n' +
       '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
@@ -111,12 +111,12 @@ Core.prototype.exerciseFail = function (mode, exercise) {
   this.end(mode, false, exercise)
 }
 
-Core.prototype.countRemaining = function () {
+WA.prototype.countRemaining = function () {
   var completed = this.appStorage.get('completed')
   return this.exercises.length - completed ? completed.length : 0
 }
 
-Core.prototype.markCompleted = function (exerciseName) {
+WA.prototype.markCompleted = function (exerciseName) {
   var completed = this.appStorage.get('completed') || []
 
   if (completed.indexOf(exerciseName) === -1) 
@@ -126,7 +126,7 @@ Core.prototype.markCompleted = function (exerciseName) {
 }
 
 // overall exercise pass
-Core.prototype.exercisePass = function (mode, exercise) {
+WA.prototype.exercisePass = function (mode, exercise) {
   var done = function done (files) {
     this.markCompleted(exercise.meta.name)
 
@@ -148,19 +148,21 @@ Core.prototype.exercisePass = function (mode, exercise) {
       stream.append({ files: files })
     }
 
-    var remaining = this.countRemaining()
-    if (remaining !== 0)
-      stream.append(
-          this.__n('progress.remaining', remaining) + '\n'
-        + this.__('ui.return', {appName: this.name}) + '\n'
-      )
-    else if (!this.onComplete)
-      stream.append(this.__('progress.finished') + '\n')
+    var complete = (this.onComplete === 'function') ? this.onComplete.bind(this) : setImmediate;
+    complete(function () {
+      var remaining = this.countRemaining()
+      if (remaining !== 0)
+        stream.append(
+            this.__n('progress.remaining', remaining) + '\n'
+          + this.__('ui.return', {appName: this.name}) + '\n'
+        )
+      else if (!this.onComplete)
+        stream.append(this.__('progress.finished') + '\n')
 
-    stream.pipe(process.stdout).on("end", function () {
-      var complete = (this.onComplete === 'function') ? this.onComplete.bind(this) : setImmediate;
-      complete(this.end.bind(this, mode, true, exercise))
-    }.bind(this))
+      stream.pipe(process.stdout).on("end", function () {
+        complete(this.end.bind(this, mode, true, exercise))
+      }.bind(this))
+    })
 
   }.bind(this)
 
@@ -187,15 +189,15 @@ function onfail (msg) {
   console.log(chalk.red.bold('\u2717 ') + msg)
 }
 
-Core.prototype.verify = function (args) {
+WA.prototype.verify = function (args) {
   return this.processCurrent('verify', args)
 }
 
-Core.prototype.run = function (args) {
+WA.prototype.run = function (args) {
   return this.processCurrent('run', args)
 }
 
-Core.prototype.processCurrent = function (mode, args) {
+WA.prototype.processCurrent = function (mode, args) {
   var currentName = this.appStorage.get('current')
   if (!currentName)
     return error(this.__('error.exercise.none_active'))
@@ -203,7 +205,7 @@ Core.prototype.processCurrent = function (mode, args) {
   return this.processExercise(currentName, mode, args)
 }
 
-Core.prototype.processExercise = function (exerciseName, mode, args) {
+WA.prototype.processExercise = function (exerciseName, mode, args) {
   exercise = this.loadExercise(exerciseName)
 
   if (!exercise)
@@ -260,7 +262,7 @@ Core.prototype.processExercise = function (exerciseName, mode, args) {
     print(this.i18n, this.i18n.lang()).appendChain(result).pipe(process.stdout)
 }
 
-Core.prototype.loadExercise = function (name) {
+WA.prototype.loadExercise = function (name) {
   var meta = this._meta[util.idFromName(name)]
   
   if (!meta)
@@ -275,7 +277,7 @@ Core.prototype.loadExercise = function (name) {
   return exercise
 }
 
-Core.prototype.selectExercise = function (name) {
+WA.prototype.selectExercise = function (name) {
   if (!this._meta[util.idFromName(name)])
     return error(this.__('error.exercise.missing', {name: name}))
 
@@ -283,7 +285,7 @@ Core.prototype.selectExercise = function (name) {
   return name
 }
 
-Core.prototype.printExercise = function printExercise (name) {
+WA.prototype.printExercise = function printExercise (name) {
   this.selectExercise(name)
 
   var exercise = this.loadExercise(name)
@@ -330,4 +332,4 @@ Core.prototype.printExercise = function printExercise (name) {
   }.bind(this))
 }
 
-module.exports = Core
+module.exports = WA
