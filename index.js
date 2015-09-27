@@ -189,23 +189,22 @@ function onfail (msg) {
   console.log(chalk.red.bold('\u2717 ') + msg)
 }
 
-WA.prototype.verify = function (args) {
-  return this.processCurrent('verify', args)
+WA.prototype.verify = function (args, exerciseName) {
+  return this.process('verify', args, exerciseName)
 }
 
-WA.prototype.run = function (args) {
-  return this.processCurrent('run', args)
+WA.prototype.run = function (args, exerciseName) {
+  return this.process('run', args, exerciseName)
 }
 
-WA.prototype.processCurrent = function (mode, args) {
-  var currentName = this.appStorage.get('current')
-  if (!currentName)
+WA.prototype.process = function (mode, args, exerciseName) {
+  if (!exerciseName) {
+    exerciseName = this.appStorage.get('current')
+  }
+
+  if (!exerciseName)
     return error(this.__('error.exercise.none_active'))
 
-  return this.processExercise(currentName, mode, args)
-}
-
-WA.prototype.processExercise = function (exerciseName, mode, args) {
   exercise = this.loadExercise(exerciseName)
 
   if (!exercise)
