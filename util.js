@@ -13,6 +13,7 @@ function idFromName (id) {
     id = ""
   
   return id.toString().toLowerCase()
+    .replace(/^\s+|\s+$/g, '')
     .replace(/\s/g, '_')
     .replace(/[^\w]/gi, '')
 }
