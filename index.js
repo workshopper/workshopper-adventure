@@ -56,7 +56,13 @@ function WA (options) {
   this.exercises   = []
   this._meta       = {}
 
-  this.i18n        = i18n.init(options, globalStorage, this.appStorage)
+
+  try {
+    this.i18n        = i18n.init(options, globalStorage, this.appStorage)
+  } catch(e) {
+    console.log(e.message)
+    process.exit(1)
+  }
   this.__          = this.i18n.__
   this.__n         = this.i18n.__n
 

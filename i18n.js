@@ -4,7 +4,6 @@ const i18n       = require('i18n-core')
     , i18nChain  = require('i18n-core/lookup/chain')
     , i18nExtend = require('i18n-core/lookup/extend')
     , path       = require('path')
-    , error      = require('./lib/print').error
     , fs         = require('fs')
     , UNDERLINE  = 'Underline'
     , chalk      = require('chalk')
@@ -16,16 +15,16 @@ function commandify (s) {
 
 function chooseLang (globalStorage, appStorage, defaultLang, availableLangs, lang) {
   if (!!lang && typeof lang != 'string')
-    return error('Please supply a language. Available languages are: ' + availableLangs.join(', '))
+    throw new Error('Please supply a language. Available languages are: ' + availableLangs.join(', '))
 
   if (lang)
     lang = lang.replace(/_/g, '-').toLowerCase()
 
   if (availableLangs.indexOf(defaultLang) === -1)
-    return error('The default language "' + defaultLang + ' is not one of the available languages?! Available languages are: ' + availableLangs.join(', '))
+    throw new Error('The default language "' + defaultLang + ' is not one of the available languages?! Available languages are: ' + availableLangs.join(', '))
 
   if (lang && availableLangs.indexOf(lang) === -1)
-    return error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
+    throw new Error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
 
   var data = ((appStorage && appStorage.get('lang')) || globalStorage.get('lang') || {})
 
