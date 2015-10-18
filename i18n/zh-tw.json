@@ -38,11 +38,11 @@
   "solution": {
     "fail": {
       "title": "FAIL",
-      "message": "Your solution to {{{name}}} didn't pass. Try again!\n"
+      "message": "Your solution to {{{currentExercise.name}}} didn't pass. Try again!\n"
     },
     "pass": {
       "title": "PASS",
-      "message": "Your solution to {{{name}}} passed!"
+      "message": "Your solution to {{{currentExercise.name}}} passed!"
     },
     "notes": {
       "compare": "Here's the official solution in case you want to compare notes:\n",

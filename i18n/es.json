@@ -39,11 +39,11 @@
   "solution": {
     "fail": {
       "title": "FALLO",
-      "message": "Su solución a {{{name}}} no pasó. Intentalo de nuevo!\n"
+      "message": "Su solución a {{{currentExercise.name}}} no pasó. Intentalo de nuevo!\n"
     },
     "pass": {
       "title": "PASO",
-      "message": "Su solución a {{{name}}} pasó sin problemas!"
+      "message": "Su solución a {{{currentExercise.name}}} pasó sin problemas!"
     },
     "notes": {
       "compare": "Aqui está la solución oficial si desea comparar notas:\n",

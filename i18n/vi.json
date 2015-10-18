@@ -38,11 +38,11 @@
   "solution": {
     "fail": {
       "title": "SAI",
-      "message": "Bài {{{name}}} của bạn chưa chuẩn. Thử lại xem sao!\n"
+      "message": "Bài {{{currentExercise.name}}} của bạn chưa chuẩn. Thử lại xem sao!\n"
     },
     "pass": {
       "title": "ĐÚNG",
-      "message": "Bài {{{name}}} của bạn rất ngon!"
+      "message": "Bài {{{currentExercise.name}}} của bạn rất ngon!"
     },
     "notes": {
       "compare": "Đây là giải pháp chuẩn, bạn tham khảo xem sao:\n",

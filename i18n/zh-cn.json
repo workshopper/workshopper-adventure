@@ -38,11 +38,11 @@
   "solution": {
     "fail": {
       "title": "失败",
-      "message": "你对 {{{name}}} 所作的答案未通过验证， 请再试一次！\n"
+      "message": "你对 {{{currentExercise.name}}} 所作的答案未通过验证， 请再试一次！\n"
     },
     "pass": {
       "title": "通过",
-      "message": "你对 {{{name}}} 所作的答案已通过验证！"
+      "message": "你对 {{{currentExercise.name}}} 所作的答案已通过验证！"
     },
     "notes": {
       "compare": "以下是官方给出的参考答案，以备你做比较参考:\n",

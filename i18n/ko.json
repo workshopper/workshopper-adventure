@@ -40,11 +40,11 @@
   "solution": {
     "fail": {
       "title": "실패",
-      "message": "{{{name}}}의 해결책은 통과하지 못했습니다. 다시 한번 해보세요!\n"
+      "message": "{{{currentExercise.name}}}의 해결책은 통과하지 못했습니다. 다시 한번 해보세요!\n"
     },
     "pass": {
       "title": "통과",
-      "message": "{{{name}}}의 해결책은 통과했습니다!"
+      "message": "{{{currentExercise.name}}}의 해결책은 통과했습니다!"
     },
     "notes": {
       "compare": "비교해보고 싶다면 공식 해답은 이렇습니다.\n",

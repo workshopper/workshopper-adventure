@@ -40,11 +40,11 @@
   "solution": {
     "fail": {
       "title": "PORAŻKA",
-      "message": "Twoje rozwiązanie dla {{{name}}} nie zdało egzaminu. Spróbuj ponownie!\n"
+      "message": "Twoje rozwiązanie dla {{{currentExercise.name}}} nie zdało egzaminu. Spróbuj ponownie!\n"
     },
     "pass": {
       "title": "SUKCES",
-      "message": "Twoje rozwiązanie dla {{{name}}} jest prawidłowe!"
+      "message": "Twoje rozwiązanie dla {{{currentExercise.name}}} jest prawidłowe!"
     },
     "notes": {
       "compare": "Oto oficjalne rozwiązanie dla porównania:\n",
