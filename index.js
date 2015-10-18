@@ -150,8 +150,11 @@ WA.prototype.exercisePass = function (mode, exercise) {
       if (files.length > 0 || exercise.solution)
         stream.append(this.__('solution.notes.compare'))
       
-      stream.append(exercise.solution, exercise.solutionType)
-      stream.append({ files: files })
+      if (files) {
+        stream.append({ files: files })
+      } else {
+        stream.append(exercise.solution, exercise.solutionType)
+      }
     }
 
     var complete = (this.onComplete === 'function') ? this.onComplete.bind(this) : setImmediate;
@@ -221,7 +224,7 @@ WA.prototype.process = function (mode, args, specifier) {
 
   if (exercise.requireSubmission !== false && args.length == 0)
     return error(this.__('ui.usage', {appName: this.options.name, mode: mode}))
-  
+
   // individual validation events
   if (typeof exercise.on === 'function') {
     exercise.on('pass', onpass)
