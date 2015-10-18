@@ -9,7 +9,7 @@ const fs           = require('fs')
 
 /* jshint -W079 */
 const createMenuFactory  = require('simple-terminal-menu/factory')
-    , print              = require('./lib/print')
+    , PrintStream        = require('./lib/print')
     , util               = require('./util')
     , i18n               = require('./i18n')
     , storage            = require('./lib/storage')
@@ -112,7 +112,7 @@ WA.prototype.exerciseFail = function (mode, exercise) {
       '{solution.fail.message}\n'
     exercise.failType = 'txt'
   }
-  var stream = print(this.i18n, this.i18n.lang())
+  var stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
   stream.appendChain(exercise.fail, exercise.failType).pipe(process.stdout)
   this.end(mode, false, exercise)
 }
@@ -143,7 +143,7 @@ WA.prototype.exercisePass = function (mode, exercise) {
       exercise.passType = 'txt'
     }
 
-    var stream = print(this.i18n, this.i18n.lang())
+    var stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
     stream.append(exercise.pass, exercise.passType)
 
     if (!exercise.hideSolutions) {
@@ -264,11 +264,11 @@ WA.prototype.process = function (mode, args, exerciseName) {
         : method.bind(exercise)(args)
   
   if (result)
-    print(this.i18n, this.i18n.lang()).appendChain(result).pipe(process.stdout)
+    new PrintStream(this.createExerciseContext(exercise), this.i18n.lang()).appendChain(result).pipe(process.stdout)
 }
 
-WA.prototype.loadExercise = function (name) {
-  var meta = this._meta[util.idFromName(name)]
+WA.prototype.loadExercise = function (id) {
+  var meta = this._meta[id]
   
   if (!meta)
     return null
@@ -295,6 +295,14 @@ WA.prototype.printExercise = function printExercise (name) {
 
   var exercise = this.loadExercise(name)
     , prepare
+WA.prototype.createExerciseContext = function (exercise) {
+  return this.i18n.extend({
+      "currentExercise.name" : exercise.meta.name
+    , "progress.count" : exercise.meta.number
+    , "progress.total" : this.exercises.length
+    , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
+  })
+}
 
   if (!exercise)
     return error(this.__('error.exercise.missing', {name: name}))
@@ -309,12 +317,7 @@ WA.prototype.printExercise = function printExercise (name) {
       if (err)
         return error(this.__('error.exercise.loading', {err: err.message || err}))
 
-      var stream = print(this.i18n.extend({
-            "currentExercise.name" : exercise.meta.name
-          , "progress.count" : exercise.meta.number
-          , "progress.total" : this.exercises.length
-          , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
-        }), this.i18n.lang())
+      var stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
         , found = false
       stream.append(exercise.header, exercise.headerType)
        || stream.append({file: exercise.headerFile})
