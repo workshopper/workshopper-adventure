@@ -195,26 +195,29 @@ function onfail (msg) {
   console.log(chalk.red.bold('\u2717 ') + msg)
 }
 
-WA.prototype.verify = function (args, exerciseName) {
-  return this.process('verify', args, exerciseName)
+WA.prototype.verify = function (args, specifier) {
+  return this.process('verify', args, specifier)
 }
 
-WA.prototype.run = function (args, exerciseName) {
-  return this.process('run', args, exerciseName)
+WA.prototype.run = function (args, specifier) {
+  return this.process('run', args, specifier)
 }
 
-WA.prototype.process = function (mode, args, exerciseName) {
-  if (!exerciseName) {
-    exerciseName = this.appStorage.get('current')
-  }
+WA.prototype.process = function (mode, args, specifier) {
+  var id
 
-  if (!exerciseName)
+  if (specifier)
+    id = this.specifierToId(specifier)
+  else
+    id = util.idFromName(this.appStorage.get('current'))
+
+  if (!id)
     return error(this.__('error.exercise.none_active'))
 
-  exercise = this.loadExercise(exerciseName)
+  exercise = this.loadExercise(id)
 
   if (!exercise)
-      return error(this.__('error.exercise.missing', {name: name}))
+    return error(this.__('error.exercise.missing', {name: specifier}))
 
   if (exercise.requireSubmission !== false && args.length == 0)
     return error(this.__('ui.usage', {appName: this.options.name, mode: mode}))
@@ -281,20 +284,31 @@ WA.prototype.loadExercise = function (id) {
 
   return exercise
 }
+WA.prototype.specifierToId = function (specifier) {
 
-WA.prototype.selectExercise = function (name) {
-  if (!this._meta[util.idFromName(name)])
-    return error(this.__('error.exercise.missing', {name: name}))
+  if (!isNaN(specifier)) {
+    var number = parseInt(specifier, 10)
+    if (number >= 0 && number < this.exercises.length) {
+      specifier = this.exercises[number]
+    } else {
+      specifier = ''
+    }
+  }
 
-  this.appStorage.save('current', name)
-  return name
+  return util.idFromName(specifier)
 }
+WA.prototype.selectExercise = function (specifier) {
+  var id = this.specifierToId(specifier)
+  if (!id)
+    return error(this.__('error.exercise.missing', {name: specifier}))
 
-WA.prototype.printExercise = function printExercise (name) {
-  this.selectExercise(name)
+  var meta = this._meta[id]
+  if (!meta)
+    return error(this.__('error.exercise.missing', {name: specifier}))
 
-  var exercise = this.loadExercise(name)
-    , prepare
+  this.appStorage.save('current', meta.name)
+  return meta.id
+}
 WA.prototype.createExerciseContext = function (exercise) {
   return this.i18n.extend({
       "currentExercise.name" : exercise.meta.name
@@ -303,9 +317,13 @@ WA.prototype.createExerciseContext = function (exercise) {
     , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
   })
 }
+WA.prototype.printExercise = function printExercise (specifier) {
+  var id = this.selectExercise(specifier)
+  if (!id)
+    return error(this.__('error.exercise.missing', {name: specifier}))
 
-  if (!exercise)
-    return error(this.__('error.exercise.missing', {name: name}))
+  var exercise = this.loadExercise(id)
+    , prepare
 
   prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate;
   prepare(function(err) {
