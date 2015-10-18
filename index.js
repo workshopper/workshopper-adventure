@@ -168,7 +168,7 @@ WA.prototype.exercisePass = function (mode, exercise) {
       stream.pipe(process.stdout).on("end", function () {
         complete(this.end.bind(this, mode, true, exercise))
       }.bind(this))
-    })
+    }.bind(this))
 
   }.bind(this)
 
