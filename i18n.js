@@ -72,9 +72,11 @@ module.exports = {
             if (key.indexOf(exercisePrefix) === 0)
               return key.substr(exercisePrefix.length)
 
-            var end = key.length-UNDERLINE.length
-            if (key.indexOf(UNDERLINE) === end)
-              return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
+            if (key.length > UNDERLINE.length) {
+              var end = key.length-UNDERLINE.length
+              if (key.indexOf(UNDERLINE) === end)
+                return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
+            }
           }
         }))
       , _exercises = []
