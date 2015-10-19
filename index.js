@@ -280,9 +280,8 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, hasOtherM
     return cleanup(e)
   }
   
-  if (result || (!hasOtherMeansOfCallback && method.length <= 1)) {
+  if (result || (!hasOtherMeansOfCallback && method.length <= 1))
     cleanup(null, true, result)
-  }
 
   return cleanup
 }
