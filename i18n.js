@@ -56,6 +56,7 @@ module.exports = {
             if (options[key])
               return options[key]
 
+            // legacy -- start
             if (key === 'title')
               return options.name.toUpperCase()
 
@@ -67,6 +68,7 @@ module.exports = {
 
             if (key === 'COMMAND' || key === 'ADVENTURE_COMMAND')
               return commandify(options.name)
+            // legacy -- end
 
             var exercisePrefix = 'exercise.'
             if (key.indexOf(exercisePrefix) === 0)
