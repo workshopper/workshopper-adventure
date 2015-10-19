@@ -95,7 +95,7 @@ WA.prototype.addExercise = function (meta) {
 
 WA.prototype.countRemaining = function () {
   var completed = this.appStorage.get('completed')
-  return this.exercises.length - completed ? completed.length : 0
+  return this.exercises.length - (completed ? completed.length : 0)
 }
 
 WA.prototype.markCompleted = function (exerciseName, cb) {
