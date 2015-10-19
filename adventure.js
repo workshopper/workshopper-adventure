@@ -58,7 +58,8 @@ function LegacyAdventure (options) {
   this.helpFile    = options.helpFile
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
-  this.onComplete  = typeof options.onComplete == 'function' && options.onComplete
+  if (typeof options.onComplete == 'function')
+    this.onComplete = options.onComplete
 
   Core.call(this, options)
 
