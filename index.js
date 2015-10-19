@@ -151,7 +151,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
           '{bold}{solution.pass.message}{/bold}\n', 'txt')
 
       if (!exercise.hideSolutions) {
-        if (files.length > 0 || exercise.solution)
+        if ((files && files.length > 0) || exercise.solution)
           stream.append('{solution.notes.compare}')
 
         files && files.length > 0
@@ -197,16 +197,21 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   if (typeof method !== 'function')
     return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.')
 
-  var cleanup = this.executeExercise(exercise, mode, method, args, (typeof exercise.on === 'function'), cb)
+  var stream = this.executeExercise(exercise, mode, method, args, cb)
   if (typeof exercise.on === 'function') {
-    exercise.on('pass', cleanup.bind(null, null, false))
-    exercise.on('fail', cleanup.bind(null, null, true))
+    exercise.on('pass', function (message) {
+      stream.append(chalk.green.bold('\u2713 ') + message)
+    })
+    exercise.on('fail', function (message) {
+      stream.append(chalk.red.bold('\u2717 ') + message)
+    })
     exercise.on('pass', this.emit.bind(this, 'pass', exercise, mode))
     exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode)) 
   }
+  return stream
 }
 
-WA.prototype.executeExercise = function (exercise, mode, method, args, hasOtherMeansOfCallback, cb) {
+WA.prototype.executeExercise = function (exercise, mode, method, args, cb) {
   var result
     , finished = false
     , stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
@@ -252,8 +257,8 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, hasOtherM
       }.bind(this)
 
   try {
-    result = (method.length <= 1)
-      ? method.call(exercise, args)
+    method.length <= 1
+      ? cleanup(null, true, method.call(exercise, args))
       : method.call(exercise, args, function callback (err, pass) {
           /*
             callback(true)       -> err=null,  pass=true
@@ -271,19 +276,16 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, hasOtherM
             err = null
           }
 
+          pass = (mode === 'run' || (pass && !exercise.fail))
           err
             ? cleanup(err)
-            : cleanup(null, mode === 'run' || (pass && !exercise.fail))
+            : cleanup(null, pass)
 
         }.bind(this))
   } catch (e) {
     return cleanup(e)
   }
-  
-  if (result || (!hasOtherMeansOfCallback && method.length <= 1))
-    cleanup(null, true, result)
-
-  return cleanup
+  return stream
 }
 WA.prototype.loadExercise = function (specifier) {
   var id
