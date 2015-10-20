@@ -135,7 +135,7 @@ WA.prototype.getExerciseFiles = function (exercise, callback) {
 WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
   this.getExerciseFiles(exercise, function (err, files) {
     if (err)
-      return error(this.__('solution.notes.load_error', {err: err.message || err}))
+      return cb(this.__('solution.notes.load_error', {err: err.message || err}))
 
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
       if (err)
