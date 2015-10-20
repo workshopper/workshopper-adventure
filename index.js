@@ -6,8 +6,8 @@ const fs           = require('fs')
 
 /* jshint -W079 */
 const util         = require('./util')
-    , PrintStream        = require('./lib/print')
-    , storage            = require('./lib/storage')
+    , PrintStream  = require('./lib/print')
+    , storage      = require('./lib/storage')
 /* jshint +W079 */
   
 
@@ -27,6 +27,11 @@ function WA (options) {
   if (options.appDir)
     options.appDir = util.getDir(options.appDir, '.')
 
+  if (!options.appRepo && options.appDir)
+    try {
+      options.appRepo = require(path.join(options.appDir, 'package.json')).repository.url
+    } catch (e) {}
+
   if (options.appDir)
     options.exerciseDir = util.getDir(options.exerciseDir || 'exercises', options.appDir)
 
@@ -42,13 +47,13 @@ function WA (options) {
 
   EventEmitter.call(this)
 
-  this.options     = options
+  this.options = options
 
   var globalStorage = storage(storage.userDir, '.config', 'workshopper')
   this.appStorage   = storage(storage.userDir, '.config', options.name)
 
-  this.exercises   = []
-  this._meta       = {}
+  this.exercises = []
+  this._meta     = {}
 
 
   try {
@@ -57,8 +62,8 @@ function WA (options) {
     console.log(e.message)
     process.exit(1)
   }
-  this.__          = this.i18n.__
-  this.__n         = this.i18n.__n
+  this.__  = this.i18n.__
+  this.__n = this.i18n.__n
 
   this.cli = commandico(this, 'menu')
     .loadCommands(path.resolve(__dirname, './lib/commands'))
