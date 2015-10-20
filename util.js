@@ -1,12 +1,5 @@
 const path   = require('path')
     , fs     = require('fs')
-    , vw     = require('visualwidth')
-
-
-function repeat (ch, sz) {
-  return new Array(sz + 1).join(ch)
-}
-
 
 function idFromName (id) {
   if (id === null || id === undefined)
@@ -46,7 +39,6 @@ function getFsObject(type, file, base) {
 module.exports = {
 	  idFromName: idFromName
 	, dirFromName: dirFromName
-  , repeat: repeat
   , getDir: getFsObject.bind(null, 'dir')
   , getFile: getFsObject.bind(null, 'file')
 }
