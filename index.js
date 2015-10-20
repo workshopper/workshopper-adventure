@@ -122,6 +122,8 @@ WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
     : stream.appendChain('\n' +
       '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
       '{solution.fail.message}\n', 'txt')
+  
+  stream.append('\n')
 
   cb()
 }
@@ -166,6 +168,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         : stream.append('{progress.finished}\n')
 
       stream.append(completeMessage)
+      stream.append('\n')
 
       cb()
     }.bind(this))
