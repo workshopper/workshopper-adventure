@@ -41,9 +41,7 @@ function LegacyAdventure (options) {
 
   if (options.showHeader) {
     options.header = '# {title}'
-          + '\n{titleUnderline}'
-          + '\n {yellow}__{currentExercise.name}__{/yellow}'
-          + '\n {yellow}_{progress.state_resolved}_{/yellow}'
+          + '\n## __{currentExercise.name}__ (_{progress.state_resolved}_)'
           + '\n\n'
     options.headerType = 'md'
   }
