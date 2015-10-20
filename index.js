@@ -371,6 +371,8 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
        || stream.append({file: exercise.footerFile})
        || stream.append(this.options.footer, this.options.footerType)
        || stream.append({file: this.options.footerFile})
+       && stream.append('\n')
+
       callback(null, stream)
     }.bind(this))
   }.bind(this))
