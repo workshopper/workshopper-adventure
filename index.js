@@ -3,14 +3,11 @@ const fs           = require('fs')
     , commandico   = require('commandico')
     , inherits     = require('util').inherits
     , EventEmitter = require('events').EventEmitter
-    , combinedStream = require('combined-stream')
-    , StringStream = require('string-to-stream')
 
 /* jshint -W079 */
 const util         = require('./util')
     , PrintStream        = require('./lib/print')
     , storage            = require('./lib/storage')
-    , error              = require('./lib/error')
 /* jshint +W079 */
   
 
