@@ -9,7 +9,6 @@ const fs           = require('fs')
 /* jshint -W079 */
 const util         = require('./util')
     , PrintStream        = require('./lib/print')
-    , i18n               = require('./i18n')
     , storage            = require('./lib/storage')
     , error              = require('./lib/error')
 /* jshint +W079 */
@@ -56,7 +55,7 @@ function WA (options) {
 
 
   try {
-    this.i18n        = i18n.init(options, globalStorage, this.appStorage)
+    this.i18n = require('./i18n').init(options, globalStorage, this.appStorage)
   } catch(e) {
     console.log(e.message)
     process.exit(1)
