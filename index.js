@@ -7,9 +7,8 @@ const fs           = require('fs')
     , StringStream = require('string-to-stream')
 
 /* jshint -W079 */
-const createMenuFactory  = require('simple-terminal-menu/factory')
+const util         = require('./util')
     , PrintStream        = require('./lib/print')
-    , util               = require('./util')
     , i18n               = require('./i18n')
     , storage            = require('./lib/storage')
     , error              = require('./lib/error')
@@ -43,7 +42,7 @@ function WA (options) {
     }
 
   if (!options.menuFactory)
-    options.menuFactory = createMenuFactory(options.menu, {})
+    options.menuFactory = require('simple-terminal-menu/factory')(options.menu, {})
 
   EventEmitter.call(this)
 
