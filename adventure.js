@@ -39,12 +39,14 @@ function LegacyAdventure (options) {
   if (options.modifiers)
     options.modifiers = option.modifiers.map(legacyCommands)
 
-  if (options.showHeader)
-    options.header = '\n {green}{bold}{title}{/bold}{/green}'
-          + '\n{green}{bold}{titleUnderline}{/bold}{/green}'
-          + '\n {yellow}{bold}{currentExercise.name}{/bold}{/yellow}'
-          + '\n {yellow}{italic}{progress.state_resolved}{/italic}{/yellow}'
+  if (options.showHeader) {
+    options.header = '# {title}'
+          + '\n{titleUnderline}'
+          + '\n {yellow}__{currentExercise.name}__{/yellow}'
+          + '\n {yellow}_{progress.state_resolved}_{/yellow}'
           + '\n\n'
+    options.headerType = 'md'
+  }
 
   if (options.footerFile) {
     if (!Array.isArray(options.footerFile))
