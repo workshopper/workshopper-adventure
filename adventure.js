@@ -26,10 +26,6 @@ function LegacyAdventure (options) {
   if (typeof options !== 'object')
     return error('You need to provide an options object')
 
-  if (typeof options.name !== 'string')
-    return error('You need to provide a `name` String option')
-
-
   if (!options.commands)
     options.commands = options.menuItems
 
