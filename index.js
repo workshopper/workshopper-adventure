@@ -383,10 +383,8 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
 
       var stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
         , found = false
-      stream.append(exercise.header, exercise.headerType)
-       || stream.append({file: exercise.headerFile})
-       || stream.append(this.options.header, this.options.headerType)
-       || stream.append({file: this.options.headerFile})
+        stream.append(exercise.header)
+         || stream.append(this.options.header)
 
       if (stream.append(exercise.problem, exercise.problemType))
         found = true
@@ -395,10 +393,8 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
       if (!found)
         return callback('The exercise "' + name + '" is missing a problem definition!')
 
-      stream.append(exercise.footer, exercise.footerType)
-       || stream.append({file: exercise.footerFile})
-       || stream.append(this.options.footer, this.options.footerType)
-       || stream.append({file: this.options.footerFile})
+        stream.append(exercise.footer)
+         || stream.append(this.options.footer)
        && stream.append('\n')
 
       callback(null, stream)
