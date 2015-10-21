@@ -3,7 +3,6 @@ const path = require('path')
 
 /* jshint -W079 */
 const Core  = require('./index')
-    , util  = require('./util')
     , error = require('./lib/print').error
 /* jshint +W079 */
 
@@ -38,12 +37,12 @@ function LegacyAdventure (options) {
     options.modifiers = option.modifiers.map(legacyCommands)
 
   if (!options.footer) {
-  if (options.footerFile) {
-    if (!Array.isArray(options.footerFile))
-      options.footerFile = [options.footerFile]
-  } else {
-    options.footerFile = []
-  }
+    if (options.footerFile) {
+      if (!Array.isArray(options.footerFile))
+        options.footerFile = [options.footerFile]
+    } else {
+      options.footerFile = []
+    }
     options.footerFile.push(require('./default/footer'))
 
     options.footer = {
@@ -56,11 +55,6 @@ function LegacyAdventure (options) {
     this.onComplete = options.onComplete
 
   Core.call(this, options)
-
-  var menuJson = util.getFile(options.menuJson || 'menu.json', this.options.exerciseDir)
-  if (menuJson) {
-    require(menuJson).forEach(this.add.bind(this))
-  }
 
   if (options.execute === 'now') {
     this.execute(process.argv.slice(2))

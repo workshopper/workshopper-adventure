@@ -1,5 +1,6 @@
 var Adventure = require("./adventure")
-  , inherits     = require('util').inherits
+  , util      = require('./util')
+  , inherits  = require('util').inherits
 
 module.exports = LegacyWorkshopper
 
@@ -15,6 +16,11 @@ function LegacyWorkshopper(options) {
   	options.execute = 'immediatly'
 
   Adventure.apply(this, [options])
+
+  var menuJson = util.getFile(options.menuJson || 'menu.json', this.options.exerciseDir)
+  if (menuJson) {
+    this.addAll(require(menuJson))
+  }
 }
 
 inherits(LegacyWorkshopper, Adventure)
