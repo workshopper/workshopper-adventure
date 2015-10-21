@@ -51,7 +51,6 @@ function LegacyAdventure (options) {
   options.footerFile.push(path.join(__dirname, './i18n/footer/{lang}.md'))
 
 
-  this.helpFile    = options.helpFile
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   if (typeof options.onComplete == 'function')
