@@ -103,6 +103,10 @@ WA.prototype.add = function (name_or_object, fn_or_object, fn) {
   return this.addExercise(meta)
 }
 
+WA.prototype.addAll = function (list) {
+  return list.map(this.add.bind(this))
+}
+
 WA.prototype.addExercise = function (meta) {
   this.exercises.push(meta.name)
   this.i18n.updateExercises(this.exercises)
