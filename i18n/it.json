@@ -3,7 +3,7 @@
     "exit": "ESCI",
     "help": "AIUTO",
     "completed": "COMPLETATO",
-    "language": "CAMBIA LA LINGUA",
+    "language": "CAMBIA LA LINGUA (CHOOSE LANGUAGE)",
     "cancel": "ANNULLA"
   },
   "language": {
