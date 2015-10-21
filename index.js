@@ -240,7 +240,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
 WA.prototype.executeExercise = function (exercise, mode, method, args, cb) {
   var result
     , finished = false
-    , stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
+    , stream = this.createMarkdownStream(exercise)
     , cleanup = function cleanup(err, pass, message, messageType) {
         if (finished)
           return // TODO: make this easier to debug ... bad case of zalgo
@@ -360,6 +360,10 @@ WA.prototype.selectExercise = function (specifier) {
   this.appStorage.save('current', meta.name)
   return meta.id
 }
+WA.prototype.createMarkdownStream = function (exercise) {
+  var context = exercise ? this.createExerciseContext(exercise) : this.i18n;
+  return new PrintStream(context, this.i18n.lang())
+}
 WA.prototype.createExerciseContext = function (exercise) {
   return this.i18n.extend({
       "currentExercise.name" : exercise.meta.name
@@ -385,7 +389,7 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
       if (err)
         return callback(this.__('error.exercise.loading', {err: err.message || err}))
 
-      var stream = new PrintStream(this.createExerciseContext(exercise), this.i18n.lang())
+      var stream = this.createMarkdownStream(exercise)
         , found = false
         stream.append(exercise.header)
          || stream.append(this.options.header)
