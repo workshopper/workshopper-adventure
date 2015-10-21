@@ -15,6 +15,8 @@ function WA (options) {
   if (!(this instanceof WA))
     return new WA(options)
 
+  if (!options)
+    options = {}
   if (!options.name)
     throw new Error('The workshopper needs a name to store the progress.');
 
