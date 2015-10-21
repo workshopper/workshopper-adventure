@@ -12,11 +12,11 @@ Hvis du ser etter generell hjelp med Node.js, så er #Node.js kanalen på Freeno
 
 # Fant en feil i {appname} eller vil du bare bidra med noe?
 
-  Det offisielle stedet {appname} er:
+Det offisielle stedet {appname} er:
 
     {appRepo}
 
-  Du må gjerne rapportere en feil eller (aller helst) sende en pull request.
+Du må gjerne rapportere en feil eller (aller helst) sende en pull request.
 
 # Bruk
 
@@ -36,6 +36,6 @@ __`{appname} reset`__ ............... Nullstill alle utførte oppgaver.
 
 __`{appname} run program.js`__ ...... Kjør programmet mot valgt input.
 
-__`{appname} verify program.js`__ ... Verifiser programmet ditt mot forventet 
-output.
+__`{appname} verify program.js`__ ... Verifiser programmet ditt mot forventet output.
+
 __`{appname} -l <språk>`__ .......... Endre systemet språk til det valgte språk.
