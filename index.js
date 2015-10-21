@@ -372,9 +372,14 @@ WA.prototype.createExerciseContext = function (exercise) {
     , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
   })
 }
-WA.prototype.getExerciseText = function printExercise (specifier, callback) {
+WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, callback) {
   var exercise = this.loadExercise(specifier)
     , prepare
+
+  if (arguments.length === 2) {
+    callback = contentOnly
+    contentOnly = false
+  }
 
   if (!exercise)
     callback(this.__('error.exercise.none_active'))
@@ -391,6 +396,8 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
 
       var stream = this.createMarkdownStream(exercise)
         , found = false
+
+      if (!contentOnly)
         stream.append(exercise.header)
          || stream.append(this.options.header)
 
@@ -401,6 +408,7 @@ WA.prototype.getExerciseText = function printExercise (specifier, callback) {
       if (!found)
         return callback('The exercise "' + name + '" is missing a problem definition!')
 
+      if (!contentOnly)
         stream.append(exercise.footer)
          || stream.append(this.options.footer)
        && stream.append('\n')
