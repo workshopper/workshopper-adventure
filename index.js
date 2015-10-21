@@ -141,9 +141,8 @@ WA.prototype.onComplete = function (cb) {
 
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
-  exercise.fail
-    ? stream.appendChain(exercise.fail, exercise.failType)
-    : stream.appendChain('\n' +
+  stream.append(exercise.fail, exercise.failType)
+  || stream.append('\n' +
       '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
       '{solution.fail.message}\n', 'txt')
   
@@ -169,9 +168,8 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       if (err)
         return cb(err)
 
-      exercise.pass
-        ? stream.append(exercise.pass, exercise.passType)
-        : stream.append('\n' +
+      stream.append(exercise.pass, exercise.passType)
+      || stream.append('\n' +
           '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
           '{bold}{solution.pass.message}{/bold}\n', 'txt')
 
