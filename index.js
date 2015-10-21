@@ -248,12 +248,9 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, cb) {
         finished = true
 
         if (message) {
-          if (pass) {
-            exercise.pass = message
-            exercise.passType = messageType
-          } else {
-            exercise.fail = message
-            exercise.failType = messageType
+          exercise[pass ? 'pass': 'fail'] = {
+            text: message,
+            type: messageType
           }
         }
 
