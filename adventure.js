@@ -41,15 +41,9 @@ function LegacyAdventure (options) {
 
   if (!options.footer) {
     if (options.footerFile) {
-      if (!Array.isArray(options.footerFile))
-        options.footerFile = [options.footerFile]
+      options.footer = { file: options.footerFile }
     } else {
-      options.footerFile = []
-    }
-    options.footerFile.push(require('./default/footer'))
-
-    options.footer = {
-      file: options.footerFile
+      options.footer = require('./default/footer')
     }
   }
 
