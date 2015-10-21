@@ -23,6 +23,9 @@ function LegacyAdventure (options) {
   if (typeof options === 'string')
     options = {name: options}
 
+  if (!options)
+    options = {}
+
   if (typeof options !== 'object')
     return error('You need to provide an options object')
 
