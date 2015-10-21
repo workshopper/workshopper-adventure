@@ -403,7 +403,7 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
       if (stream.append(exerciseText, exerciseTextType))
         found = true
       if (!found)
-        return callback('The exercise "' + name + '" is missing a problem definition!')
+        return callback('The exercise "' + exercise.meta.name + '" is missing a problem definition!')
 
       if (!contentOnly)
         stream.append(exercise.footer)
