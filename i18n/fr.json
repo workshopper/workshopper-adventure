@@ -39,11 +39,11 @@
   "solution": {
     "fail": {
       "title": "RATÉ",
-      "message": "Votre solution pour {{{name}}} ne fonctionne pas. Réessayez !\n"
+      "message": "Votre solution pour {{{currentExercise.name}}} ne fonctionne pas. Réessayez !\n"
     },
     "pass": {
       "title": "RÉUSSI",
-      "message": "Votre solution pour {{{name}}} fonctionne !"
+      "message": "Votre solution pour {{{currentExercise.name}}} fonctionne !"
     },
     "notes": {
       "compare": "Voici la solution officielle, si vous voulez comparer :\n",

@@ -40,11 +40,11 @@
   "solution": {
     "fail": {
       "title": "NICHT BESTANDEN",
-      "message": "Deine Lösung für {{{name}}} hat den Test nicht bestanden. Versuche es erneut!\n"
+      "message": "Deine Lösung für {{{currentExercise.name}}} hat den Test nicht bestanden. Versuche es erneut!\n"
     },
     "pass": {
       "title": "BESTANDEN",
-      "message": "Deine Lösung für {{{name}}} hat den Test bestanden!"
+      "message": "Deine Lösung für {{{currentExercise.name}}} hat den Test bestanden!"
     },
     "notes": {
       "compare": "Hier ist die offizielle Lösung, falls du noch einmal vergleichen möchtest:\n",

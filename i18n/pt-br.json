@@ -40,11 +40,11 @@
   "solution": {
     "fail": {
       "title": "FALHA",
-      "message": "Sua solução para {{{name}}} não foi aprovada. Tente novamente!\n"
+      "message": "Sua solução para {{{currentExercise.name}}} não foi aprovada. Tente novamente!\n"
     },
     "pass": {
       "title": "SUCESSO",
-      "message": "Sua solução para {{{name}}} foi aprovada!"
+      "message": "Sua solução para {{{currentExercise.name}}} foi aprovada!"
     },
     "notes": {
       "compare": "Aqui está a solução original, caso você deseje comparar:\n",

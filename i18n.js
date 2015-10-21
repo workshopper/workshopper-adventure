@@ -1,91 +1,32 @@
 const i18n       = require('i18n-core')
     , i18nFs     = require('i18n-core/lookup/fs')
     , i18nObject = require('i18n-core/lookup/object')
+    , i18nChain  = require('i18n-core/lookup/chain')
+    , i18nExtend = require('i18n-core/lookup/extend')
     , path       = require('path')
     , fs         = require('fs')
+    , UNDERLINE  = 'Underline'
+    , chalk      = require('chalk')
+    , util       = require('./util')
 
-function i18nChain() {
-  var linked = {
-        handler: arguments[0]
-      , next: null
-    }
-    , current = linked
-  for (var i = 1; i<arguments.length; i++) {
-    var next = {
-      handler: arguments[i]
-    }
-    current.next = next
-    current = next
-  }
-  return {
-    get: function (key) {
-      var current = linked
-        , result
-      while (!result && current) {
-        result = current.handler.get(key)
-        current = current.next
-      }
-
-      return result
-    }
-  }
+function commandify (s) {
+    return String(s).toLowerCase().replace(/\s+/g, '-');
 }
 
-function createDefaultLookup(options, exercises) {
-  var result = {}
-
-  result[options.defaultLang] = {
-      title: options.title
-    , subtitle: options.subtitle
-    , exercise: {}
-  }
-
-  options.languages.forEach(function (language) {
-    if (!result[language])
-      result[language] = {}
-
-    if (!result[language].title)
-      result[language].title = options.name.toUpperCase()
-  })
-
-  exercises.forEach(function (exercise) {
-    result[options.defaultLang].exercise[exercise] = exercise
-  })
-
-  return result
-}
-
-function chooseLang (globalDataDir, appDataDir, lang, defaultLang, availableLangs) {
-  var globalPath = path.resolve(globalDataDir, 'lang.json')
-    , appPath = path.resolve(appDataDir, 'lang.json')
-    , data
-  try {
-    // Lets see if we find some stored language in the app's config
-    data = require(appPath)
-  } catch (e) {
-    // Without a file an error will occur here, but thats okay
-  }
-  if (!data) {
-    // Lets see if some other workshopper stored language settings
-    try {
-      data = require(globalPath)
-    } catch (e) {
-      data = {}
-      // Without a file an error will occur here, but thats okay
-    }
-  }
-
+function chooseLang (globalStorage, appStorage, defaultLang, availableLangs, lang) {
   if (!!lang && typeof lang != 'string')
-    throw new TypeError('Please supply a language. Available languages are: ' + availableLangs.join(', '))
+    throw new Error('Please supply a language. Available languages are: ' + availableLangs.join(', '))
 
   if (lang)
     lang = lang.replace(/_/g, '-').toLowerCase()
 
   if (availableLangs.indexOf(defaultLang) === -1)
-    throw new TypeError('The default language "' + defaultLang + ' is not one of the available languages?! Available languages are: ' + availableLangs.join(', '))
+    throw new Error('The default language "' + defaultLang + ' is not one of the available languages?! Available languages are: ' + availableLangs.join(', '))
 
   if (lang && availableLangs.indexOf(lang) === -1)
-    throw new TypeError('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
+    throw new Error('The language "' + lang + '" is not available.\nAvailable languages are ' + availableLangs.join(', ') + '.\n\nNote: the language is not case-sensitive ("en", "EN", "eN", "En" will become "en") and you can use "_" instead of "-" for seperators.')
+
+  var data = ((appStorage && appStorage.get('lang')) || globalStorage.get('lang') || {})
 
   if (availableLangs.indexOf(data.selected) === -1)
     // The stored data is not available so lets use one of the other languages
@@ -93,38 +34,73 @@ function chooseLang (globalDataDir, appDataDir, lang, defaultLang, availableLang
   else
     data.selected = lang || data.selected || defaultLang
 
-  try {
-    fs.writeFileSync(globalPath, JSON.stringify(data))
-    fs.writeFileSync(appPath, JSON.stringify(data))
-  } catch(e) {
-    // It is not good if an error occurs but it shouldn't really matter
-  }
+  globalStorage.save('lang', data)
+  if (appStorage)
+    appStorage.save('lang', data)
+
   return data.selected
 }
 
 module.exports = {
-  chooseLang: chooseLang,
-  init: function(options, exercises, lang) {
-    var generalTranslator = i18nChain(
-          i18nFs(path.resolve(__dirname, './i18n'))
-        , i18nObject(createDefaultLookup(options, exercises))
+  init: function(options, globalStorage, appStorage) {
+    var lookup = i18nChain(
+          options.appDir ? i18nFs(path.resolve(options.appDir, './i18n')) : null
+        , i18nFs(path.resolve(__dirname, './i18n'))
       )
-      , translator = i18n(
-          options.appDir
-            ? i18nChain( i18nFs(path.resolve(options.appDir, './i18n')), generalTranslator)
-            : generalTranslator
-        )
-      , result = translator.lang(lang, true)
-    translator.fallback = function (key) {
-      if (!key)
-        return '(???)'
+      , root = i18n(lookup)
+      , choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, options.languages)
+      , lang = choose(null)
+      , translator = root.lang(lang, true)
+      , result = i18n(i18nExtend(translator, {
+          get: function (key) {
+            if (options[key])
+              return options[key]
 
+            // legacy -- start
+            if (key === 'title')
+              return options.name.toUpperCase()
+
+            if (key === 'appName' || key === 'appname' || key === 'ADVENTURE_NAME')
+              return options.name
+
+            if (key === 'rootdir')
+              return options.appDir
+
+            if (key === 'COMMAND' || key === 'ADVENTURE_COMMAND')
+              return commandify(options.name)
+            // legacy -- end
+
+            var exercisePrefix = 'exercise.'
+            if (key.indexOf(exercisePrefix) === 0)
+              return key.substr(exercisePrefix.length)
+
+            if (key.length > UNDERLINE.length) {
+              var end = key.length-UNDERLINE.length
+              if (key.indexOf(UNDERLINE) === end)
+                return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
+            }
+          }
+        }))
+      , _exercises = []
+    root.fallback = function (key) {
       return '?' + key + '?'
     }
-    result.languages = options.languages || ['en']
-    result.change = function (globalDataDir, appDataDir, lang, defaultLang, availableLangs) {
-      result.changeLang(lang)
-      chooseLang(globalDataDir, appDataDir, lang, defaultLang, availableLangs)
+    result.change = function (lng) {
+      lang = choose(lng)
+      translator.changeLang(lang)
+    }
+    result.extend = function (obj) {
+      return i18n(i18nExtend(result, {
+        get: function (key) {
+          return obj[key]
+        }
+      }));
+    }
+    result.updateExercises = function(exercises) {
+      _exercises = exercises;
+    }
+    result.lang = function () {
+      return lang
     }
     return result
   }

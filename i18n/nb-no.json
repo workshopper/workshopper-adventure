@@ -41,11 +41,11 @@
   "solution": {
     "fail": {
       "title": "FEIL",
-      "message": "Din løsning på {{{name}}} er ikke godkjent. Prøv en gang til!\n"
+      "message": "Din løsning på {{{currentExercise.name}}} er ikke godkjent. Prøv en gang til!\n"
     },
     "pass": {
       "title": "RIKTIG",
-      "message": "Løsningen din på {{{name}}} er riktig!"
+      "message": "Løsningen din på {{{currentExercise.name}}} er riktig!"
     },
     "notes": {
       "compare": "Her er den offisielle løsningen i tilfelle du vil sammenligne:\n",

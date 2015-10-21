@@ -39,11 +39,11 @@
   "solution": {
     "fail": {
       "title": "НЕВЕРНО",
-      "message": "Ваше решение {{{name}}} неверное. Попробуйте снова!\n"
+      "message": "Ваше решение {{{currentExercise.name}}} неверное. Попробуйте снова!\n"
     },
     "pass": {
       "title": "ВЕРНО",
-      "message": "Ваше решение {{{name}}} верное!"
+      "message": "Ваше решение {{{currentExercise.name}}} верное!"
     },
     "notes": {
       "compare": "Это правильное решение задачи:\n",

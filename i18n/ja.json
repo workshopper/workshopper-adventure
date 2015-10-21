@@ -40,11 +40,11 @@
   "solution": {
     "fail": {
       "title": "残念！",
-      "message": "「{{{name}}}」に対するあなたの回答は不合格でした。再度挑戦してみて下さい！\n"
+      "message": "「{{{currentExercise.name}}}」に対するあなたの回答は不合格でした。再度挑戦してみて下さい！\n"
     },
     "pass": {
       "title": "おめでとう！",
-      "message": "「{{{name}}}」に対するあなたの回答は合格です！"
+      "message": "「{{{currentExercise.name}}}」に対するあなたの回答は合格です！"
     },
     "notes": {
       "compare": "これが正式な回答です（もしあなたの回答と比較してみたいならどうぞ）：\n",
