@@ -406,7 +406,7 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
       if (!contentOnly)
         stream.append(exercise.footer)
          || stream.append(this.options.footer)
-       && stream.append('\n')
+        && stream.append('\n')
 
       callback(null, stream)
     }.bind(this))
