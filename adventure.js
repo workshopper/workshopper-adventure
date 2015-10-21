@@ -5,7 +5,6 @@ const path = require('path')
 const Core  = require('./index')
     , util  = require('./util')
     , error = require('./lib/print').error
-    , createExerciseMeta = require('./lib/createExerciseMeta')
 /* jshint +W079 */
 
 function legacyCommands(item) {
