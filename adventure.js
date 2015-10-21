@@ -38,22 +38,19 @@ function LegacyAdventure (options) {
   if (options.modifiers)
     options.modifiers = option.modifiers.map(legacyCommands)
 
-  if (options.showHeader) {
-    options.header = '# {title}'
-          + '\n## __{currentExercise.name}__ (_{progress.state_resolved}_)'
-          + '\n\n'
-    options.headerType = 'md'
-  }
-
+  if (!options.footer) {
   if (options.footerFile) {
     if (!Array.isArray(options.footerFile))
       options.footerFile = [options.footerFile]
   } else {
     options.footerFile = []
   }
-  options.footerFile.push(path.join(__dirname, './i18n/footer/{lang}.md'))
+    options.footerFile.push(require('./default/footer'))
 
-
+    options.footer = {
+      file: options.footerFile
+    }
+  }
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   if (typeof options.onComplete == 'function')
