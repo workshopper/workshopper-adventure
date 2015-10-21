@@ -36,6 +36,9 @@ function LegacyAdventure (options) {
   if (options.modifiers)
     options.modifiers = option.modifiers.map(legacyCommands)
 
+  if (options.helpFile)
+    options.help = {file: options.helpFile}
+
   if (!options.footer) {
     if (options.footerFile) {
       if (!Array.isArray(options.footerFile))
