@@ -96,15 +96,4 @@ function LegacyAdventure (options) {
 
 inherits(LegacyAdventure, Core)
 
-LegacyAdventure.prototype.add = function (name_or_object, fn_or_object, fn) {
-  var meta
-  try {
-    meta = createExerciseMeta(this.options.exerciseDir, name_or_object, fn_or_object)
-  } catch(e) {
-    console.log(e)
-    return error(this.__('error.exercise.' + e.id, e))
-  }
-  return this.addExercise(meta)
-}
-
 module.exports = LegacyAdventure

@@ -92,6 +92,17 @@ WA.prototype.execute = function (args) {
   return this.cli.execute(args)
 }
 
+WA.prototype.add = function (name_or_object, fn_or_object, fn) {
+  var meta
+  try {
+    meta = require('./lib/createExerciseMeta')(this.options.exerciseDir, name_or_object, fn_or_object)
+  } catch(e) {
+    console.log(e)
+    return error(this.__('error.exercise.' + e.id, e))
+  }
+  return this.addExercise(meta)
+}
+
 WA.prototype.addExercise = function (meta) {
   this.exercises.push(meta.name)
   this.i18n.updateExercises(this.exercises)
