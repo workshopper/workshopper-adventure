@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@leichtgewicht/msee": "^0.2.3",
+    "@leichtgewicht/msee": "^0.2.4",
     "chalk": "~0.4.0",
     "colors-tmpl": "~0.1.0",
     "combined-stream": "0.0.7",
