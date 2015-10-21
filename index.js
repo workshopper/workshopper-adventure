@@ -17,6 +17,16 @@ function WA (options) {
 
   if (!options)
     options = {}
+
+  if (options.appDir) {
+    options.appDir = util.getDir(options.appDir, '.')
+    if (!options.name) {
+      try {
+        options.name = require(path.join(options.appDir, 'package.json')).name
+      } catch(e) {}
+    }
+  }
+
   if (!options.name)
     throw new Error('The workshopper needs a name to store the progress.');
 
@@ -25,9 +35,6 @@ function WA (options) {
 
   if (!options.defaultLang)
     options.defaultLang = options.languages[0]
-
-  if (options.appDir)
-    options.appDir = util.getDir(options.appDir, '.')
 
   if (!options.appRepo && options.appDir)
     try {
