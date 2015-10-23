@@ -41,6 +41,11 @@ function WA (options) {
       options.appRepo = require(path.join(options.appDir, 'package.json')).repository.url
     } catch (e) {}
 
+  if (!options.version && options.appDir)
+    try {
+      options.version = require(path.join(options.appDir, 'package.json')).version
+    } catch (e) {}
+
   if (options.appDir)
     options.exerciseDir = util.getDir(options.exerciseDir || 'exercises', options.appDir)
 
@@ -114,7 +119,9 @@ WA.prototype.addExercise = function (meta) {
   meta.number = this.exercises.length
   return this
 }
-
+WA.prototype.getVersionString = function () {
+  return this.options.name + '@' + this.options.version
+}
 
 WA.prototype.countRemaining = function () {
   var completed = this.appStorage.get('completed')
