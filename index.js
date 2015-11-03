@@ -353,11 +353,11 @@ WA.prototype.specifierToId = function (specifier) {
 WA.prototype.selectExercise = function (specifier) {
   var id = this.specifierToId(specifier)
   if (!id)
-    return error(this.__('error.exercise.missing', {name: specifier}))
+    throw new Error(this.__('error.exercise.missing', {name: specifier}))
 
   var meta = this._meta[id]
   if (!meta)
-    return error(this.__('error.exercise.missing', {name: specifier}))
+    throw new Error(this.__('error.exercise.missing', {name: specifier}))
 
   this.appStorage.save('current', meta.name)
   return meta.id
