@@ -1,4 +1,6 @@
-# Có thắc mắc với một bài tập {appname} nào đó?
+# {title}
+
+## Có thắc mắc với một bài tập {appname} nào đó?
 
 Một đội ngũ chuyên gia luôn luôn lắng nghe và muốn giúp đỡ bạn để bạn có thể làm chủ được Node.js ở đây:
 
@@ -10,7 +12,7 @@ Ngoài ra, bạn có thể được giúp đỡ thong qua kênh #Node.js trên F
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# Bạn tìm ra lỗi trong {appname} hoặc muốn đóng góp?
+## Bạn tìm ra lỗi trong {appname} hoặc muốn đóng góp?
 
 Repository chính thức của {appname} là:
 
@@ -18,7 +20,7 @@ Repository chính thức của {appname} là:
 
 Hãy báo lại cho chúng tôi lỗi bạn phát hiện ra hoặc tạo một pull request nếu bạn cải tiến được chương trình này.
 
-# Usage
+## Usage
 
 __`{appname}`__ ..................... Hiển thị menu chọn bài tập.
 

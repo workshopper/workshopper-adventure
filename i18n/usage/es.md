@@ -1,4 +1,6 @@
-# ¿Tienes problemas con un ejercicio de {appname}?
+# {title}
+
+## ¿Tienes problemas con un ejercicio de {appname}?
 
 Un equipo de ayudantes elfos expertos está esperando ayudarte ansiosamente en aprender lo básico de Node.js, simplemente ve a:
 
@@ -12,7 +14,7 @@ Si estás buscando ayuda general con Node.js, el canal #Node.js en Freenode IRC 
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# ¿Encontraste un bug en {appname} o solamente quieres contribuir?
+## ¿Encontraste un bug en {appname} o solamente quieres contribuir?
 
 El repositorio oficial de {appname} es:
 
@@ -20,7 +22,7 @@ El repositorio oficial de {appname} es:
 
 Sientete libre de abrir un issue o (preferentemente) un pull request.
 
-# Usage
+## Usage
 
 __`{appname}`__ ..................... Show a menu to interactively select a workshop.
 

@@ -1,4 +1,6 @@
-# 在 {appname} 的练习中遇到困难了吗？
+# {title}
+
+## 在 {appname} 的练习中遇到困难了吗？
 
 一群专家级别的小精灵助手正急切等待着帮你掌握 Node.js 的基础，前往
 
@@ -10,7 +12,7 @@
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# 发现了一个 {appname} 的 bug 或者想要贡献代码？
+## 发现了一个 {appname} 的 bug 或者想要贡献代码？
 
 {appname} 的官方 git 仓库是:
 
@@ -18,7 +20,7 @@
 
 请随意提交一个 bug (或者更好的) 提交一个 Pull Request。
 
-# Usage
+## Usage
 
 __`{appname}`__ ..................... 显示一个互动菜单来选择习题。
 

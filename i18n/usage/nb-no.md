@@ -1,4 +1,6 @@
-# Har du problemer med {appname} oppgaven?
+# {title}
+
+## Har du problemer med {appname} oppgaven?
 
 Et helt team med ivrige og hjelpsomme JavaScript-alver venter på å hjelpe deg lære grunnleggende Node.js, bare gå til denne adressen:
 
@@ -10,7 +12,7 @@ Hvis du ser etter generell hjelp med Node.js, så er #Node.js kanalen på Freeno
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# Fant en feil i {appname} eller vil du bare bidra med noe?
+## Fant en feil i {appname} eller vil du bare bidra med noe?
 
 Det offisielle stedet {appname} er:
 
@@ -18,7 +20,7 @@ Det offisielle stedet {appname} er:
 
 Du må gjerne rapportere en feil eller (aller helst) sende en pull request.
 
-# Bruk
+## Bruk
 
 __`{appname}`__ ..................... Vis menyen for å velge oppgaver.
 

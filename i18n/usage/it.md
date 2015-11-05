@@ -1,4 +1,6 @@
-# Having trouble with a {appname} exercise?
+# {title}
+
+## Having trouble with a {appname} exercise?
 
 A team of expert helper elves is eagerly waiting to assist you in mastering the basics of Node.js, simply go to:
 
@@ -10,7 +12,7 @@ If you're looking for general help with Node.js, the #Node.js channel on Freenod
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# Found a bug with {appname} or just want to contribute?
+## Found a bug with {appname} or just want to contribute?
 
 The official repository for {appname} is:
 
@@ -18,7 +20,7 @@ The official repository for {appname} is:
 
 Feel free to file a bug report or (preferably) a pull request.
 
-# Istruzioni
+## Istruzioni
 
 __`{appname}`__ ..................... Mostra un menu per scegliere un workshop in maniera interattiva.
 

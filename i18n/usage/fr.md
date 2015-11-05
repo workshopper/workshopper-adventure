@@ -1,4 +1,6 @@
-# Un souci avec un exercice de {appname} ?
+# {title}
+
+## Un souci avec un exercice de {appname} ?
 
 Une équipe d’assistants elfiques experts n’attend que l’occasion de vous aider à maîtriser les bases de Node.js, allez simplement sur:
 
@@ -10,7 +12,7 @@ Si vous cherchez de l’aide plus globale sur Node.js, le canal #Node.js sur Fre
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# Vous avez trouvé un bogue dans {appname} ou voulez juste contribuer ?
+## Vous avez trouvé un bogue dans {appname} ou voulez juste contribuer ?
 
 Le dépôt officiel pour {appname} est ici :
 
@@ -19,7 +21,7 @@ Le dépôt officiel pour {appname} est ici :
 N’hésitez pas à créer un ticket ou (de préférence) faire une _pull request_…
 
 
-# Utilisation
+## Utilisation
 
 __`{appname}`__ ..................... Affiche un menu interactif pour choisir un exercice.
 

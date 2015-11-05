@@ -1,4 +1,6 @@
-# {appname} 연습문제에 문제가 있나요
+# {title}
+
+## {appname} 연습문제에 문제가 있나요
 
 전문적인 도우미 요정 팀이 열심히 당신이 Node.js의 기본에 정통하도록 돕기 위해 기다리는 중입니다.
 
@@ -10,7 +12,7 @@ Node.js의 일반적인 도움이 필요하면 Freenode IRC의 #Node.js 채널�
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# {appname}에 버그를 찾았거나 기여하고 싶으신가요?
+## {appname}에 버그를 찾았거나 기여하고 싶으신가요?
 
 {appname}의 공식 저장소는 여기입니다.
 
@@ -18,7 +20,7 @@ Node.js의 일반적인 도움이 필요하면 Freenode IRC의 #Node.js 채널�
 
 자유롭게 버그를 제보하거나 (되도록이면) 풀 리퀘스트를 보내세요.
 
-# 사용법
+## 사용법
 
 __`{appname}`__ ..................... 워크숍을 선택하는 대화형 메뉴를 표시합니다.
 

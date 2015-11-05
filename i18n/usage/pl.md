@@ -1,4 +1,6 @@
-# Problemy z zadaniem {appname}?
+# {title}
+
+## Problemy z zadaniem {appname}?
 
 Zespół doświadczonych elfów-pomocników tylko czeka żeby Ci pomóc w opanowaniu podstaw Node.js! Odwiedź:
 
@@ -10,7 +12,7 @@ Jeżeli poszukujesz ogólnej pomocy dotyczącej Node.js, kanał #Node.js w sieci
 
     https://groups.google.com/forum/#!forum/nodejs
 
-# Udało Ci się znaleźć błąd w {appname} lub chcesz się poudzielać?
+## Udało Ci się znaleźć błąd w {appname} lub chcesz się poudzielać?
 
 Oficjalne repozytorium {appname} to:
 
@@ -18,7 +20,7 @@ Oficjalne repozytorium {appname} to:
 
 Nie krępuj się i dodaj raport na temat znalezionego błędu lub (lepiej) napraw go i zrób pull request. 
 
-# Sposób użycia{/yellow}{/bold}
+## Sposób użycia{/yellow}{/bold}
 
 __`{appname}`__ ..................... Pokaż menu aby interaktywnie wybrać warsztat.
 
