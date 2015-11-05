@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23m選擇一個題目，然後按下 \u001b[3mEnter\u001b[23m 開始嘗試！",
   "menu": {
+    "credits": "感謝",
     "exit": "EXIT",
     "help": "HELP",
     "completed": "COMPLETED",
@@ -63,5 +65,10 @@
       "one": "You have one challenge left",
       "other": "You have {{count}} challenges left."
     }
+  },
+  "credits": {
+    "title": "底下這些做出重大貢獻的 hacker 為您製作了 {{appName}}：",
+    "name": "名前",
+    "user": "GitHub Username"
   }
 }

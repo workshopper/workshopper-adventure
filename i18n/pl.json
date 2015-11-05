@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23mWybierz ćwiczenie i wciśnij \u001b[3mEnter\u001b[23m aby rozpocząć",
   "menu": {
+    "credits": "AUTORZY",
     "exit": "WYJDŹ",
     "help": "POMOC",
     "completed": "UKOŃCZONO",
@@ -64,5 +66,10 @@
       "one": "Pozostało Ci jedno ćwiczenie",
       "other": "Pozostało Ci {{count}} ćwiczeń."
     }
+  },
+  "credits": {
+    "title": "{{appName}} jest w Twoich rękach dzięki staraniom następujących hakerów:",
+    "name": "Imię i Nazwisko",
+    "user": "GitHub"
   }
 }

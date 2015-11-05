@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23mSelecione um exercício e pressione \u001b[3mEnter\u001b[23m para começar",
   "menu": {
+    "credits": "CRÉDITOS",
     "exit": "SAIR",
     "help": "AJUDA",
     "completed": "COMPLETO",
@@ -63,5 +65,10 @@
       "one": "Você tem um desafio restante.",
       "other": "Você tem {{count}} desafios restantes."
     }
+  },
+  "credits": {
+    "title": "{{appName}} é trazido até você pelos seguintes hackers dedicados:",
+    "name": "Nome",
+    "user": "GitHub Username"
   }
 }

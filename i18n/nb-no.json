@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23mVelg en oppgave og trykk \u001b[3mEnter\u001b[23m for å begynne",
   "menu": {
+    "credits": "TAKK TIL",
     "exit": "AVSLUTT",
     "help": "HJELP",
     "completed": "FULLFØRT",
@@ -64,5 +66,10 @@
       "one": "Du har en oppgave igjen",
       "other": "Du har {{count}} oppgaver igjen."
     }
+  },
+  "credits": {
+    "title": "Takket være disse dedikerte hacker'ne har du kunnet bruke {{appName}}:",
+    "name": "Navn",
+    "user": "GitHub Brukernavn"
   }
 }

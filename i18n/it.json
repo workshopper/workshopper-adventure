@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23mSeleziona un esercizio e premi \u001b[3mInvio\u001b[23m per cominciare",
   "menu": {
+    "credits": "CREDITI",
     "exit": "ESCI",
     "help": "AIUTO",
     "completed": "COMPLETATO",

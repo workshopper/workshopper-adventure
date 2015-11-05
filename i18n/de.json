@@ -63,5 +63,10 @@
       "one": "Du hast eine Herausforderung übrig.",
       "other": "Du hast {{count}} Herausforderungen übrig."
     }
+  },
+  "credits": {
+    "title": "{{appName}} wurde von den folgenden, hart-arbeitenden Hackern erstellt:",
+    "name": "Name",
+    "user": "GitHub User"
   }
 }

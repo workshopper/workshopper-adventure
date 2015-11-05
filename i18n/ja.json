@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23m演習課題を選択、 \u001b[3mEnter\u001b[23m 押してスタートします。",
   "menu": {
+    "credits": "謝辞",
     "exit": "終了する",
     "help": "ヘルプを表示する",
     "completed": "完了済み",
@@ -63,5 +65,10 @@
       "one": "一つのチャレンジが残っています！",
       "other": "あと{{count}}個のチャレンジが残っています。"
     }
+  },
+  "credits": {
+    "title": "{{appName}} をお届けしたのは、以下の献身的なハッカー達です：",
+    "name": "名前",
+    "user": "GitHub Username"
   }
 }

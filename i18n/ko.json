@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23m연습문제를 고르고 \u001b[3mEnter\u001b[23m로 시작하세요.",
   "menu": {
+    "credits": "CREDITS",
     "exit": "끝내기",
     "help": "도움말을 확인",
     "completed": "완료",
@@ -64,5 +66,10 @@
       "one": "한 개의 도전만 남아있습니다!",
       "other": "앞으로 {{count}}개의 도전이 남아 있습니다."
     }
+  },
+  "credits": {
+    "title": "{{appName}} 는 이런 열성적인 해커에 의해 제공됩니다:",
+    "name": "Name",
+    "user": "GitHub Username"
   }
 }

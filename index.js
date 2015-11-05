@@ -36,15 +36,16 @@ function WA (options) {
   if (!options.defaultLang)
     options.defaultLang = options.languages[0]
 
-  if (!options.appRepo && options.appDir)
+  if (!options.pkg && options.appDir)
     try {
-      options.appRepo = require(path.join(options.appDir, 'package.json')).repository.url
-    } catch (e) {}
+      options.pkg = require(path.join(options.appDir, 'package.json'))
+    } catch (e) {}    
 
-  if (!options.version && options.appDir)
-    try {
-      options.version = require(path.join(options.appDir, 'package.json')).version
-    } catch (e) {}
+  if (!options.appRepo && options.pkg)
+    options.appRepo = options.pkg.repository.url
+
+  if (!options.version && options.pkg)
+    options.version = options.pkg.version
 
   if (options.appDir)
     options.exerciseDir = util.getDir(options.exerciseDir || 'exercises', options.appDir)

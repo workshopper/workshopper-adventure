@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23m选择一个题目，按 \u001b[3m回车\u001b[23m 开始",
   "menu": {
+    "credits": "鸣谢",
     "exit": "退出",
     "help": "帮助",
     "completed": "完成",
@@ -63,5 +65,10 @@
       "one": "你还剩最后一个习题",
       "other": "你还剩 {{count}} 个习题。"
     }
+  },
+  "credits": {
+    "title": "{{appName}} 的完成离不开以下列举的黑客们:",
+    "name": "姓名",
+    "user": "GitHub 用户名"
   }
 }

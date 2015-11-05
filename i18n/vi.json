@@ -1,5 +1,7 @@
 {
+  "subtitle": "\u001b[23mChọn một bài tập và ấn \u001b[3mEnter\u001b[23m để bắt đầu",
   "menu": {
+    "credits": "Đóng góp",
     "exit": "THOÁT",
     "help": "TRỢ GIÚP",
     "completed": "HOÀN THÀNH",
@@ -63,5 +65,10 @@
       "one": "Bạn còn một bài nữa thôi",
       "other": "Bạn vẫn còn {{count}} bài."
     }
+  },
+  "credits": {
+    "title": "{{appName}} được đóng góp bởi các hacker tích cực sau:",
+    "name": "Name",
+    "user": "GitHub Username"
   }
 }

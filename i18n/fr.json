@@ -1,5 +1,7 @@
 {
+  "subtitle" : "\u001b[23mSélectionnez un exercice et tapez \u001b[3mEnter\u001b[23m pour démarrer",
   "menu": {
+    "credits": "CRÉDITS",
     "exit": "QUITTER",
     "help": "AIDE",
     "completed": "FAIT",
@@ -62,5 +64,10 @@
       "one": "Il vous reste un défi",
       "other": "Il vous reste {{count}} défis."
     }
+  },
+  "credits": {
+    "title": "{{appName}} vous est proprosé par les codeurs dévoués suivants:",
+    "name": "Nom",
+    "user": "Compte GitHub"
   }
 }
