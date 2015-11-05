@@ -51,8 +51,8 @@ function WA (options) {
 
   if (!options.menu)
     options.menu = {
-        width: 65
-      , x: 3
+        width: 73
+      , x: 2
       , y: 2
     }
 
