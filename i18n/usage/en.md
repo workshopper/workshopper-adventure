@@ -20,7 +20,7 @@ The official repository for {appname} is:
 
 Feel free to file a bug report or (preferably) a pull request.
 
-# Usage
+## Usage
 
 __`{appname}`__ ..................... Show a menu to interactively select a workshop.
 
