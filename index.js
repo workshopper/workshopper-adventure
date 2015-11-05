@@ -368,7 +368,7 @@ WA.prototype.createMarkdownStream = function (exercise) {
 }
 WA.prototype.createExerciseContext = function (exercise) {
   return this.i18n.extend({
-      "currentExercise.name" : exercise.meta.name
+      "currentExercise.name" : this.__('exercise.' + exercise.meta.name)
     , "progress.count" : exercise.meta.number
     , "progress.total" : this.exercises.length
     , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
