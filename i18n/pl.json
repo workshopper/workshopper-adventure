@@ -6,7 +6,8 @@
     "help": "POMOC",
     "completed": "UKOŃCZONO",
     "language": "WYBIERZ JĘZYK (CHOOSE LANGUAGE)",
-    "cancel": "ANULUJ"
+    "cancel": "ANULUJ",
+    "update": "SPRAWDŹ AKTUALIZACJE"
   },
   "language": {
     "_current": "WYBRANO",
@@ -71,5 +72,9 @@
     "title": "{{appName}} jest w Twoich rękach dzięki staraniom następujących hakerów:",
     "name": "Imię i Nazwisko",
     "user": "GitHub"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
   }
 }

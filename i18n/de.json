@@ -4,7 +4,8 @@
     "help": "HILFE",
     "completed": "ABGESCHLOSSEN",
     "language": "SPRACHE WÄHLEN (CHOOSE LANGUAGE)",
-    "cancel": "ABBRECHEN"
+    "cancel": "ABBRECHEN",
+    "update": "AUF UPDATE PRÜFEN"
   },
   "language": {
     "_current": "AKTUELL",
@@ -68,5 +69,9 @@
     "title": "{{appName}} wurde von den folgenden, hart-arbeitenden Hackern erstellt:",
     "name": "Name",
     "user": "GitHub User"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** ist die neueste Version.\n\n**Super!**",
+    "now": "{{name}}_@{{current}}_ ist veraltet. Starte automatisches update auf **{{latest}}** mit dem Befehl \n\n```bash\n{{cmd}}\n```\n"
   }
 }

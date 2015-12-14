@@ -6,7 +6,8 @@
     "help": "AYUDA",
     "completed": "COMPLETADO",
     "language": "ELEGIR IDIOMA (CHOOSE LANGUAGE)",
-    "cancel": "CANCELAR"
+    "cancel": "CANCELAR",
+    "update": "BUSCAR ACTUALIZACIONES"
   },
   "language": {
     "_current": "ACTUAL",
@@ -70,5 +71,9 @@
     "title": "{{appName}} is brought to you by the following dedicated hackers:",
     "name": "Name",
     "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** ya está ATT y la última versión.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ está fuera de- Dart, la actualización a **{{latest}}** con \n\n```bash\n{{cmd}}\n```\n"
   }
 }

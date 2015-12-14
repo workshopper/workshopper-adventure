@@ -6,7 +6,8 @@
     "help": "AIDE",
     "completed": "FAIT",
     "language": "CHOISIR LA LANGUE (CHOOSE LANGUAGE)",
-    "cancel": "ANNULER"
+    "cancel": "ANNULER",
+    "update": "VÉRIFIER LA MISE À JOUR"
   },
   "language": {
     "_current": "ACTUEL",
@@ -69,5 +70,9 @@
     "title": "{{appName}} vous est proprosé par les codeurs dévoués suivants:",
     "name": "Nom",
     "user": "Compte GitHub"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** est déjà à la dernière version.\n\n**Félicitations à vous!**",
+    "now": "{{name}}_@{{current}}_ est de jour en dehors, la mise à jour à **{{latest}}** avec \n\n```bash\n{{cmd}}\n```\n"
   }
 }

@@ -1,12 +1,13 @@
 {
   "subtitle": "\u001b[23mChọn một bài tập và ấn \u001b[3mEnter\u001b[23m để bắt đầu",
   "menu": {
-    "credits": "Đóng góp",
+    "credits": "ĐÓNG GÓP",
     "exit": "THOÁT",
     "help": "TRỢ GIÚP",
     "completed": "HOÀN THÀNH",
     "language": "CHỌN NGÔN NGỮ (CHOOSE LANGUAGE)",
-    "cancel": "HỦY BỎ"
+    "cancel": "HỦY BỎ",
+    "update": "KIỂM TRA CẬP NHẬT"
   },
   "language": {
     "_current": "HIỆN TẠI",
@@ -70,5 +71,9 @@
     "title": "{{appName}} được đóng góp bởi các hacker tích cực sau:",
     "name": "Name",
     "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
   }
 }

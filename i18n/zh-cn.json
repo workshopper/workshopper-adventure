@@ -6,7 +6,8 @@
     "help": "帮助",
     "completed": "完成",
     "language": "选择语言 (CHOOSE LANGUAGE)",
-    "cancel": "取消"
+    "cancel": "取消",
+    "update": "检查更新"
   },
   "language": {
     "_current": "当前",
@@ -70,5 +71,9 @@
     "title": "{{appName}} 的完成离不开以下列举的黑客们:",
     "name": "姓名",
     "user": "GitHub 用户名"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
   }
 }

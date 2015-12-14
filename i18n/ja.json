@@ -6,7 +6,8 @@
     "help": "ヘルプを表示する",
     "completed": "完了済み",
     "language": "言語を選択する (CHOOSE LANGUAGE)",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "update": "アップデート チェック"
   },
   "language": {
     "_current": "現在の言語",
@@ -70,5 +71,9 @@
     "title": "{{appName}} をお届けしたのは、以下の献身的なハッカー達です：",
     "name": "名前",
     "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** は一番新しいバーションです。\n\n**おめでとうございます！**",
+    "now": "{{name}}_@{{current}}_ は古いです、**{{latest}}** にアップデートをします。このコマンドを使っています：\n\n```bash\n{{cmd}}\n```\n"
   }
 }

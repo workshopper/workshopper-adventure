@@ -6,7 +6,8 @@
     "help": "AIUTO",
     "completed": "COMPLETATO",
     "language": "CAMBIA LA LINGUA (CHOOSE LANGUAGE)",
-    "cancel": "ANNULLA"
+    "cancel": "ANNULLA",
+    "update": "RICERCA AGGIORNAMENTI"
   },
   "language": {
     "_current": "ATTUALE",
@@ -65,5 +66,9 @@
       "one": "Ti rimane una sola sfida irrisolta.",
       "other": "Ti rimangono {{count}} sfide irrisolte."
     }
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** è già al l'ultima versione.\n\n**Congratulazioni!**",
+    "now": "{{name}}_@{{current}}_ è out-of-date, l'aggiornamento a **{{latest}}** con \n\n```bash\n{{cmd}}\n```\n"
   }
 }

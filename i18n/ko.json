@@ -6,7 +6,8 @@
     "help": "도움말을 확인",
     "completed": "완료",
     "language": "언어를 선택 (CHOOSE LANGUAGE)",
-    "cancel": "취소"
+    "cancel": "취소",
+    "update": "업데이트를 확인"
   },
   "language": {
     "_current": "지금 언어",
@@ -71,5 +72,9 @@
     "title": "{{appName}} 는 이런 열성적인 해커에 의해 제공됩니다:",
     "name": "Name",
     "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** 는 최신 버전에서 이미.\n\n**치하!**",
+    "now": "{{name}}_@{{current}}_ 는 다음 명령을 **{{latest}}**하는 업데이트, 오래된이다로 업데이트:\n\n```bash\n{{cmd}}\n```\n"
   }
 }

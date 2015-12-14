@@ -6,7 +6,8 @@
     "help": "СПРАВКА",
     "completed": "ВЫПОЛНЕНО",
     "language": "ВЫБРАТЬ ЯЗЫК (CHOOSE LANGUAGE)",
-    "cancel": "ОТМЕНА"
+    "cancel": "ОТМЕНА",
+    "update": "ПРОВЕРИТЬ ОБНОВЛЕНИЯ"
   },
   "language": {
     "_current": "ТЕКУЩИЙ",
@@ -69,5 +70,9 @@
     "title": "{{appName}} была создана следующими разработчиками:",
     "name": "Имя",
     "user": "GitHub аккаунт"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
   }
 }

@@ -6,7 +6,8 @@
     "help": "HELP",
     "completed": "COMPLETED",
     "language": "CHOOSE LANGUAGE",
-    "cancel": "CANCEL"
+    "cancel": "CANCEL",
+    "update": "UPDATE"
   },
   "language": {
     "_current": "CURRENT",
@@ -70,5 +71,9 @@
     "title": "底下這些做出重大貢獻的 hacker 為您製作了 {{appName}}：",
     "name": "名前",
     "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
   }
 }
