@@ -143,6 +143,21 @@ WA.prototype.markCompleted = function (exerciseName, cb) {
   return this.onComplete(cb)
 }
 
+WA.prototype.getNext = function () {
+  var current = this.appStorage.get('current')
+  var remainingAfterCurrent = this.exercises.slice(this.exercises.indexOf(current) + 1)
+  var completed = this.appStorage.get('completed') || []
+
+  var incompleteAfterCurrent = remainingAfterCurrent.filter(function (elem) {
+    return completed.indexOf(elem) < 0
+  })
+
+  if (incompleteAfterCurrent.length === 0)
+    return new Error('error.no_uncomplete_left')
+
+  return incompleteAfterCurrent[0]
+}
+
 WA.prototype.onComplete = function (cb) {
   setImmediate(cb)
 }
