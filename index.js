@@ -247,10 +247,20 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   var stream = this.executeExercise(exercise, mode, method, args, cb)
   if (typeof exercise.on === 'function') {
     exercise.on('pass', function (message) {
-      stream.append(require('chalk').green.bold('\u2713 ') + message)
+      stream.append({
+        text: require('chalk').green.bold('\u2713 '),
+        type: (message && message.type) || 'md',
+        skipNewline: true
+      })
+      stream.append(message)
     })
     exercise.on('fail', function (message) {
-      stream.append(require('chalk').red.bold('\u2717 ') + message)
+      stream.append({
+        text: require('chalk').red.bold('\u2717 '),
+        type: (message && message.type) || 'md',
+        skipNewline: true
+      })
+      stream.append(message)
     })
     exercise.on('pass', this.emit.bind(this, 'pass', exercise, mode))
     exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode)) 
