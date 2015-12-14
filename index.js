@@ -194,7 +194,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       stream.append(exercise.pass, exercise.passType)
       || stream.append('\n' +
           '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
-          '{bold}{solution.pass.message}{/bold}\n', 'txt')
+          '{bold}{solution.pass.message}{/bold}\n')
 
       if (!exercise.hideSolutions) {
         if ((files && files.length > 0) || exercise.solution)
