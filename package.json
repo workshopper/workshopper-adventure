@@ -18,7 +18,7 @@
     "i18n-core": "^2.1.1",
     "latest-version": "^2.0.0",
     "mkdirp": "~0.5.1",
-    "msee-preview": "^0.4.0",
+    "msee-preview": "^0.4.1",
     "rimraf": "^2.4.3",
     "simple-terminal-menu": "^1.1.1",
     "split": "^1.0.0",
