@@ -64,7 +64,7 @@
     "finished": "Udało Ci się wykonać wszystkie ćwiczenia! Hurra!\n",
     "state": "Ćwiczenie {{count}} z {{amount}}",
     "remaining": {
-      "one": "Pozostało Ci jedno ćwiczenie",
+      "one": "Pozostało Ci jedno ćwiczenie.",
       "other": "Pozostało Ci {{count}} ćwiczeń."
     }
   },
