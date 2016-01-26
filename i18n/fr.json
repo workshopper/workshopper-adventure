@@ -62,7 +62,7 @@
     "finished": "Vous avez terminé tous les défis ! Bravo !\n",
     "state": "Exercice {{count}} sur {{amount}}",
     "remaining": {
-      "one": "Il vous reste un défi",
+      "one": "Il vous reste un défi.",
       "other": "Il vous reste {{count}} défis."
     }
   },

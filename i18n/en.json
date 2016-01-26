@@ -64,7 +64,7 @@
     "finished": "You've finished all the challenges! Hooray!\n",
     "state": "Exercise {{count}} of {{amount}}",
     "remaining": {
-      "one": "You have one challenge left",
+      "one": "You have one challenge left.",
       "other": "You have {{count}} challenges left."
     }
   },

@@ -63,7 +63,7 @@
     "finished": "Thật tuyệt vời! Chúc mừng bạn đã vượt qua tất cả các thử thách\n",
     "state": "Bài số {{count}} / {{amount}}",
     "remaining": {
-      "one": "Bạn còn một bài nữa thôi",
+      "one": "Bạn còn một bài nữa thôi.",
       "other": "Bạn vẫn còn {{count}} bài."
     }
   },
