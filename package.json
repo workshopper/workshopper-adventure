@@ -14,7 +14,6 @@
     "colors-tmpl": "~1.0.0",
     "combined-stream": "1.0.5",
     "commandico": "^2.0.0",
-    "concat-stream": "^1.5.0",
     "i18n-core": "^2.1.1",
     "latest-version": "^2.0.0",
     "mkdirp": "~0.5.1",
@@ -23,9 +22,7 @@
     "simple-terminal-menu": "^1.1.1",
     "split": "^1.0.0",
     "string-to-stream": "^1.0.1",
-    "through2": "^2.0.0",
-    "visualwidth": "^0.1.0",
-    "xtend": "~4.0.1"
+    "through2": "^2.0.0"
   },
   "bugs": {
     "url": "https://github.com/workshopper/workshopper-adventure/issues"
