@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "chalk": "~1.1.1",
+    "chalk": "~1.1.2",
     "colors-tmpl": "~1.0.0",
     "combined-stream": "1.0.5",
     "commandico": "^2.0.2",
