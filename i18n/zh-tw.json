@@ -2,78 +2,78 @@
   "subtitle": "\u001b[23m選擇一個題目，然後按下 \u001b[3mEnter\u001b[23m 開始嘗試！",
   "menu": {
     "credits": "感謝",
-    "exit": "EXIT",
-    "help": "HELP",
-    "completed": "COMPLETED",
-    "language": "CHOOSE LANGUAGE",
-    "cancel": "CANCEL",
-    "update": "UPDATE"
+    "exit": "離開",
+    "help": "幫助",
+    "completed": "已完成",
+    "language": "選擇語言",
+    "cancel": "取消",
+    "update": "更新"
   },
   "language": {
-    "_current": "CURRENT",
-    "de": "德语 (Deutsch)",
-    "en": "英语 (English)",
-    "fr": "法國 (français)",
-    "ja": "日语 (日本語)",
-    "zh-cn": "中文",
-    "zh-tw": "國語",
-    "es": "西班牙语 (Español)",
-    "pt-br": "葡萄牙 (Português)",
-    "vi": "越南 (Tiếng Việt)",
-    "ru": "俄 (Русский)",
+    "_current": "目前",
+    "de": "德文 (Deutsch)",
+    "en": "英文 (English)",
+    "fr": "法文 (français)",
+    "ja": "日文 (日本語)",
+    "zh-cn": "簡體中文",
+    "zh-tw": "繁體中文",
+    "es": "西班牙文 (Español)",
+    "pt-br": "葡萄牙文 (Português)",
+    "vi": "越南文 (Tiếng Việt)",
+    "ru": "俄文 (Русский)",
     "uk": "烏克蘭語 (Українська)",
-    "ko": "韓國語 (한국어)",
+    "ko": "韓文 (한국어)",
     "pl": "波蘭語 (Polski)",
-    "nb-no": "挪威話 (Norsk)",
-    "it": "意大利語 (Italiano)"
+    "nb-no": "挪威語 (Norsk)",
+    "it": "義大利文 (Italiano)"
   },
   "error": {
     "exercise": {
-      "none_active": "No active exercise. Select one from the menu.",
-      "missing": "No such exercise: {{{name}}}",
-      "unexpected_error": "Could not {{mode}}: {{{err}}}",
-      "missing_file": "ERROR: {{{exerciseFile}}} does not exist!",
-      "not_a_workshopper": "ERROR: {{{exerciseFile}}} is not a workshopper exercise",
-      "preparing": "Error preparing exercise: {{{err}}}",
-      "loading": "Error loading exercise text: {{{err}}}"
+      "none_active": "目前沒有選擇任何練習題，請從選單中選擇一個。",
+      "missing": "找不到練習題： {{{name}}}",
+      "unexpected_error": "無法執行 {{mode}}： {{{err}}}",
+      "missing_file": "錯誤： {{{exerciseFile}}} 並不存在！",
+      "not_a_workshopper": "錯誤： {{{exerciseFile}}} 並不是一個有效的練習題",
+      "preparing": "準備練習題時出錯： {{{err}}}",
+      "loading": "載入練習題文字時出錯： {{{err}}}"
     },
-    "no_uncomplete_left": "There are no incomplete exercises after the current exercise",
-    "cleanup": "Error cleaning up: {{{err}}}"
+    "no_uncomplete_left": "目前的練習題完成之後就沒有其他未完成的練習題了。",
+    "cleanup": "清理時出錯： {{{err}}}"
   },
   "solution": {
     "fail": {
-      "title": "FAIL",
-      "message": "Your solution to {{{currentExercise.name}}} didn't pass. Try again!\n"
+      "title": "失敗",
+      "message": "你對 {{{currentExercise.name}}} 的解答並沒有通過。再試一次！\n"
     },
     "pass": {
-      "title": "PASS",
-      "message": "Your solution to {{{currentExercise.name}}} passed!"
+      "title": "通過",
+      "message": "你對 {{{currentExercise.name}}} 的解答通過了！"
     },
     "notes": {
-      "compare": "Here's the official solution in case you want to compare notes:\n",
-      "load_error": "ERROR: There was a problem printing the solution files: {{{err}}}"
+      "compare": "這裡是官方給的參考解答，以便你做參考比較：\n",
+      "load_error": "錯誤： 在印出解答檔案時發生錯誤： {{{err}}}"
     }
   },
   "ui": {
-    "return": "Type '{{appName}}' to show the menu.\n",
-    "usage": "Usage: {{appName}} {{mode}} mysubmission.js"
+    "return": "輸入 '{{appName}}' 來顯示選單。\n",
+    "usage": "用法： {{appName}} {{mode}} mysubmission.js"
   },
   "progress": {
-    "reset": "{{title}} progress reset",
-    "finished": "You've finished all the challenges! Hooray!\n",
-    "state": "Exercise {{count}} of {{amount}}",
+    "reset": "{{title}} 進度重置",
+    "finished": "你已經完成所有的挑戰了！喔耶！\n",
+    "state": "練習題 {{count}} 之 {{amount}}",
     "remaining": {
-      "one": "You have one challenge left.",
-      "other": "You have {{count}} challenges left."
+      "one": "你還剩下最後一個挑戰。",
+      "other": "你還剩 {{count}} 個挑戰。"
     }
   },
   "credits": {
     "title": "底下這些做出重大貢獻的 hacker 為您製作了 {{appName}}：",
-    "name": "名前",
-    "user": "GitHub Username"
+    "name": "姓名",
+    "user": "GitHub 用戶名"
   },
   "update": {
-    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
-    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
+    "latest_version": "{{name}}**@{{version}}** 已經是最新的版本了。\n\n**恭喜！**",
+    "now": "{{name}}_@{{current}}_ 已經過時了，更新至 **{{latest}}** 請執行 \n\n```bash\n{{cmd}}\n```\n"
   }
 }

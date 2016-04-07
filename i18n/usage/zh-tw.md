@@ -8,11 +8,11 @@
 
 然後 __新建一個 Issue__，讓我們知道你在哪裡遇到了問題。沒有甚麼問題是 _愚蠢的_。
 
-關於 Node.js 如果你正在尋找幫助，在 Freenode IRC 上的 #Node.js 頻道是一個很不錯的地方，可以找到很多人来協助你。同樣地，這裡還有一個 Node.js 的 Google 群組：
+關於 Node.js 如果你正在尋找幫助，在 Freenode IRC 上的 #Node.js 頻道是一個很不錯的地方，可以找到很多人來協助你。同樣地，這裡還有一個 Node.js 的 Google 群組：
 
     https://groups.google.com/forum/#!forum/nodejs
 
-## 發現了{appname} 的 bug 或者想要貢獻代碼？
+## 發現了{appname} 的 bug 或者想要貢獻程式碼？
 
 {appname} 的官方 git 倉庫是:
 
@@ -22,22 +22,22 @@
 
 ## Usage
 
-__`{appname}`__ ..................... Show a menu to interactively select a workshop.
+__`{appname}`__ ..................... 顯示一個互動式的選單來選擇練習題。
 
-__`{appname} list`__ ................ Show a newline-separated list of all the workshops.
+__`{appname} list`__ ................ 顯示出一個所有練習題的清單。
 
-__`{appname} select NAME`__ ......... Select a workshop.
+__`{appname} select NAME`__ ......... 選擇一個練習題。
 
-__`{appname} current`__ ............. Show the currently selected workshop.
+__`{appname} current`__ ............. 顯示出目前選擇的練習題。
 
-__`{appname} print`__ ............... Print the instructions for the currently selected workshop.
+__`{appname} print`__ ............... 印出目前練習題的說明指南。
 
-__`{appname} next`__ ................ Print the instructions for the next incomplete workshop after the currently selected workshop.
+__`{appname} next`__ ................ 印出下一道未完成練習題的說明指南。
 
-__`{appname} reset`__ ............... Reset completed workshop progress.
+__`{appname} reset`__ ............... 重設所有已完成練習題的進度。
 
-__`{appname} run program.js`__ ...... Run your program against the selected input.
+__`{appname} run program.js`__ ...... 執行你的程式來檢查輸出。
 
-__`{appname} verify program.js`__ ... Verify your program against the expected output.
+__`{appname} verify program.js`__ ... 驗證你的程式來和正確解答比較。
 
-__`{appname} -l <language>`__ ....... Change the system to the specified language.
+__`{appname} -l <language>`__ ....... 更換系統至指定語言。

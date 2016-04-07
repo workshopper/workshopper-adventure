@@ -1,4 +1,4 @@
- - To print these instructions again, run: `{appname} print`
- - To execute your program in a test environment, run: `{appname} run program.js`
- - To verify your program, run: `{appname} verify program.js`
- - For help run: `{appname} help`
+ - 若要再次顯示這些說明，請執行： `{appname} print`
+ - 要在測試環境執行你的程式，請執行： `{appname} run program.js`
+ - 要驗證你的答案，請執行： `{appname} verify program.js`
+ - 若需要幫助，請執行： `{appname} help`
