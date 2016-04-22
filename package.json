@@ -21,7 +21,7 @@
     "rimraf": "^2.5.2",
     "simple-terminal-menu": "^1.1.2",
     "split": "^1.0.0",
-    "string-to-stream": "^1.0.1",
+    "string-to-stream": "^1.1.0",
     "through2": "^2.0.1"
   },
   "bugs": {
