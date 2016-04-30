@@ -7,7 +7,7 @@
     "completed": "COMPLETATO",
     "language": "CAMBIA LA LINGUA (CHOOSE LANGUAGE)",
     "cancel": "ANNULLA",
-    "update": "RICERCA AGGIORNAMENTI"
+    "update": "CERCA AGGIORNAMENTI"
   },
   "language": {
     "_current": "ATTUALE",
@@ -68,7 +68,7 @@
     }
   },
   "update": {
-    "latest_version": "{{name}}**@{{version}}** è già al l'ultima versione.\n\n**Congratulazioni!**",
-    "now": "{{name}}_@{{current}}_ è out-of-date, l'aggiornamento a **{{latest}}** con \n\n```bash\n{{cmd}}\n```\n"
+    "latest_version": "{{name}}**@{{version}}** è già all'ultima versione.\n\n**Congratulazioni!**",
+    "now": "{{name}}_@{{current}}_ è obsoleto, aggiornamento in corso a **{{latest}}** con \n\n```bash\n{{cmd}}\n```\n"
   }
 }
