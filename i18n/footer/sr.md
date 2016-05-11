@@ -1,0 +1,4 @@
+ - За испис описа задатка унесите: `{appname} print`
+ - Да покренете решење: `{appname} run program.js`
+ - Да тестирате решење:  `{appname} verify program.js`
+ - За испис помоћних упутстава: `{appname} help`
