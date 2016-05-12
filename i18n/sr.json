@@ -1,0 +1,80 @@
+{
+  "subtitle": "\u001b[23mДа почнете изаберите задатак и притисните \u001b[3mУлаз\u001b[23m",
+  "menu": {
+    "credits": "ЗАСЛУГЕ",
+    "exit": "ИЗЛАЗ",
+    "help": "ПОМОЋ",
+    "completed": "ЗАВРШЕНО",
+    "language": "ИЗАБЕРИ ЈЕЗИК (CHOOSE LANGUAGE)",
+    "cancel": "ОТКАЖИ",
+    "update": "АЖУРИРАЈ"
+  },
+  "language": {
+    "_current": "ТРЕНУТНИ",
+    "de": "немачки (Deutsch)",
+    "en": "енглески (English)",
+    "fr": "француски (français)",
+    "ja": "јапански (日本語)",
+    "zh-cn": "кинески (поједностављени) (简体中文)",
+    "zh-tw": "кинески (традиционални) (繁體中文)",
+    "es": "шпански (Español)",
+    "pt-br": "бразилски португалски (Português)",
+    "vi": "вијетнамски (Tiếng Việt)",
+    "ru": "руски (русский)",
+    "ko": "корејски (한국어)",
+    "pl": "пољски (Polski)",
+    "uk": "украјински (Українська)",
+    "nb-no": "норвешки (Norsk)",
+    "it": "италијански (Italiano)",
+    "sr": "српски"
+  },
+  "error": {
+    "exercise": {
+      "none_active": "Задатак није одабран, користите изборник.",
+      "missing": "Нема задатка: {{{name}}}",
+      "unexpected_error": "Грешка {{mode}}: {{{err}}}",
+      "missing_file": "ГРЕШКА: {{{exerciseFile}}} није нађен!",
+      "not_a_workshopper": "ГРЕШКА: {{{exerciseFile}}} није део радионице",
+      "preparing": "Грешка у припреми задатка: {{{err}}}",
+      "loading": "Грешка при учитавању задатка: {{{err}}}"
+    },
+    "no_uncomplete_left": "Сви задаци су завршени",
+    "cleanup": "Грешка чишћења: {{{err}}}"
+  },
+  "solution": {
+    "fail": {
+      "title": "НЕТАЧНО",
+      "message": "Ваше решење {{{currentExercise.name}}} није тачно. Пробајте поново!\n"
+    },
+    "pass": {
+      "title": "ТАЧНО",
+      "message": "Ваше решење {{{currentExercise.name}}} је тачно!"
+    },
+    "notes": {
+      "compare": "Ово је правилно решење вашег задатка:\n",
+      "load_error": "Грешка при учитавању датотеке с правим одговором: {{{err}}}"
+    }
+  },
+  "ui": {
+    "return": "Унесите '{{appName}}' да видите изборник.\n",
+    "usage": "Како да користите: {{appName}} {{mode}} mysubmission.js"
+  },
+  "progress": {
+    "reset": "Почните {{title}} испочетка",
+    "finished": "Решили сте све задатке! Ура!\n",
+    "state": "Задатак {{count}} од {{amount}}",
+    "remaining": {
+      "one": "Остао вам је један нерешен задатак.",
+      "other": "Нерешених задатака: {{count}}."
+    }
+  },
+  "credits": {
+    "title": "За {{appName}} су заслужни:",
+    "name": "Име",
+    "user": "GitHub налог"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** је већ ажуран.\n\n**Свака част!**",
+    "now": "{{name}}_@{{current}}_ није ажуран, ажурирајте **{{latest}}** са \n\n```bash\n{{cmd}}\n```\n"
+  }
+}
