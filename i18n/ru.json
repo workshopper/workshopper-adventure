@@ -33,7 +33,8 @@
       "missing": "Нет задачи: {{{name}}}",
       "unexpected_error": "Ошибка {{mode}}: {{{err}}}",
       "missing_file": "ОШИБКА: {{{exerciseFile}}} не найден!",
-      "not_a_workshopper": "ОШИБКА: {{{exerciseFile}}} не является воркшоппером",
+      "not_a_workshopper": "ОШИБКА: {{{exerciseFile}}} не является воркшоппером.",
+      "method_not_required": "{{method}} не требуется для этого упражнения.",
       "preparing": "Ошибка подготовки задачи: {{{err}}}",
       "loading": "Ошибка загрузки задачи: {{{err}}}"
     },

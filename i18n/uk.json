@@ -34,7 +34,8 @@
       "missing": "Немає завдання: {{{name}}}",
       "unexpected_error": "Помилка {{mode}}: {{{err}}}",
       "missing_file": "ПОМИЛКА: {{{exerciseFile}}} не існує!",
-      "not_a_workshopper": "ПОМИЛКА: {{{exerciseFile}}} не є воркшоппером",
+      "not_a_workshopper": "ПОМИЛКА: {{{exerciseFile}}} не є воркшоппером.",
+      "method_not_required": "{{method}} не потрібна для цієї вправи.",
       "preparing": "Помилка підготовки завдання: {{{err}}}",
       "loading": "Помилка завантаження завданя: {{{err}}}"
     },

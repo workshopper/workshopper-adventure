@@ -34,7 +34,8 @@
       "missing": "Brak ćwiczenia: {{{name}}}",
       "unexpected_error": "Nie można {{mode}}: {{{err}}}",
       "missing_file": "BŁĄD: {{{exerciseFile}}} nie istnieje!",
-      "not_a_workshopper": "BŁĄD: {{{exerciseFile}}} nie jest poprawnym ćwiczeniem",
+      "not_a_workshopper": "BŁĄD: {{{exerciseFile}}} nie jest poprawnym ćwiczeniem.",
+      "method_not_required": "{{method}} nie jest wymagane do tego ćwiczenia.",
       "preparing": "Błąd podczas przygotowywania ćwiczenia: {{{err}}}",
       "loading": "Błąd podczas wczytywania tekstu ćwiczenia: {{{err}}}"
     },

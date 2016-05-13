@@ -34,7 +34,8 @@
       "missing": "没有这个练习题： {{{name}}}",
       "unexpected_error": "无法执行 {{mode}}： {{{err}}}",
       "missing_file": "错误： {{{exerciseFile}}} 不存在!",
-      "not_a_workshopper": "错误： {{{exerciseFile}}} 不是一个练习题",
+      "not_a_workshopper": "错误： {{{exerciseFile}}} 不是一个练习题。",
+      "method_not_required": "{{method}} 不需要这个练习。",
       "preparing": "准备练习题时出错： {{{err}}}",
       "loading": "载入习题文本时候出错： {{{err}}}"
     },

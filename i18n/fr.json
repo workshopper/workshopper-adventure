@@ -33,7 +33,8 @@
       "missing": "L’exercice {{{name}}} est introuvable.",
       "unexpected_error": "Impossible de {{mode}} : {{{err}}}",
       "missing_file": "ERREUR : {{{exerciseFile}}} n’existe pas !",
-      "not_a_workshopper": "ERREUR : {{{exerciseFile}}} n’est pas un exercice d’atelier",
+      "not_a_workshopper": "ERREUR : {{{exerciseFile}}} n’est pas un exercice d’atelier.",
+      "method_not_required": "{{method}} est pas nécessaire pour cet exercice.",
       "preparing": "Erreur lors de la préparation de l’exercice : {{{err}}}",
       "loading": "Erreur au chargement du texte de l’exercice : {{{err}}}"
     },

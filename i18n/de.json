@@ -31,7 +31,8 @@
       "missing": "Aufgabe {{{name}}} fehlt.",
       "unexpected_error": "{{mode}} konnte nicht ausgeführt werden: {{{err}}}",
       "missing_file": "FEHLER: {{{exerciseFile}}} existiert nicht!",
-      "not_a_workshopper": "FEHLER: {{{exerciseFile}}} ist keine workshopper Aufgabe",
+      "not_a_workshopper": "FEHLER: {{{exerciseFile}}} ist keine workshopper Aufgabe.",
+      "method_not_required": "{{method}} ist nicht notwendig für diese Aufgabe.",
       "preparing": "Fehler bei der Vorbereitung der Aufgabe: {{{err}}}",
       "loading": "Fehler beim Laden der Aufgabe: {{{err}}}"
     },

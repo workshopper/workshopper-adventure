@@ -240,7 +240,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
 
   var method = exercise[mode]
   if (!method)
-    return cb('This problem doesn\'t have a `.' + mode + '` function.', false, stream)
+    return cb(this.__('error.exercise.method_not_required', {method: mode}), false, stream)
 
   if (typeof method !== 'function')
     return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)

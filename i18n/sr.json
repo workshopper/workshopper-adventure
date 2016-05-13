@@ -34,7 +34,8 @@
       "missing": "Нема задатка: {{{name}}}",
       "unexpected_error": "Грешка {{mode}}: {{{err}}}",
       "missing_file": "ГРЕШКА: {{{exerciseFile}}} није нађен!",
-      "not_a_workshopper": "ГРЕШКА: {{{exerciseFile}}} није део радионице",
+      "not_a_workshopper": "ГРЕШКА: {{{exerciseFile}}} није део радионице.",
+      "method_not_required": "{{method}} није потребан за ову вежбу.",
       "preparing": "Грешка у припреми задатка: {{{err}}}",
       "loading": "Грешка при учитавању задатка: {{{err}}}"
     },

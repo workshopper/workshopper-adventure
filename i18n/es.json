@@ -34,7 +34,8 @@
       "missing": "No se encontró el ejercicio: {{{name}}}",
       "unexpected_error": "No se pudo {{mode}}: {{{err}}}",
       "missing_file": "ERROR: {{{exerciseFile}}} no existe!",
-      "not_a_workshopper": "ERROR: {{{exerciseFile}}} no es un ejercicio de workshopper",
+      "not_a_workshopper": "ERROR: {{{exerciseFile}}} no es un ejercicio de workshopper.",
+      "method_not_required": "{{method}} no es necesario para este ejercicio.",
       "preparing": "Error preparando el ejercicio: {{{err}}}",
       "loading": "Error cargando el texto del ejercicio: {{{err}}}"
     },

@@ -34,7 +34,8 @@
       "missing": "Fant ikke oppgaven: {{{name}}}",
       "unexpected_error": "Kunne ikke {{mode}}: {{{err}}}",
       "missing_file": "FEIL: {{{exerciseFile}}} finnes ikke!",
-      "not_a_workshopper": "FEIL: {{{exerciseFile}}} er ikke en workshopper oppgave",
+      "not_a_workshopper": "FEIL: {{{exerciseFile}}} er ikke en workshopper oppgave.",
+      "method_not_required": "{{method}} er ikke nødvendig for denne øvelsen.",
       "preparing": "Feil ved oppsett av oppgave: {{{err}}}",
       "loading": "Feil ved lasting av oppgave: {{{err}}}"
     },

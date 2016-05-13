@@ -34,6 +34,7 @@
       "unexpected_error": "{{mode}}できませんでした：{{{err}}}",
       "missing_file": "エラー：{{{exerciseFile}}} は見つかりません。",
       "not_a_workshopper": "エラー：{{{exerciseFile}}} はワークショップの演習課題ではありません。",
+      "method_not_required": "{{method}} はこの問題では利用できません。",
       "preparing": "演習課題の準備中に問題が発生しました：{{{err}}}",
       "loading": "演習課題のテキスト読み込み中に問題が発生しました：{{{err}}}"
     },

@@ -35,6 +35,7 @@
       "unexpected_error": "{{mode}}을(를) 할 수 없었습니다. {{{err}}}",
       "missing_file": "오류: {{{exerciseFile}}}은(는) 존재하지 않습니다!",
       "not_a_workshopper": "오류: {{{exerciseFile}}}은(는) 워크숍의 연습 문제가 아닙니다.",
+      "method_not_required": "{{method}} 이 연습 필요하지 않습니다.",
       "preparing": "연습 문제의 준비에 실패했습니다. {{{err}}}",
       "loading": "연습 문제의 텍스트를 불러오는 중 오류가 발생했습니다. {{{err}}}"
     },
