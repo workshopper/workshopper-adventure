@@ -230,21 +230,22 @@ WA.prototype.run = function (args, specifier, cb) {
 
 WA.prototype.process = function (mode, args, specifier, cb) {
   var exercise = this.loadExercise(specifier)
+    , stream = this.createMarkdownStream(exercise)
 
   if (!exercise)
-    return cb(this.__('error.exercise.missing', {name: specifier}))
+    return cb(this.__('error.exercise.missing', {name: specifier}), false, stream)
 
   if (exercise.requireSubmission !== false && args.length == 0)
-    return cb(this.__('ui.usage', {appName: this.options.name, mode: mode}))
+    return cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
 
   var method = exercise[mode]
   if (!method)
-    return cb('This problem doesn\'t have a `.' + mode + '` function.')
+    return cb('This problem doesn\'t have a `.' + mode + '` function.', false, stream)
 
   if (typeof method !== 'function')
-    return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.')
+    return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)
 
-  var stream = this.executeExercise(exercise, mode, method, args, cb)
+  stream = this.executeExercise(exercise, mode, method, args, stream, cb)
   if (typeof exercise.on === 'function') {
     exercise.on('pass', function (message) {
       stream.append({
@@ -268,10 +269,9 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   return stream
 }
 
-WA.prototype.executeExercise = function (exercise, mode, method, args, cb) {
+WA.prototype.executeExercise = function (exercise, mode, method, args, stream, cb) {
   var result
     , finished = false
-    , stream = this.createMarkdownStream(exercise)
     , cleanup = function cleanup(err, pass, message, messageType) {
         if (finished)
           return // TODO: make this easier to debug ... bad case of zalgo
