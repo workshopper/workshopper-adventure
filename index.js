@@ -185,11 +185,11 @@ WA.prototype.getExerciseFiles = function (exercise, callback) {
 WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
   this.getExerciseFiles(exercise, function (err, files) {
     if (err)
-      return cb(this.__('solution.notes.load_error', {err: err.message || err}))
+      return cb(this.__('solution.notes.load_error', {err: err.message || err}), false, stream)
 
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
       if (err)
-        return cb(err)
+        return cb(err, false, stream)
 
       stream.append(exercise.pass, exercise.passType)
       || stream.append('\n' +
@@ -215,7 +215,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       stream.append(completeMessage)
       stream.append('\n')
 
-      cb()
+      cb(null, true, stream)
     }.bind(this))
   }.bind(this))
 }
@@ -279,14 +279,17 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
         finished = true
 
         if (message) {
-          exercise[pass ? 'pass': 'fail'] = {
-            text: message,
-            type: messageType
+          if (typeof message === 'string') {
+            message = {
+              text: message,
+              type: messageType
+            }
           }
+          exercise[pass ? 'pass': 'fail'] = message
         }
 
         if (err)
-          return cb(this.__('error.exercise.unexpected_error', {mode: mode, err: (err.message || err) }))
+          return cb(this.__('error.exercise.unexpected_error', {mode: mode, err: (err.message || err) }), false, stream)
 
         var end = function (err) {
           if (typeof exercise.end !== 'function')
@@ -294,7 +297,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
 
           exercise.end(mode, pass, function (cleanupErr) {
             if (cleanupErr)
-              return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}))
+              return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false, stream)
 
             cb(err, pass, stream)
           }.bind(this))
@@ -313,8 +316,12 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
   try {
     method.length <= 1
       ? cleanup(null, true, method.call(exercise, args))
-      : method.call(exercise, args, function callback (err, pass) {
+      : method.call(exercise, args, function callback (err, pass, message) {
           /*
+            err ... Error that occured
+            pass ... true = The run has worked
+            message ... message to Append after the output
+
             callback(true)       -> err=null,  pass=true
             callback(false)      -> err=null,  pass=false
             callback()           -> err=null,  pass=null
@@ -332,8 +339,8 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
 
           pass = (mode === 'run' || (pass && !exercise.fail))
           err
-            ? cleanup(err)
-            : cleanup(null, pass)
+            ? cleanup(err, null, message)
+            : cleanup(null, pass, message)
 
         }.bind(this))
   } catch (e) {
