@@ -35,6 +35,7 @@
       "unexpected_error": "無法執行 {{mode}}： {{{err}}}",
       "missing_file": "錯誤： {{{exerciseFile}}} 並不存在！",
       "not_a_workshopper": "錯誤： {{{exerciseFile}}} 並不是一個有效的練習題",
+      "method_not_required": "{{method}} 不需要這個練習。",
       "preparing": "準備練習題時出錯： {{{err}}}",
       "loading": "載入練習題文字時出錯： {{{err}}}"
     },
