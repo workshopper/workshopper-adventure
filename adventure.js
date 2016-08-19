@@ -80,5 +80,11 @@ function LegacyAdventure (options) {
 }
 
 inherits(LegacyAdventure, Core)
+LegacyAdventure.prototype.processResult = function (result, stream) {
+  if (result) {
+    stream.append(['```', result, '```'])
+  }
+  return stream
+}
 
 module.exports = LegacyAdventure

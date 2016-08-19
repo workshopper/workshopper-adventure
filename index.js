@@ -314,7 +314,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
       }.bind(this)
 
   try {
-    method.length <= 1
+    var result = method.length <= 1
       ? cleanup(null, true, method.call(exercise, args))
       : method.call(exercise, args, function callback (err, pass, message) {
           /*
@@ -344,8 +344,12 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
 
         }.bind(this))
   } catch (e) {
-    return cleanup(e)
+    return cleanup(e, false)
   }
+  return this.processResult(result, stream)
+}
+WA.prototype.processResult = function (result, stream) {
+  stream.append(result)
   return stream
 }
 WA.prototype.loadExercise = function (specifier) {
