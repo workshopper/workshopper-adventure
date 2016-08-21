@@ -170,10 +170,11 @@ WA.prototype.onComplete = function (cb) {
 
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
+  (
     stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
     || stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
-  
-  stream.append('\n')
+  )
+  && stream.append('\n')
 
   cb()
 }
@@ -195,9 +196,9 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       if (err)
         return cb(err, false, stream)
       
-      stream.append(completeMessage, this.options.defaultOutputType)
-      || stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
-      || stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
+      var appended = stream.append(completeMessage, this.options.defaultOutputType)
+        || stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
+        || stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
 
       var hideSolutions = exercise.hideSolutions
       if (hideSolutions === undefined) {
@@ -210,6 +211,8 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         files && files.length > 0
           ? stream.append({ files: files })
           : stream.append(exercise.solution, exercise.solutionType || this.options.defaultOutputType)
+
+        appended = true
       }
 
       var hideRemaining = exercise.hideRemaining
@@ -221,12 +224,14 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         var remaining = this.countRemaining()
         remaining > 0
           ? stream.append(
-            '{progress.remaining#' + remaining + '}\n' +
+            '{progress.remaining#' + remaining + '}\n\n' +
               '{ui.return}\n')
           : stream.append('{progress.finished}\n')
+        appended = true
       }
 
-      stream.append('\n')
+      if (appended)
+        stream.append('\n')
 
       cb(null, true, stream)
     }.bind(this))
@@ -271,7 +276,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
         skipNewline: true
       })
       stream.append(message, this.options.defaultOutputType)
-    })
+    }.bind(this))
     exercise.on('fail', function (message) {
       stream.append({
         text: require('chalk').red.bold('\u2717 '),
@@ -279,7 +284,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
         skipNewline: true
       })
       stream.append(message, this.options.defaultOutputType)
-    })
+    }.bind(this))
     exercise.on('pass', this.emit.bind(this, 'pass', exercise, mode))
     exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode)) 
   }
