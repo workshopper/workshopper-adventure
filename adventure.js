@@ -49,6 +49,10 @@ function LegacyAdventure (options) {
     options.defaultOutputType = 'txt'
   }
 
+  if (options.hideSolutions == undefined) {
+    options.hideSolutions = true
+  }
+
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   if (typeof options.onComplete == 'function')
     this.onComplete = options.onComplete

@@ -199,7 +199,11 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
           '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
           '{bold}{solution.pass.message}{/bold}\n', this.options.defaultPassType)
 
-      if (!exercise.hideSolutions) {
+      var hideSolutions = exercise.hideSolutions
+      if (hideSolutions === undefined) {
+        hideSolutions = this.options.hideSolutions
+      }
+      if (hideSolutions !== true) {
         if ((files && files.length > 0) || exercise.solution)
           stream.append('{solution.notes.compare}')
 
