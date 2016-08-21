@@ -8,8 +8,10 @@ function LegacyWorkshopper(options) {
   if (!(this instanceof LegacyWorkshopper))
     return new LegacyWorkshopper(options)
 
+  if (!options.header) {
   if (options.showHeader === undefined || options.showHeader) {
     options.header = require('./default/header')
+  }
   }
   if (options.hideRemaining === undefined) {
     options.hideRemaining = false
