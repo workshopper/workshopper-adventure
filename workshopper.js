@@ -12,6 +12,10 @@ function LegacyWorkshopper(options) {
     options.header = require('./default/header')
   }
 
+  if (options.requireSubmission === undefined) {
+    options.requireSubmission = true
+  }
+
   if (options.execute === undefined)
   	options.execute = 'immediatly'
 

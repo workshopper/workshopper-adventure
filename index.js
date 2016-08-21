@@ -60,6 +60,9 @@ function WA (options) {
       , y: 2
     }
 
+  if (options.requireSubmission === undefined)
+    options.requireSubmission = false
+
   if (!options.menuFactory)
     options.menuFactory = require('simple-terminal-menu/factory')(options.menu, {})
 
@@ -242,7 +245,11 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   if (!exercise)
     return cb(this.__('error.exercise.missing', {name: specifier}), false, stream)
 
-  if (exercise.requireSubmission !== false && args.length == 0)
+  var requireSubmission = exercise.requireSubmission
+  if (requireSubmission === undefined) {
+    requireSubmission = this.options.requireSubmission
+  }
+  if (requireSubmission !== false && args.length == 0)
     return cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
 
   var method = exercise[mode]
