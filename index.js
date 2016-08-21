@@ -171,9 +171,7 @@ WA.prototype.onComplete = function (cb) {
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
   stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
-  || stream.append('\n' +
-      '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
-      '{solution.fail.message}\n', 'txt')
+  || stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
   
   stream.append('\n')
 
@@ -198,9 +196,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         return cb(err, false, stream)
 
       stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
-      || stream.append('\n' +
-          '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
-          '{bold}{solution.pass.message}{/bold}\n', this.options.defaultPassType)
+      || stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
 
       var hideSolutions = exercise.hideSolutions
       if (hideSolutions === undefined) {
@@ -221,16 +217,16 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       }
 
       if (hideRemaining !== true) {
-      var remaining = this.countRemaining()
-      remaining > 0
-        ? stream.append(
+        var remaining = this.countRemaining()
+        remaining > 0
+          ? stream.append(
             '{progress.remaining#' + remaining + '}\n' +
-            '{ui.return}\n')
-        : stream.append('{progress.finished}\n')
+              '{ui.return}\n')
+          : stream.append('{progress.finished}\n')
       }
 
       stream.append(completeMessage, this.options.defaultOutputType)
-      stream.append('\n')
+        stream.append('\n')
 
       cb(null, true, stream)
     }.bind(this))

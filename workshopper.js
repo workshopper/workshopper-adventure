@@ -21,8 +21,16 @@ function LegacyWorkshopper(options) {
     options.requireSubmission = true
   }
 
+  if (options.pass === undefined) {
+    options.pass = require('./default/pass')
+  }
+
+  if (options.fail === undefined) {
+    options.fail = require('./default/fail')
+  }
+
   if (options.execute === undefined)
-  	options.execute = 'immediatly'
+    options.execute = 'immediatly'
 
   Adventure.apply(this, [options])
 
