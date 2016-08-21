@@ -53,6 +53,10 @@ function LegacyAdventure (options) {
     options.hideSolutions = true
   }
 
+  if (options.hideRemaining === undefined) {
+    options.hideRemaining = true
+  }
+
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
   if (typeof options.onComplete == 'function')
     this.onComplete = options.onComplete

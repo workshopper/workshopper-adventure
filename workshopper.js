@@ -11,6 +11,9 @@ function LegacyWorkshopper(options) {
   if (options.showHeader === undefined || options.showHeader) {
     options.header = require('./default/header')
   }
+  if (options.hideRemaining === undefined) {
+    options.hideRemaining = false
+  }
 
   if (options.requireSubmission === undefined) {
     options.requireSubmission = true

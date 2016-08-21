@@ -215,12 +215,19 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
           : stream.append(exercise.solution, exercise.solutionType || this.options.defaultOutputType)
       }
 
+      var hideRemaining = exercise.hideRemaining
+      if (hideRemaining === undefined) {
+        hideRemaining = this.options.hideRemaining
+      }
+
+      if (hideRemaining !== true) {
       var remaining = this.countRemaining()
       remaining > 0
         ? stream.append(
             '{progress.remaining#' + remaining + '}\n' +
             '{ui.return}\n')
         : stream.append('{progress.finished}\n')
+      }
 
       stream.append(completeMessage, this.options.defaultOutputType)
       stream.append('\n')
