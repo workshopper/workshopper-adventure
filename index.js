@@ -36,6 +36,9 @@ function WA (options) {
   if (!options.defaultLang)
     options.defaultLang = options.languages[0]
 
+  if (!options.defaultOutputType)
+    options.defaultOutputType = 'md'
+
   if (!options.pkg && options.appDir)
     try {
       options.pkg = require(path.join(options.appDir, 'package.json'))
@@ -164,7 +167,7 @@ WA.prototype.onComplete = function (cb) {
 
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
-  stream.append(exercise.fail, exercise.failType)
+  stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
   || stream.append('\n' +
       '{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
       '{solution.fail.message}\n', 'txt')
@@ -191,10 +194,10 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       if (err)
         return cb(err, false, stream)
 
-      stream.append(exercise.pass, exercise.passType)
+      stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
       || stream.append('\n' +
           '{bold}{green}# {solution.pass.title}{/green}{/bold}\n' +
-          '{bold}{solution.pass.message}{/bold}\n')
+          '{bold}{solution.pass.message}{/bold}\n', this.options.defaultPassType)
 
       if (!exercise.hideSolutions) {
         if ((files && files.length > 0) || exercise.solution)
@@ -202,7 +205,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
 
         files && files.length > 0
           ? stream.append({ files: files })
-          : stream.append(exercise.solution, exercise.solutionType)
+          : stream.append(exercise.solution, exercise.solutionType || this.options.defaultOutputType)
       }
 
       var remaining = this.countRemaining()
@@ -212,7 +215,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
             '{ui.return}\n')
         : stream.append('{progress.finished}\n')
 
-      stream.append(completeMessage)
+      stream.append(completeMessage, this.options.defaultOutputType)
       stream.append('\n')
 
       cb(null, true, stream)
@@ -253,7 +256,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
         type: (message && message.type) || 'md',
         skipNewline: true
       })
-      stream.append(message)
+      stream.append(message, this.options.defaultOutputType)
     })
     exercise.on('fail', function (message) {
       stream.append({
@@ -261,7 +264,7 @@ WA.prototype.process = function (mode, args, specifier, cb) {
         type: (message && message.type) || 'md',
         skipNewline: true
       })
-      stream.append(message)
+      stream.append(message, this.options.defaultOutputType)
     })
     exercise.on('pass', this.emit.bind(this, 'pass', exercise, mode))
     exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode)) 
@@ -282,7 +285,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
           if (typeof message === 'string') {
             message = {
               text: message,
-              type: messageType
+              type: messageType || this.options.defaultOutputType
             }
           }
           exercise[pass ? 'pass': 'fail'] = message
@@ -349,7 +352,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
   return this.processResult(result, stream)
 }
 WA.prototype.processResult = function (result, stream) {
-  stream.append(result)
+  stream.append(result, this.options.defaultOutputType)
   return stream
 }
 WA.prototype.loadExercise = function (specifier) {
@@ -437,19 +440,19 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
         , found = false
 
       if (!contentOnly)
-        stream.append(exercise.header)
-         || stream.append(this.options.header)
+        stream.append(exercise.header, this.options.defaultOutputType)
+         || stream.append(this.options.header, this.options.defaultOutputType)
 
-      if (stream.append(exercise.problem, exercise.problemType))
+      if (stream.append(exercise.problem, exercise.problemType || this.options.defaultOutputType))
         found = true
-      if (stream.append(exerciseText, exerciseTextType))
+      if (stream.append(exerciseText, exerciseTextType || this.options.defaultOutputType))
         found = true
       if (!found)
         return callback('The exercise "' + exercise.meta.name + '" is missing a problem definition!')
 
       if (!contentOnly)
-        stream.append(exercise.footer)
-         || stream.append(this.options.footer)
+        stream.append(exercise.footer, this.options.defaultOutputType)
+         || stream.append(this.options.footer, this.options.defaultOutputType)
         && stream.append('\n')
 
       callback(null, stream)
