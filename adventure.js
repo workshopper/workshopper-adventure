@@ -75,6 +75,13 @@ function LegacyAdventure (options) {
   this.__defineGetter__('appDir', function () { return this.options.appDir }.bind(this))
   this.__defineGetter__('exerciseDir', function () { return this.options.exerciseDir }.bind(this))
   this.__defineGetter__('current', function () { return this.appStorage.get('current') }.bind(this))
+  this.__defineGetter__('_adventures', function () { return this.exercises }.bind(this))
+  this.__defineGetter__('state', function () {
+    return {
+      completed: this.appStorage.get('completed'),
+      current: this.appStorage.get('current')
+    }
+  })
 }
 
 inherits(LegacyAdventure, Core)
