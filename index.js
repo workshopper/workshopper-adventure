@@ -170,8 +170,8 @@ WA.prototype.onComplete = function (cb) {
 
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
-  stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
-  || stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
+    stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
+    || stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
   
   stream.append('\n')
 
@@ -194,8 +194,9 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
       if (err)
         return cb(err, false, stream)
-
-      stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
+      
+      stream.append(completeMessage, this.options.defaultOutputType)
+      || stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
       || stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
 
       var hideSolutions = exercise.hideSolutions
@@ -225,8 +226,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
           : stream.append('{progress.finished}\n')
       }
 
-      stream.append(completeMessage, this.options.defaultOutputType)
-        stream.append('\n')
+      stream.append('\n')
 
       cb(null, true, stream)
     }.bind(this))
