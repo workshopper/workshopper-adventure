@@ -1,7 +1,7 @@
 # Workshopper-Adventure
 
 **A flexible terminal workshop runner framework**
-
+[![Join the chat at https://gitter.im/nodeschool/workshoppers](https://badges.gitter.im/nodeschool/workshoppers.svg)](https://gitter.im/nodeschool/workshoppers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM](https://nodei.co/npm/workshopper-adventure.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/workshopper-adventure/) [![NPM](https://nodei.co/npm-dl/workshopper-adventure.png?months=3&height=3)](https://nodei.co/npm/workshopper-adventure/)
 
 ![Learn You The Node.js For Much Win!](https://raw.github.com/rvagg/learnyounode/master/learnyounode.png)
