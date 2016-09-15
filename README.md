@@ -1,5 +1,7 @@
 # Workshopper-Adventure
 
+[![Join the chat at https://gitter.im/workshopper-adventure/Lobby](https://badges.gitter.im/workshopper-adventure/Lobby.svg)](https://gitter.im/workshopper-adventure/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **A flexible terminal workshop runner framework**
 
 [![NPM](https://nodei.co/npm/workshopper-adventure.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/workshopper-adventure/) [![NPM](https://nodei.co/npm-dl/workshopper-adventure.png?months=3&height=3)](https://nodei.co/npm/workshopper-adventure/)
