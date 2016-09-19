@@ -4,67 +4,78 @@
 // assumes the menu.json is in the directory under which the
 // exercises will be placed
 
-const fs     = require('fs')
-    , path   = require('path')
-    , mkdirp = require('mkdirp')
+const fs = require('fs')
+const path = require('path')
+const mkdirp = require('mkdirp')
 
-    , util   = require('../util')
+const util = require('../util')
 
 function usage (err) {
-  if (err)
+  if (err) {
     console.error(err)
+  }
 
   console.error('Usage: makews.js /path/to/menu.json [--force]')
 }
 
-if (!process.argv[2])
-  return usage()
+function run () {
+  if (!process.argv[2]) {
+    return usage()
+  }
 
-if (!fs.existsSync(process.argv[2]))
-  return usage('File [' + process.argv[2] + '] does not exist')
+  if (!fs.existsSync(process.argv[2])) {
+    return usage('File [' + process.argv[2] + '] does not exist')
+  }
 
-var menuFile = path.resolve(process.cwd(), process.argv[2])
-  , exDir    = path.dirname(menuFile)
-  , menu     = require(menuFile)
+  var menuFile = path.resolve(process.cwd(), process.argv[2])
+  var exDir = path.dirname(menuFile)
+  var menu = require(menuFile)
 
-if (!Array.isArray(menu))
-  return usage('[' + process.argv[2] + '] doesn\'t contain an array of exercises')
+  if (!Array.isArray(menu)) {
+    return usage('[' + process.argv[2] + "] doesn't contain an array of exercises")
+  }
 
-console.log(menuFile, exDir)
+  console.log(menuFile, exDir)
 
-if (menu.filter(function (name) { return typeof name != 'string' }).length)
-  return usage('[' + process.argv[2] + '] doesn\'t contain an array of Strings')
+  if (menu.filter(function (name) { return typeof name !== 'string' }).length) {
+    return usage('[' + process.argv[2] + "] doesn't contain an array of Strings")
+  }
 
-menu.forEach(processExercise)
+  menu.forEach(processExercise)
 
-function processExercise (name) {
-  var dir = util.dirFromName(exDir, name)
-    , files = {
-          'problem.md'           : '# Write stuff about ' + name + ' here'
-        , 'exercise.js'          : 'const Exercise = require(\'workshopper-exercise\'); module.exports = new Exercise()'
-        , 'solution/solution.js' : '// solution stuff here'
+  function processExercise (name) {
+    var dir = util.dirFromName(exDir, name)
+    var files = {
+      'problem.md': '# Write stuff about ' + name + ' here',
+      'exercise.js': "const Exercise = require('workshopper-exercise'); module.exports = new Exercise()",
+      'solution/solution.js': '// solution stuff here'
+    }
+
+    console.log('Making', name, '...')
+
+    mkdirp(path.join(dir, 'solution'), function (err) {
+      if (err) {
+        return console.error('Error making', dir + ':', err)
       }
 
-  console.log('Making', name, '...')
+      Object.keys(files).forEach(function (f) {
+        var filePath = path.join(dir, f)
 
-  mkdirp(path.join(dir, 'solution'), function (err) {
-    if (err)
-      return console.error('Error making', dir + ':', err)
+        fs.exists(filePath, function (exists) {
+          if (exists && process.argv[3] !== '--force') {
+            return
+          }
 
-    Object.keys(files).forEach(function (f) {
-      var filePath = path.join(dir, f)
-
-      fs.exists(filePath, function (exists) {
-        if (exists && process.argv[3] !== '--force')
-          return
-
-        fs.writeFile(
+          fs.writeFile(
             filePath
-          , files[f]
-          , 'utf8'
-          , function () {}
-        )
+            , files[f]
+            , 'utf8'
+            , function () {}
+          )
+        })
       })
     })
-  })
+  }
 }
+
+run()

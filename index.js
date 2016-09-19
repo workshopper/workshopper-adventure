@@ -1,116 +1,125 @@
-const fs           = require('fs')
-    , path         = require('path')
-    , commandico   = require('commandico')
-    , inherits     = require('util').inherits
-    , EventEmitter = require('events').EventEmitter
+const path = require('path')
+const commandico = require('commandico')
+const inherits = require('util').inherits
+const EventEmitter = require('events').EventEmitter
 
-/* jshint -W079 */
-const util         = require('./util')
-    , PrintStream  = require('./lib/print')
-    , storage      = require('./lib/storage')
-/* jshint +W079 */
-  
+const util = require('./util')
+const PrintStream = require('./lib/print')
+const storage = require('./lib/storage')
 
 function WA (options) {
-  if (!(this instanceof WA))
+  if (!(this instanceof WA)) {
     return new WA(options)
+  }
 
-  if (!options)
+  if (!options) {
     options = {}
+  }
 
   if (options.appDir) {
     options.appDir = util.getDir(options.appDir, '.')
     if (!options.name) {
       try {
         options.name = require(path.join(options.appDir, 'package.json')).name
-      } catch(e) {}
+      } catch (e) {}
     }
   }
 
-  if (!options.name)
-    throw new Error('The workshopper needs a name to store the progress.');
+  if (!options.name) {
+    throw new Error('The workshopper needs a name to store the progress.')
+  }
 
-  if (!options.languages) 
+  if (!options.languages) {
     options.languages = ['en']
+  }
 
-  if (!options.defaultLang)
+  if (!options.defaultLang) {
     options.defaultLang = options.languages[0]
+  }
 
-  if (!options.defaultOutputType)
+  if (!options.defaultOutputType) {
     options.defaultOutputType = 'md'
+  }
 
-  if (!options.pkg && options.appDir)
+  if (!options.pkg && options.appDir) {
     try {
       options.pkg = require(path.join(options.appDir, 'package.json'))
-    } catch (e) {}    
+    } catch (e) {}
+  }
 
-  if (!options.appRepo && options.pkg)
+  if (!options.appRepo && options.pkg) {
     options.appRepo = options.pkg.repository.url
+  }
 
-  if (!options.version && options.pkg)
+  if (!options.version && options.pkg) {
     options.version = options.pkg.version
+  }
 
-  if (options.appDir)
+  if (options.appDir) {
     options.exerciseDir = util.getDir(options.exerciseDir || 'exercises', options.appDir)
+  }
 
-  if (!options.menu)
+  if (!options.menu) {
     options.menu = {
-        width: 73
-      , x: 2
-      , y: 2
+      width: 73,
+      x: 2,
+      y: 2
     }
+  }
 
-  if (options.requireSubmission === undefined)
+  if (options.requireSubmission === undefined) {
     options.requireSubmission = false
+  }
 
-  if (!options.menuFactory)
+  if (!options.menuFactory) {
     options.menuFactory = require('simple-terminal-menu/factory')(options.menu, {})
+  }
 
   EventEmitter.call(this)
 
   this.options = options
 
   var globalStorage = storage(storage.userDir, '.config', 'workshopper')
-  this.appStorage   = storage(storage.userDir, '.config', options.name)
+  this.appStorage = storage(storage.userDir, '.config', options.name)
 
   this.exercises = []
-  this._meta     = {}
-
+  this._meta = {}
 
   try {
     this.i18n = require('./i18n').init(options, globalStorage, this.appStorage)
-  } catch(e) {
+  } catch (e) {
     console.log(e.message)
     process.exit(1)
   }
-  this.__  = this.i18n.__
+  this.__ = this.i18n.__
   this.__n = this.i18n.__n
 
   this.cli = commandico(this, 'menu')
     .loadCommands(path.resolve(__dirname, './lib/commands'))
     .loadModifiers(path.resolve(__dirname, './lib/modifiers'))
 
-  if (options.commands)
+  if (options.commands) {
     this.cli.addCommands(options.commands)
+  }
 
-  if (options.modifiers)
+  if (options.modifiers) {
     this.cli.addModifiers(options.modifiers)
+  }
 }
 
 inherits(WA, EventEmitter)
-
 
 WA.prototype.execute = function (args) {
   return this.cli.execute(args)
 }
 
-WA.prototype.add = function (name_or_object, fn_or_object, fn) {
+WA.prototype.add = function (nameOrObject, fnOrObject, fn) {
   var meta
   try {
-    meta = require('./lib/createExerciseMeta')(this.options.exerciseDir, name_or_object, fn_or_object)
-  } catch(e) {
+    meta = require('./lib/createExerciseMeta')(this.options.exerciseDir, nameOrObject, fnOrObject)
+  } catch (e) {
     console.log(e)
-    return error(this.__('error.exercise.' + e.id, e))
+    return new Error(this.__('error.exercise.' + e.id, e))
   }
   return this.addExercise(meta)
 }
@@ -138,8 +147,9 @@ WA.prototype.countRemaining = function () {
 WA.prototype.markCompleted = function (exerciseName, cb) {
   var completed = this.appStorage.get('completed') || []
 
-  if (completed.indexOf(exerciseName) === -1) 
+  if (completed.indexOf(exerciseName) === -1) {
     completed.push(exerciseName)
+  }
 
   this.appStorage.save('completed', completed)
 
@@ -158,8 +168,9 @@ WA.prototype.getNext = function () {
     return completed.indexOf(elem) < 0
   })
 
-  if (incompleteAfterCurrent.length === 0)
+  if (incompleteAfterCurrent.length === 0) {
     return new Error('error.no_uncomplete_left')
+  }
 
   return incompleteAfterCurrent[0]
 }
@@ -171,17 +182,18 @@ WA.prototype.onComplete = function (cb) {
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
   (
-    stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType)
-    || stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
-  )
-  && stream.append('\n')
+  stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType) ||
+  stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
+  ) &&
+  stream.append('\n')
 
   cb()
 }
 
 WA.prototype.getExerciseFiles = function (exercise, callback) {
-  if (!exercise.hideSolutions && typeof exercise.getSolutionFiles === 'function')
+  if (!exercise.hideSolutions && typeof exercise.getSolutionFiles === 'function') {
     return exercise.getSolutionFiles(callback)
+  }
 
   setImmediate(callback.bind(null, null, exercise.solutionFiles || []))
 }
@@ -189,24 +201,27 @@ WA.prototype.getExerciseFiles = function (exercise, callback) {
 // overall exercise pass
 WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
   this.getExerciseFiles(exercise, function (err, files) {
-    if (err)
+    if (err) {
       return cb(this.__('solution.notes.load_error', {err: err.message || err}), false, stream)
+    }
 
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
-      if (err)
+      if (err) {
         return cb(err, false, stream)
-      
-      var appended = stream.append(completeMessage, this.options.defaultOutputType)
-        || stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType)
-        || stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
+      }
+
+      var appended = stream.append(completeMessage, this.options.defaultOutputType) ||
+      stream.append(exercise.pass, exercise.passType || this.options.defaultOutputType) ||
+      stream.append(this.options.pass, this.options.passType || this.options.defaultPassType)
 
       var hideSolutions = exercise.hideSolutions
       if (hideSolutions === undefined) {
         hideSolutions = this.options.hideSolutions
       }
       if (hideSolutions !== true) {
-        if ((files && files.length > 0) || exercise.solution)
+        if ((files && files.length > 0) || exercise.solution) {
           stream.append('{solution.notes.compare}')
+        }
 
         files && files.length > 0
           ? stream.append({ files: files })
@@ -225,13 +240,14 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         remaining > 0
           ? stream.append(
             '{progress.remaining#' + remaining + '}\n\n' +
-              '{ui.return}\n')
+            '{ui.return}\n')
           : stream.append('{progress.finished}\n')
         appended = true
       }
 
-      if (appended)
+      if (appended) {
         stream.append('\n')
+      }
 
       cb(null, true, stream)
     }.bind(this))
@@ -248,24 +264,29 @@ WA.prototype.run = function (args, specifier, cb) {
 
 WA.prototype.process = function (mode, args, specifier, cb) {
   var exercise = this.loadExercise(specifier)
-    , stream = this.createMarkdownStream(exercise)
+  var stream = this.createMarkdownStream(exercise)
 
-  if (!exercise)
+  if (!exercise) {
     return cb(this.__('error.exercise.missing', {name: specifier}), false, stream)
+  }
 
   var requireSubmission = exercise.requireSubmission
   if (requireSubmission === undefined) {
     requireSubmission = this.options.requireSubmission
   }
-  if (requireSubmission !== false && args.length == 0)
+
+  if (requireSubmission !== false && args.length === 0) {
     return cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
+  }
 
   var method = exercise[mode]
-  if (!method)
+  if (!method) {
     return cb(this.__('error.exercise.method_not_required', {method: mode}), false, stream)
+  }
 
-  if (typeof method !== 'function')
+  if (typeof method !== 'function') {
     return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)
+  }
 
   stream = this.executeExercise(exercise, mode, method, args, stream, cb)
   if (typeof exercise.on === 'function') {
@@ -286,85 +307,89 @@ WA.prototype.process = function (mode, args, specifier, cb) {
       stream.append(message, this.options.defaultOutputType)
     }.bind(this))
     exercise.on('pass', this.emit.bind(this, 'pass', exercise, mode))
-    exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode)) 
+    exercise.on('fail', this.emit.bind(this, 'fail', exercise, mode))
   }
   return stream
 }
 
 WA.prototype.executeExercise = function (exercise, mode, method, args, stream, cb) {
   var result
-    , finished = false
-    , cleanup = function cleanup(err, pass, message, messageType) {
-        if (finished)
-          return // TODO: make this easier to debug ... bad case of zalgo
+  var finished = false
+  var cleanup = function cleanup (err, pass, message, messageType) {
+    if (finished) {
+      return // TODO: make this easier to debug ... bad case of zalgo
+    }
 
-        finished = true
+    finished = true
 
-        if (message) {
-          if (typeof message === 'string') {
-            message = {
-              text: message,
-              type: messageType || this.options.defaultOutputType
-            }
-          }
-          exercise[pass ? 'pass': 'fail'] = message
+    if (message) {
+      if (typeof message === 'string') {
+        message = {
+          text: message,
+          type: messageType || this.options.defaultOutputType
+        }
+      }
+      exercise[pass ? 'pass' : 'fail'] = message
+    }
+
+    if (err) {
+      return cb(this.__('error.exercise.unexpected_error', { mode: mode, err: (err.message || err) }), false, stream)
+    }
+
+    var end = function (err) {
+      if (typeof exercise.end !== 'function') {
+        return cb(null, pass, stream)
+      }
+
+      exercise.end(mode, pass, function (cleanupErr) {
+        if (cleanupErr) {
+          return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false, stream)
         }
 
-        if (err)
-          return cb(this.__('error.exercise.unexpected_error', {mode: mode, err: (err.message || err) }), false, stream)
+        cb(err, pass, stream)
+      }.bind(this))
+    }.bind(this)
 
-        var end = function (err) {
-          if (typeof exercise.end !== 'function')
-            return cb(null, pass, stream)
+    if (mode === 'run') {
+      return setImmediate(end)
+    }
 
-          exercise.end(mode, pass, function (cleanupErr) {
-            if (cleanupErr)
-              return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false, stream)
-
-            cb(err, pass, stream)
-          }.bind(this))
-        }.bind(this)
-
-        if (mode === 'run')
-          return setImmediate(end)
-
-        if (pass)
-          this.exercisePass(mode, exercise, stream, end)
-        else
-          this.exerciseFail(mode, exercise, stream, end)
-
-      }.bind(this)
+    if (pass) {
+      this.exercisePass(mode, exercise, stream, end)
+    } else {
+      this.exerciseFail(mode, exercise, stream, end)
+    }
+  }.bind(this)
 
   try {
-    var result = method.length <= 1
+    result = method.length <= 1
       ? cleanup(null, true, method.call(exercise, args))
       : method.call(exercise, args, function callback (err, pass, message) {
-          /*
-            err ... Error that occured
-            pass ... true = The run has worked
-            message ... message to Append after the output
+        /*
+          err ... Error that occured
+          pass ... true = The run has worked
+          message ... message to Append after the output
 
-            callback(true)       -> err=null,  pass=true
-            callback(false)      -> err=null,  pass=false
-            callback()           -> err=null,  pass=null
-            callback(null)       -> err=null,  pass=null
-            callback(true, true) -> err=true,  pass="x"
-            callback(false, "x") -> err=false, pass="x"
-            callback(null, "x")  -> err=null,  pass="x"
-            callback("x", false) -> err="x",   pass=false
-            callback("x", true)  -> err="x",   pass=true ... pass should be ignored
-          */
-          if (pass === undefined && (err === true || err === false || err === undefined || err === null)) {
-            pass = err
-            err = null
-          }
+          callback(true)       -> err=null,  pass=true
+          callback(false)      -> err=null,  pass=false
+          callback()           -> err=null,  pass=null
+          callback(null)       -> err=null,  pass=null
+          callback(true, true) -> err=true,  pass="x"
+          callback(false, "x") -> err=false, pass="x"
+          callback(null, "x")  -> err=null,  pass="x"
+          callback("x", false) -> err="x",   pass=false
+          callback("x", true)  -> err="x",   pass=true ... pass should be ignored
+        */
+        if (pass === undefined && (err === true || err === false || err === undefined || err === null)) {
+          pass = err
+          err = null
+        }
 
-          pass = (mode === 'run' || (pass && !exercise.fail))
-          err
-            ? cleanup(err, null, message)
-            : cleanup(null, pass, message)
-
-        }.bind(this))
+        pass = (mode === 'run' || (pass && !exercise.fail))
+        err
+          ? cleanup(err, null, message)
+          : cleanup(null, pass, message)
+      })
   } catch (e) {
     return cleanup(e, false)
   }
@@ -376,28 +401,30 @@ WA.prototype.processResult = function (result, stream) {
 }
 WA.prototype.loadExercise = function (specifier) {
   var id
-  if (specifier)
+  if (specifier) {
     id = this.specifierToId(specifier)
-  else
+  } else {
     id = util.idFromName(this.appStorage.get('current'))
+  }
 
-  if (!id)
+  if (!id) {
     return null
-
+  }
   var meta = this._meta[id]
-  if (!meta)
+  if (!meta) {
     return null
+  }
 
-  exercise = meta.fn()
+  var exercise = meta.fn()
   exercise.meta = meta
 
-  if (typeof exercise.init === 'function')
+  if (typeof exercise.init === 'function') {
     exercise.init(this, meta.id, meta.name, meta.dir, meta.number)
+  }
 
   return exercise
 }
 WA.prototype.specifierToId = function (specifier) {
-
   if (!isNaN(specifier)) {
     var number = parseInt(specifier, 10)
     if (number >= 0 && number < this.exercises.length) {
@@ -411,69 +438,75 @@ WA.prototype.specifierToId = function (specifier) {
 }
 WA.prototype.selectExercise = function (specifier) {
   var id = this.specifierToId(specifier)
-  if (!id)
+  if (!id) {
     throw new Error(this.__('error.exercise.missing', {name: specifier}))
+  }
 
   var meta = this._meta[id]
-  if (!meta)
+  if (!meta) {
     throw new Error(this.__('error.exercise.missing', {name: specifier}))
+  }
 
   this.appStorage.save('current', meta.name)
   return meta.id
 }
 WA.prototype.createMarkdownStream = function (exercise) {
-  var context = exercise ? this.createExerciseContext(exercise) : this.i18n;
+  var context = exercise ? this.createExerciseContext(exercise) : this.i18n
   return new PrintStream(context, this.i18n.lang())
 }
 WA.prototype.createExerciseContext = function (exercise) {
   return this.i18n.extend({
-      "currentExercise.name" : this.__('exercise.' + exercise.meta.name)
-    , "progress.count" : exercise.meta.number
-    , "progress.total" : this.exercises.length
-    , "progress.state_resolved" : this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
+    'currentExercise.name': this.__('exercise.' + exercise.meta.name),
+    'progress.count': exercise.meta.number,
+    'progress.total': this.exercises.length,
+    'progress.state_resolved': this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
   })
 }
 WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, callback) {
   var exercise = this.loadExercise(specifier)
-    , prepare
+  var prepare
 
   if (arguments.length === 2) {
     callback = contentOnly
     contentOnly = false
   }
 
-  if (!exercise)
+  if (!exercise) {
     callback(this.__('error.exercise.none_active'))
+  }
 
-  prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate;
-  prepare(function(err) {
-    if (err)
+  prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate
+  prepare(function (err) {
+    if (err) {
       return callback(this.__('error.exercise.preparing', {err: err.message || err}))
+    }
 
-    var getExerciseText = (typeof exercise.getExerciseText === 'function') ? exercise.getExerciseText.bind(exercise) : setImmediate;
+    var getExerciseText = (typeof exercise.getExerciseText === 'function') ? exercise.getExerciseText.bind(exercise) : setImmediate
     getExerciseText(function (err, exerciseTextType, exerciseText) {
-      if (err)
+      if (err) {
         return callback(this.__('error.exercise.loading', {err: err.message || err}))
-
+      }
       var stream = this.createMarkdownStream(exercise)
-        , found = false
+      var found = false
 
-      if (!contentOnly)
-        stream.append(exercise.header, this.options.defaultOutputType)
-         || stream.append(this.options.header, this.options.defaultOutputType)
-
-      if (stream.append(exercise.problem, exercise.problemType || this.options.defaultOutputType))
+      if (!contentOnly) {
+        stream.append(exercise.header, this.options.defaultOutputType) ||
+        stream.append(this.options.header, this.options.defaultOutputType)
+      }
+      if (stream.append(exercise.problem, exercise.problemType || this.options.defaultOutputType)) {
         found = true
-      if (stream.append(exerciseText, exerciseTextType || this.options.defaultOutputType))
+      }
+      if (stream.append(exerciseText, exerciseTextType || this.options.defaultOutputType)) {
         found = true
-      if (!found)
+      }
+      if (!found) {
         return callback('The exercise "' + exercise.meta.name + '" is missing a problem definition!')
-
-      if (!contentOnly)
-        stream.append(exercise.footer, this.options.defaultOutputType)
-         || stream.append(this.options.footer, this.options.defaultOutputType)
-        && stream.append('\n')
-
+      }
+      if (!contentOnly) {
+        stream.append(exercise.footer, this.options.defaultOutputType) ||
+        stream.append(this.options.footer, this.options.defaultOutputType) &&
+        stream.append('\n')
+      }
       callback(null, stream)
     }.bind(this))
   }.bind(this))
