@@ -1,17 +1,18 @@
-var Adventure = require("./adventure")
-  , util      = require('./util')
-  , inherits  = require('util').inherits
+var Adventure = require('./adventure')
+var util = require('./util')
+var inherits = require('util').inherits
 
 module.exports = LegacyWorkshopper
 
-function LegacyWorkshopper(options) {
-  if (!(this instanceof LegacyWorkshopper))
+function LegacyWorkshopper (options) {
+  if (!(this instanceof LegacyWorkshopper)) {
     return new LegacyWorkshopper(options)
+  }
 
   if (!options.header) {
-  if (options.showHeader === undefined || options.showHeader) {
-    options.header = require('./default/header')
-  }
+    if (options.showHeader === undefined || options.showHeader) {
+      options.header = require('./default/header')
+    }
   }
   if (options.hideRemaining === undefined) {
     options.hideRemaining = false
@@ -29,8 +30,9 @@ function LegacyWorkshopper(options) {
     options.fail = require('./default/fail')
   }
 
-  if (options.execute === undefined)
+  if (options.execute === undefined) {
     options.execute = 'immediatly'
+  }
 
   Adventure.apply(this, [options])
 

@@ -1,43 +1,46 @@
-const path = require('path')
-    , inherits     = require('util').inherits
+const inherits = require('util').inherits
 
 /* jshint -W079 */
-const Core  = require('./index')
-    , error = require('./lib/print').error
+const Core = require('./index')
+const error = require('./lib/print').error
 /* jshint +W079 */
 
-function legacyCommands(item) {
-  if (!item.aliases)
+function legacyCommands (item) {
+  if (!item.aliases) {
     item.aliases = []
-  if (item && item.name)
+  }
+  if (item && item.name) {
     item.aliases.unshift(item.name)
+  }
   return item
 }
 
 function LegacyAdventure (options) {
-  if (!(this instanceof LegacyAdventure))
+  if (!(this instanceof LegacyAdventure)) {
     return new LegacyAdventure(options)
-
-  if (typeof options === 'string')
+  }
+  if (typeof options === 'string') {
     options = {name: options}
-
-  if (!options)
+  }
+  if (!options) {
     options = {}
-
-  if (typeof options !== 'object')
+  }
+  if (typeof options !== 'object') {
     return error('You need to provide an options object')
-
-  if (!options.commands)
+  }
+  if (!options.commands) {
     options.commands = options.menuItems
-
-  if (options.commands)
+  }
+  if (options.commands) {
     options.commands = options.commands.map(legacyCommands)
+  }
+  if (options.modifiers) {
+    options.modifiers = options.modifiers.map(legacyCommands)
+  }
 
-  if (options.modifiers)
-    options.modifiers = option.modifiers.map(legacyCommands)
-
-  if (options.helpFile)
+  if (options.helpFile) {
     options.help = {file: options.helpFile}
+  }
 
   if (!options.footer) {
     if (options.footerFile) {
@@ -49,7 +52,7 @@ function LegacyAdventure (options) {
     options.defaultOutputType = 'txt'
   }
 
-  if (options.hideSolutions == undefined) {
+  if (options.hideSolutions === undefined) {
     options.hideSolutions = true
   }
 
@@ -58,15 +61,15 @@ function LegacyAdventure (options) {
   }
 
   // an `onComplete` hook function *must* call the callback given to it when it's finished, async or not
-  if (typeof options.onComplete == 'function')
+  if (typeof options.onComplete === 'function') {
     this.onComplete = options.onComplete
-
+  }
   Core.call(this, options)
 
   if (options.execute === 'now') {
     this.execute(process.argv.slice(2))
   } else if (options.execute === 'immediatly') {
-    setImmediate(this.execute.bind(this, process.argv.slice(2))) 
+    setImmediate(this.execute.bind(this, process.argv.slice(2)))
   }
 
   // backwards compatibility support
