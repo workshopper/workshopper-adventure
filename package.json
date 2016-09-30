@@ -32,7 +32,7 @@
     "example": "examples"
   },
   "devDependencies": {
-    "standard": "^8.1.0",
+    "standard": "^8.2.0",
     "workshopper-exercise": "^2.7.0"
   },
   "scripts": {
