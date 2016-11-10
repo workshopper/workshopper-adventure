@@ -207,7 +207,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
 
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
       if (err) {
-        return cb(err, false, stream)
+        return cb(err, false)
       }
 
       var appended = stream.append(completeMessage, this.options.defaultOutputType) ||
@@ -249,7 +249,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         stream.append('\n')
       }
 
-      cb(null, true, stream)
+      cb(null, true)
     }.bind(this))
   }.bind(this))
 }
@@ -304,7 +304,8 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
     return stream
   }
 
-  stream = this.executeExercise(exercise, mode, method, args, stream, cb)
+  stream.startWaiting()
+  stream = this.executeExercise(exercise, mode, method, args, stream, contentOnly, cb)
   if (typeof exercise.on === 'function') {
     exercise.on('pass', function (message) {
       stream.append({
@@ -357,7 +358,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
     }
 
     if (err) {
-      return cb(this.__('error.exercise.unexpected_error', { mode: mode, err: (err.message || err) }), false, stream)
+      return cb(this.__('error.exercise.unexpected_error', { mode: mode, err: (err.stack || err) }), false)
     }
 
     var writeFooter = function () {
@@ -375,16 +376,17 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
     var end = function (err) {
       if (typeof exercise.end !== 'function') {
         writeFooter()
-        return cb(null, pass, stream)
+        return cb(null, pass)
       }
 
       exercise.end(mode, pass, function (cleanupErr) {
         if (cleanupErr) {
-          return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false, stream)
+          return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false)
         }
 
         writeFooter()
-        cb(err, pass, stream)
+        stream.stopWaiting() // to end this farce
+        cb(err, pass)
       }.bind(this))
     }.bind(this)
 

@@ -10,9 +10,10 @@
   },
   "license": "MIT",
   "dependencies": {
+    "after": "^0.8.2",
     "chalk": "^1.1.3",
     "colors-tmpl": "~1.0.0",
-    "combined-stream": "1.0.5",
+    "combined-stream-wait-for-it": "^1.1.0",
     "commandico": "^2.0.2",
     "i18n-core": "^2.1.1",
     "latest-version": "^2.0.0",
