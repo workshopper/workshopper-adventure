@@ -354,7 +354,23 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
           type: messageType || this.options.defaultOutputType
         }
       }
-      exercise[pass ? 'pass' : 'fail'] = message
+      if (pass) {
+        exercise.pass = [
+          {
+            text: exercise.pass || this.options.pass,
+            type: exercise.pass ? exercise.passType : this.options.passType
+          },
+          message
+        ]
+      } else {
+        exercise.pass = [
+          {
+            text: exercise.fail || this.options.fail,
+            type: exercise.fail ? exercise.failType : this.options.failType
+          },
+          message
+        ]
+      }
     }
 
     if (err) {
