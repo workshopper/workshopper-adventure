@@ -225,7 +225,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
 
         files && files.length > 0
           ? stream.append({ files: files })
-          : stream.append(exercise.solution, exercise.solutionType || this.options.defaultOutputType)
+          : stream.append(exercise.solution, exercise.solutionType || this.options.defaultSolutionType)
 
         appended = true
       }
