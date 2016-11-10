@@ -266,8 +266,16 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   var exercise = this.loadExercise(specifier)
   var stream = this.createMarkdownStream(exercise)
 
+  var _cb = cb
+  cb = function (err, pass) {
+    setImmediate(function () {
+      _cb(err, pass)
+    })
+  }
+
   if (!exercise) {
-    return cb(this.__('error.exercise.missing', {name: specifier}), false, stream)
+    cb(this.__('error.exercise.missing', {name: specifier}), false)
+    return stream
   }
 
   var requireSubmission = exercise.requireSubmission
@@ -276,16 +284,19 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   }
 
   if (requireSubmission !== false && args.length === 0) {
-    return cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
+    cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
+    return stream
   }
 
   var method = exercise[mode]
   if (!method) {
-    return cb(this.__('error.exercise.method_not_required', {method: mode}), false, stream)
+    cb(this.__('error.exercise.method_not_required', {method: mode}), false, stream)
+    return stream
   }
 
   if (typeof method !== 'function') {
-    return cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)
+    cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)
+    return stream
   }
 
   stream = this.executeExercise(exercise, mode, method, args, stream, cb)
@@ -391,7 +402,8 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
           : cleanup(null, pass, message)
       })
   } catch (e) {
-    return cleanup(e, false)
+    cleanup(e, false)
+    return stream
   }
   return this.processResult(result, stream)
 }
