@@ -254,17 +254,22 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
   }.bind(this))
 }
 
-WA.prototype.verify = function (args, specifier, cb) {
-  return this.process('verify', args, specifier, cb)
+WA.prototype.verify = function (args, specifier, contentOnly, cb) {
+  return this.process('verify', args, specifier, contentOnly, cb)
 }
 
 WA.prototype.run = function (args, specifier, cb) {
   return this.process('run', args, specifier, cb)
 }
 
-WA.prototype.process = function (mode, args, specifier, cb) {
+WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
   var exercise = this.loadExercise(specifier)
   var stream = this.createMarkdownStream(exercise)
+
+  if (!cb && typeof contentOnly === 'function') {
+    cb = contentOnly
+    contentOnly = false
+  }
 
   var _cb = cb
   cb = function (err, pass) {
@@ -323,7 +328,15 @@ WA.prototype.process = function (mode, args, specifier, cb) {
   return stream
 }
 
-WA.prototype.executeExercise = function (exercise, mode, method, args, stream, cb) {
+WA.prototype.executeExercise = function (exercise, mode, method, args, stream, contentOnly, cb) {
+  if (!cb && typeof contentOnly === 'function') {
+    cb = contentOnly
+    contentOnly = false
+  }
+  if (!contentOnly && mode === 'verify') {
+    (stream.append(exercise.header, this.options.defaultOutputType) ||
+    stream.append(this.options.header, this.options.defaultOutputType))
+  }
   var result
   var finished = false
   var cleanup = function cleanup (err, pass, message, messageType) {
@@ -347,8 +360,21 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
       return cb(this.__('error.exercise.unexpected_error', { mode: mode, err: (err.message || err) }), false, stream)
     }
 
+    var writeFooter = function () {
+      if (!contentOnly && mode === 'verify') {
+        // TODO: Make this footer great again once we fixed workshopper-exercise
+        if (stream.append(exercise.footer, this.options.defaultOutputType) ||
+            stream.append(this.options.footer, this.options.defaultOutputType)) {
+          stream.append('\n')
+        }
+        return true
+      }
+      return false
+    }.bind(this)
+
     var end = function (err) {
       if (typeof exercise.end !== 'function') {
+        writeFooter()
         return cb(null, pass, stream)
       }
 
@@ -357,6 +383,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
           return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false, stream)
         }
 
+        writeFooter()
         cb(err, pass, stream)
       }.bind(this))
     }.bind(this)
