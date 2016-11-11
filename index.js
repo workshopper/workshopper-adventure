@@ -130,11 +130,11 @@ WA.prototype.addAll = function (list) {
 
 WA.prototype.addExercise = function (meta) {
   this.exercises.push(meta.name)
-  this.i18n.updateExercises(this.exercises)
   this._meta[meta.id] = meta
   meta.number = this.exercises.length
   return this
 }
+
 WA.prototype.getVersionString = function () {
   return this.options.name + '@' + this.options.version
 }

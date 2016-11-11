@@ -54,6 +54,8 @@ module.exports = {
     var choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, options.languages)
     var lang = choose(null)
     var translator = root.lang(lang, true)
+    // TODO: _excercises is unused... is this ok?
+    // eslint-disable-next-line
     var result = i18n(i18nExtend(translator, {
       get: function (key) {
         if (options[key]) {
@@ -91,9 +93,6 @@ module.exports = {
       }
     }))
 
-    // TODO: _excercises is unused... is this ok?
-    // eslint-disable-next-line
-    var _exercises = []
     root.fallback = function (key) {
       return '?' + key + '?'
     }
@@ -107,9 +106,6 @@ module.exports = {
           return obj[key]
         }
       }))
-    }
-    result.updateExercises = function (exercises) {
-      _exercises = exercises
     }
     result.lang = function () {
       return lang
