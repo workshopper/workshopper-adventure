@@ -116,7 +116,7 @@ WA.prototype.execute = function (args) {
 WA.prototype.add = function (nameOrObject, fnOrObject, fn) {
   var meta
   try {
-    meta = require('./lib/createExerciseMeta')(this.options.exerciseDir, nameOrObject, fnOrObject)
+    meta = require('./lib/createExerciseMeta')(this.options.exerciseDir, nameOrObject, fnOrObject, fn)
   } catch (e) {
     console.log(e)
     return new Error(this.__('error.exercise.' + e.id, e))
