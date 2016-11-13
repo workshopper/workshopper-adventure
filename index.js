@@ -5,7 +5,7 @@ const EventEmitter = require('events').EventEmitter
 
 const util = require('./util')
 const PrintStream = require('./lib/print')
-const storage = require('./lib/storage')
+const storage = require('workshopper-adventure-storage')
 
 function WA (options) {
   if (!(this instanceof WA)) {
