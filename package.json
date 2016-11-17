@@ -22,7 +22,7 @@
     "split": "^1.0.0",
     "string-to-stream": "^1.1.0",
     "through2": "^2.0.1",
-    "workshopper-adventure-storage": "^2.0.2"
+    "workshopper-adventure-storage": "^3.0.0"
   },
   "bugs": {
     "url": "https://github.com/workshopper/workshopper-adventure/issues"
