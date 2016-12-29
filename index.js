@@ -273,10 +273,20 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
 
   var _cb = cb
   cb = function (err, pass) {
+    // The method that creates the stream is supposed to know
+    // when it will surely never add anything more to the
+    // the stream
+    stream.stopWaiting()
+    // Zalgo protection
     setImmediate(function () {
       _cb(err, pass)
     })
   }
+  // The stream we return needs to be "not finished yet". Which
+  // is why we mark it as "waiting". It will already push out the
+  // stream of data but before `.stopWaiting` it will not send
+  // the end event.
+  stream.startWaiting()
 
   if (!exercise) {
     cb(this.__('error.exercise.missing', {name: specifier}), false)
@@ -304,7 +314,6 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
     return stream
   }
 
-  stream.startWaiting()
   stream = this.executeExercise(exercise, mode, method, args, stream, contentOnly, cb)
   if (typeof exercise.on === 'function') {
     exercise.on('pass', function (message) {
@@ -395,7 +404,6 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
         }
 
         writeFooter()
-        stream.stopWaiting() // to end this farce
         cb(err, pass)
       }.bind(this))
     }.bind(this)
