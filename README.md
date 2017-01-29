@@ -16,7 +16,7 @@
 **Workshopper-Adventure** allows you to create a workshop written
 like either of those frameworks!
 
-[@linclark](https://github.com/linclark) has written a good introduction on creating your own workshop, available [here](http://lin-clark.com/blog/2014/07/01/authoring-nodejs-workshopper-lessons/).
+[@linclark](https://github.com/linclark) has written a good introduction on creating your own workshop, available [here](https://github.com/linclark/lin-clark.com/blob/master/content/blog/2014/07/01/authoring-nodejs-workshopper-lessons.md).
 
 ## High-level overview
 
