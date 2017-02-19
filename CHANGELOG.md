@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.1"></a>
+## [6.0.1](https://github.com/workshopper/workshopper-adventure/compare/v6.0.0...v6.0.1) (2017-02-19)
+
+
+### Bug Fixes
+
+* **package:** workshopper-exercise is not used in a test and shouldnt ever be used ([e09975c](https://github.com/workshopper/workshopper-adventure/commit/e09975c))
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/workshopper/workshopper-adventure/compare/v5.1.8...v6.0.0) (2017-02-19)
 
