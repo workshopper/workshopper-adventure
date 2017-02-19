@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "standard": "^8.6.0",
-    "workshopper-exercise": "^2.7.0"
+    "workshopper-exercise": "^3.0.0"
   },
   "scripts": {
     "test": "standard"
