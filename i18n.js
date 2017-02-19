@@ -53,42 +53,40 @@ module.exports = {
     var root = i18n(lookup)
     var choose = chooseLang.bind(null, globalStorage, appStorage, options.defaultLang, options.languages)
     var lang = choose(null)
-    var translator = root.lang(lang, true)
+    var translator = root.section(lang, true)
     // TODO: _excercises is unused... is this ok?
     // eslint-disable-next-line
-    var result = i18n(i18nExtend(translator, {
-      get: function (key) {
-        if (options[key]) {
-          return options[key]
-        }
+    var result = i18n(i18nExtend(translator, function (key) {
+      if (options[key]) {
+        return options[key]
+      }
 
-        // legacy -- start
-        if (key === 'title') {
-          return options.name.toUpperCase()
-        }
+      // legacy -- start
+      if (key === 'title') {
+        return options.name.toUpperCase()
+      }
 
-        if (key === 'appName' || key === 'appname' || key === 'ADVENTURE_NAME') {
-          return options.name
-        }
+      if (key === 'appName' || key === 'appname' || key === 'ADVENTURE_NAME') {
+        return options.name
+      }
 
-        if (key === 'rootdir') {
-          return options.appDir
-        }
+      if (key === 'rootdir') {
+        return options.appDir
+      }
 
-        if (key === 'COMMAND' || key === 'ADVENTURE_COMMAND') {
-          return commandify(options.name)
-        // legacy -- end
-        }
+      if (key === 'COMMAND' || key === 'ADVENTURE_COMMAND') {
+        return commandify(options.name)
+      // legacy -- end
+      }
 
-        var exercisePrefix = 'exercise.'
-        if (key.indexOf(exercisePrefix) === 0) {
-          return key.substr(exercisePrefix.length)
-        }
-        if (key.length > UNDERLINE.length) {
-          var end = key.length - UNDERLINE.length
-          if (key.indexOf(UNDERLINE) === end) {
-            return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
-          }
+      var exercisePrefix = 'exercise.'
+      if (key.indexOf(exercisePrefix) === 0) {
+        return key.substr(exercisePrefix.length)
+      }
+      if (key.length > UNDERLINE.length) {
+        var end = key.length - UNDERLINE.length
+        if (key.indexOf(UNDERLINE) === end) {
+          return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
         }
       }
     }))
@@ -98,13 +96,11 @@ module.exports = {
     }
     result.change = function (lng) {
       lang = choose(lng)
-      translator.changeLang(lang)
+      translator.changeSection(lang)
     }
     result.extend = function (obj) {
-      return i18n(i18nExtend(result, {
-        get: function (key) {
-          return obj[key]
-        }
+      return i18n(i18nExtend(result, function (key) {
+        return obj[key]
       }))
     }
     result.lang = function () {
