@@ -563,8 +563,8 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
       }
       if (!contentOnly) {
         stream.append(exercise.footer, this.options.defaultOutputType) ||
-        stream.append(this.options.footer, this.options.defaultOutputType) &&
-        stream.append('\n')
+          (stream.append(this.options.footer, this.options.defaultOutputType) &&
+          stream.append('\n'))
       }
       callback(null, stream)
     }.bind(this))
