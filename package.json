@@ -32,9 +32,11 @@
     "example": "examples"
   },
   "devDependencies": {
-    "standard": "^9.0.0"
+    "standard": "^9.0.0",
+    "standard-version": "^4.0.0"
   },
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "release": "standard-version"
   }
 }
