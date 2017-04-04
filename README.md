@@ -43,17 +43,11 @@ Workshopper-Adventure is essentially a *test-runner* with a fancy terminal UI. T
 * [@dominictarr](https://github.com/dominictarr)
 * [@dominhhai](https://github.com/dominhhai)
 * [@minatu2d](https://github.com/minatu2d)
+* [@wewark](https://github.com/wewark)
 
 #### Maintainers
 
 * [@martinheidegger](https://github.com/martinheidegger)
-* [@rvagg](https://github.com/rvagg)
-* [@substack](https://github.com/substack)
-* [@maxogden](https://github.com/maxogden)
-* [@cjb](https://github.com/cjb)
-* [@timoxley](https://github.com/timoxley)
-* [@dominictarr](https://github.com/dominictarr)
-* [@braz](https://github.com/braz)
 
 
 ## License
