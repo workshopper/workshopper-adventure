@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.2"></a>
+## [6.0.2](https://github.com/workshopper/workshopper-adventure/compare/v6.0.1...v6.0.2) (2017-04-04)
+
+
+### Bug Fixes
+
+* **output:** run shows the error message twice, once too many ([bb1cd2d](https://github.com/workshopper/workshopper-adventure/commit/bb1cd2d))
+* **output:** The i18n codes now are used correctly in the `next` command. ([c5ba41b](https://github.com/workshopper/workshopper-adventure/commit/c5ba41b))
+* **style:** update for standard v9 ([18b55d3](https://github.com/workshopper/workshopper-adventure/commit/18b55d3))
+
+
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/workshopper/workshopper-adventure/compare/v6.0.0...v6.0.1) (2017-02-19)
 
