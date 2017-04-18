@@ -1,5 +1,7 @@
 # Workshopper-Adventure
 
+[![Join the chat at https://gitter.im/workshopper-adventure/Lobby](https://badges.gitter.im/workshopper-adventure/Lobby.svg)](https://gitter.im/workshopper-adventure/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **A flexible terminal workshop runner framework**
 
 [![Join the chat at https://gitter.im/nodeschool/workshoppers](https://badges.gitter.im/nodeschool/workshoppers.svg)](https://gitter.im/nodeschool/workshoppers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
