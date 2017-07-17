@@ -11,7 +11,7 @@
 
 **Workshopper** was used by **[learnyounode](https://github.com/rvagg/learnyounode)**, and other Node.js command-line workshop applications.
 
-**Adventure** was used by **[javascripting](hhttps://github.com/sethvincent/javascripting), and other Node.js command-line workshop applications.
+**Adventure** was used by **[javascripting](https://github.com/sethvincent/javascripting)**, and other Node.js command-line workshop applications.
 
 **Workshopper-Adventure** allows you to create a workshop written
 like either of those frameworks!
