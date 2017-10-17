@@ -222,7 +222,7 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
         if ((files && files.length > 0) || exercise.solution) {
           stream.append('{solution.notes.compare}')
           if (exercise.solutionPath) {
-            stream.append({ files : [exercise.solutionPath] })
+            stream.append({ files: [exercise.solutionPath] })
           }
         }
 
