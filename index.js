@@ -221,6 +221,9 @@ WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
       if (hideSolutions !== true) {
         if ((files && files.length > 0) || exercise.solution) {
           stream.append('{solution.notes.compare}')
+          if (exercise.solutionPath) {
+            stream.append({ files: [exercise.solutionPath] })
+          }
         }
 
         files && files.length > 0
