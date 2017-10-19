@@ -313,6 +313,7 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
   }
 
   if (typeof method !== 'function') {
+    // eslint-disable-next-line standard/no-callback-literal
     cb('The `.' + mode + '` object of the exercise `' + exercise.meta.id + ' is a `' + typeof method + '`. It should be a `function` instead.', false, stream)
     return stream
   }
@@ -562,6 +563,7 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
         found = true
       }
       if (!found) {
+        // eslint-disable-next-line standard/no-callback-literal
         return callback('The exercise "' + exercise.meta.name + '" is missing a problem definition!')
       }
       if (!contentOnly) {
