@@ -4,8 +4,8 @@ const i18nChain = require('i18n-core/lookup/chain')
 const i18nExtend = require('i18n-core/lookup/extend')
 const path = require('path')
 const UNDERLINE = 'Underline'
-const chalk = require('chalk')
 const util = require('./util')
+const stripColor = require('strip-ansi')
 
 function commandify (s) {
   return String(s).toLowerCase().replace(/\s+/g, '-')
@@ -86,7 +86,7 @@ module.exports = {
       if (key.length > UNDERLINE.length) {
         var end = key.length - UNDERLINE.length
         if (key.indexOf(UNDERLINE) === end) {
-          return util.repeat('\u2500', chalk.stripColor(result.__(key.substr(0, end))).length + 2)
+          return util.repeat('\u2500', stripColor(result.__(key.substr(0, end))).length + 2)
         }
       }
     }))
