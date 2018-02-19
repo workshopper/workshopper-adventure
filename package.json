@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "after": "^0.8.2",
-    "chalk": "^2.1.0",
+    "chalk": "^2.3.1",
     "colors-tmpl": "~1.0.0",
     "combined-stream-wait-for-it": "^1.1.0",
     "commandico": "^2.0.2",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "standard": "^11.0.0",
-    "standard-version": "^4.0.0"
+    "standard-version": "^4.3.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/standard",
