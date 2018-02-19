@@ -182,8 +182,8 @@ WA.prototype.onComplete = function (cb) {
 // overall exercise fail
 WA.prototype.exerciseFail = function (mode, exercise, stream, cb) {
   (
-  stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType) ||
-  stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
+    stream.append(exercise.fail, exercise.failType || this.options.defaultOutputType) ||
+    stream.append(this.options.fail, this.options.failType || this.options.defaultOutputType)
   ) &&
   stream.append('\n')
 
