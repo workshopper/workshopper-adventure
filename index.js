@@ -447,7 +447,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
           err = null
         }
 
-        pass = mode === 'run' || pass)
+        pass = mode === 'run' || pass
         err
           ? cleanup(err, null, message)
           : cleanup(null, pass, message)
