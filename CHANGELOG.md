@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.4"></a>
+## [6.0.4](https://github.com/workshopper/workshopper-adventure/compare/v6.0.3...v6.0.4) (2018-07-07)
+
+
+### Bug Fixes
+
+* chalk dependency doesn’t have stripColor support anymore. ([9396bde](https://github.com/workshopper/workshopper-adventure/commit/9396bde))
+
+
+
 <a name="6.0.3"></a>
 ## [6.0.3](https://github.com/workshopper/workshopper-adventure/compare/v6.0.2...v6.0.3) (2017-10-19)
 
