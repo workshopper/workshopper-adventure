@@ -30,7 +30,7 @@
   },
   "error": {
     "exercise": {
-      "none_active": "No hay un ejercicio activo. Selecciona uno desde el menu.",
+      "none_active": "No hay un ejercicio activo. Selecciona uno desde el menú.",
       "missing": "No se encontró el ejercicio: {{{name}}}",
       "unexpected_error": "No se pudo {{mode}}: {{{err}}}",
       "missing_file": "ERROR: {{{exerciseFile}}} no existe!",
@@ -45,19 +45,19 @@
   "solution": {
     "fail": {
       "title": "FALLO",
-      "message": "Su solución a {{{currentExercise.name}}} no pasó. Intentalo de nuevo!\n"
+      "message": "Su solución a {{{currentExercise.name}}} no pasó. Inténtalo de nuevo!\n"
     },
     "pass": {
       "title": "PASO",
       "message": "Su solución a {{{currentExercise.name}}} pasó sin problemas!"
     },
     "notes": {
-      "compare": "Aqui está la solución oficial si desea comparar notas:\n",
+      "compare": "Aquí está la solución oficial si desea comparar notas:\n",
       "load_error": "ERROR: Hubo un problema mostrando el archivo de solución: {{{err}}}"
     }
   },
   "ui": {
-    "return": "Escriba '{{appName}}' para mostrar el menu.\n",
+    "return": "Escriba '{{appName}}' para mostrar el menú.\n",
     "usage": "Uso: {{appName}} {{mode}} miprograma.js"
   },
   "progress": {
@@ -65,14 +65,14 @@
     "finished": "Has finalizado todos los ejercicios.! URRAA!!!\n",
     "state": "Ejercicio {{count}} de {{amount}}",
     "remaining": {
-      "one": "Tienes solo un ejercicio por hacer.",
+      "one": "Tienes sólo un ejercicio por hacer.",
       "other": "Tienes {{count}} ejercicios por hacer."
     }
   },
   "credits": {
-    "title": "{{appName}} is brought to you by the following dedicated hackers:",
-    "name": "Name",
-    "user": "GitHub Username"
+    "title": "{{appName}} es traído a usted por los siguientes dedicados hackers:",
+    "name": "Nombre",
+    "user": "Nombre de usuario en GitHub"
   },
   "update": {
     "latest_version": "{{name}}**@{{version}}** ya está ATT y la última versión.\n\n**Congratulations!**",
