@@ -1,0 +1,4 @@
+ - Tulostaaksesi nämä ohjeet uudelleen, kirjoita: `{appname} print`
+ - Ajaaksesi ohjelmasi testiympäristössä, kirjoita: `{appname} run program.js`
+ - Antaaksesi ohjelmasi tarkastettavaksi, kirjoita: `{appname} verify program.js`
+ - Saadaksesi apua: `{appname} help`
