@@ -21,7 +21,7 @@
     "simple-terminal-menu": "^1.1.3",
     "split": "^1.0.0",
     "string-to-stream": "^3.0.1",
-    "strip-ansi": "^4.0.0",
+    "strip-ansi": "^5.2.0",
     "through2": "^2.0.3",
     "workshopper-adventure-storage": "^3.0.0"
   },
