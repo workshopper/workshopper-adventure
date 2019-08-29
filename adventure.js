@@ -20,7 +20,7 @@ function LegacyAdventure (options) {
     return new LegacyAdventure(options)
   }
   if (typeof options === 'string') {
-    options = {name: options}
+    options = { name: options }
   }
   if (!options) {
     options = {}
@@ -39,7 +39,7 @@ function LegacyAdventure (options) {
   }
 
   if (options.helpFile) {
-    options.help = {file: options.helpFile}
+    options.help = { file: options.helpFile }
   }
 
   if (!options.footer) {
