@@ -33,7 +33,7 @@
     "example": "examples"
   },
   "devDependencies": {
-    "standard": "^11.0.0",
+    "standard": "^14.1.0",
     "standard-version": "^4.3.0"
   },
   "scripts": {
