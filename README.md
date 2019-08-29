@@ -2,7 +2,7 @@
 
 **A flexible terminal workshop runner framework**
 
-[![Join the chat at https://gitter.im/nodeschool/workshoppers](https://badges.gitter.im/nodeschool/workshoppers.svg)](https://gitter.im/nodeschool/workshoppers)
+[![Join the chat at https://gitter.im/nodeschool/workshoppers](https://badges.gitter.im/nodeschool/workshoppers.svg)](https://gitter.im/nodeschool/workshoppers) [![Build Status](https://api.travis-ci.org/workshopper/workshopper-adventure.svg?branch=master)](https://travis-ci.org/workshopper/workshopper-adventure) [![Dependency Status](https://david-dm.org/workshopper/workshopper-adventure.svg)](https://david-dm.org/workshopper/workshopper-adventure)
 
 
 [![NPM](https://nodei.co/npm/workshopper-adventure.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/workshopper-adventure/) [![NPM](https://nodei.co/npm-dl/workshopper-adventure.png?months=3&height=3)](https://nodei.co/npm/workshopper-adventure/)
