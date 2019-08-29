@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "standard": "^14.1.0",
-    "standard-version": "^4.3.0"
+    "standard-version": "^7.0.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/standard",
