@@ -202,7 +202,7 @@ WA.prototype.getExerciseFiles = function (exercise, callback) {
 WA.prototype.exercisePass = function (mode, exercise, stream, cb) {
   this.getExerciseFiles(exercise, function (err, files) {
     if (err) {
-      return cb(this.__('solution.notes.load_error', {err: err.message || err}), false, stream)
+      return cb(this.__('solution.notes.load_error', { err: err.message || err }), false, stream)
     }
 
     this.markCompleted(exercise.meta.name, function (err, completeMessage) {
@@ -292,7 +292,7 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
   stream.startWaiting()
 
   if (!exercise) {
-    cb(this.__('error.exercise.missing', {name: specifier}), false)
+    cb(this.__('error.exercise.missing', { name: specifier }), false)
     return stream
   }
 
@@ -302,13 +302,13 @@ WA.prototype.process = function (mode, args, specifier, contentOnly, cb) {
   }
 
   if (requireSubmission !== false && args.length === 0) {
-    cb(this.__('ui.usage', {appName: this.options.name, mode: mode}), false, stream)
+    cb(this.__('ui.usage', { appName: this.options.name, mode: mode }), false, stream)
     return stream
   }
 
   var method = exercise[mode]
   if (!method) {
-    cb(this.__('error.exercise.method_not_required', {method: mode}), false, stream)
+    cb(this.__('error.exercise.method_not_required', { method: mode }), false, stream)
     return stream
   }
 
@@ -404,7 +404,7 @@ WA.prototype.executeExercise = function (exercise, mode, method, args, stream, c
 
       exercise.end(mode, pass, function (cleanupErr) {
         if (cleanupErr) {
-          return cb(this.__('error.cleanup', {err: cleanupErr.message || cleanupErr}), false)
+          return cb(this.__('error.cleanup', { err: cleanupErr.message || cleanupErr }), false)
         }
 
         writeFooter()
@@ -502,12 +502,12 @@ WA.prototype.specifierToId = function (specifier) {
 WA.prototype.selectExercise = function (specifier) {
   var id = this.specifierToId(specifier)
   if (!id) {
-    throw new Error(this.__('error.exercise.missing', {name: specifier}))
+    throw new Error(this.__('error.exercise.missing', { name: specifier }))
   }
 
   var meta = this._meta[id]
   if (!meta) {
-    throw new Error(this.__('error.exercise.missing', {name: specifier}))
+    throw new Error(this.__('error.exercise.missing', { name: specifier }))
   }
 
   this.appStorage.save('current', meta.name)
@@ -522,7 +522,7 @@ WA.prototype.createExerciseContext = function (exercise) {
     'currentExercise.name': this.__('exercise.' + exercise.meta.name),
     'progress.count': exercise.meta.number,
     'progress.total': this.exercises.length,
-    'progress.state_resolved': this.__('progress.state', {count: exercise.meta.number, amount: this.exercises.length})
+    'progress.state_resolved': this.__('progress.state', { count: exercise.meta.number, amount: this.exercises.length })
   })
 }
 WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, callback) {
@@ -541,13 +541,13 @@ WA.prototype.getExerciseText = function printExercise (specifier, contentOnly, c
   prepare = (typeof exercise.prepare === 'function') ? exercise.prepare.bind(exercise) : setImmediate
   prepare(function (err) {
     if (err) {
-      return callback(this.__('error.exercise.preparing', {err: err.message || err}))
+      return callback(this.__('error.exercise.preparing', { err: err.message || err }))
     }
 
     var getExerciseText = (typeof exercise.getExerciseText === 'function') ? exercise.getExerciseText.bind(exercise) : setImmediate
     getExerciseText(function (err, exerciseTextType, exerciseText) {
       if (err) {
-        return callback(this.__('error.exercise.loading', {err: err.message || err}))
+        return callback(this.__('error.exercise.loading', { err: err.message || err }))
       }
       var stream = this.createMarkdownStream(exercise)
       var found = false

@@ -14,15 +14,15 @@
     "chalk": "^2.3.1",
     "colors-tmpl": "~1.0.0",
     "combined-stream-wait-for-it": "^1.1.0",
-    "commandico": "^2.0.2",
+    "commandico": "^2.0.4",
     "i18n-core": "^3.0.0",
-    "latest-version": "^3.0.0",
+    "latest-version": "^5.1.0",
     "msee": "^0.3.5",
     "simple-terminal-menu": "^1.1.3",
     "split": "^1.0.0",
-    "string-to-stream": "^1.1.0",
-    "strip-ansi": "^4.0.0",
-    "through2": "^2.0.3",
+    "string-to-stream": "^3.0.1",
+    "strip-ansi": "^5.2.0",
+    "through2": "^3.0.1",
     "workshopper-adventure-storage": "^3.0.0"
   },
   "bugs": {
@@ -33,8 +33,8 @@
     "example": "examples"
   },
   "devDependencies": {
-    "standard": "^11.0.0",
-    "standard-version": "^4.3.0"
+    "standard": "^14.1.0",
+    "standard-version": "^7.0.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/standard",
