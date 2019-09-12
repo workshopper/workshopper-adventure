@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "after": "^0.8.2",
-    "chalk": "^2.3.1",
+    "chalk": "^2.4.2",
     "colors-tmpl": "~1.0.0",
     "combined-stream-wait-for-it": "^1.1.0",
     "commandico": "^2.0.4",
@@ -33,7 +33,7 @@
     "example": "examples"
   },
   "devDependencies": {
-    "standard": "^14.1.0",
+    "standard": "^14.2.0",
     "standard-version": "^7.0.0"
   },
   "scripts": {
