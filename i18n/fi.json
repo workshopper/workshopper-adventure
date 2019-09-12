@@ -1,0 +1,83 @@
+{
+  "subtitle": "\u001b[23mValitse harjoitustehtävä ja paina \u001b[3mEnter\u001b[23m aloittaaksesi",
+  "menu": {
+    "credits": "TEKIJÄT",
+    "exit": "POISTU",
+    "help": "APUA",
+    "completed": "VALMIS",
+    "language": "VALITSE KIELI",
+    "cancel": "PERUUTA",
+    "update": "HAE PÄIVITYKSIÄ"
+  },
+  "language": {
+    "_current": "NYKYINEN",
+    "de": "Saksa (Deutsch)",
+    "en": "Englanti (English)",
+    "fr": "Ranska (français)",
+    "ja": "Japani (日本語)",
+    "zh-cn": "Mannerkiina (简体中文)",
+    "zh-tw": "Taiwanin kiina (繁體中文)",
+    "es": "Espanja (Español)",
+    "pt-br": "Brasilian portugali (Português)",
+    "vi": "Vietnam (Tiếng Việt)",
+    "ru": "Venäjä (Русский)",
+    "ko": "Korea (한국어)",
+    "pl": "Puola (Polski)",
+    "nb-no": "Norja (Norsk)",
+    "it": "Italia (Italiano)",
+    "uk": "Ukraina (Українська)",
+    "sr": "Serbia (српски)",
+    "fi": "Suomi"
+  },
+  "error": {
+    "exercise": {
+      "none_active": "Ei aktiivista harjoitustehtävää. Valitse tehtävä valikosta.",
+      "missing": "Harjoitusta {{{name}}} ei löydy",
+      "unexpected_error": "Ei voinut toteuttaa {{mode}}: {{{err}}}",
+      "missing_file": "VIRHE: tiedostoa {{{exerciseFile}}} ei ole!",
+      "not_a_workshopper": "VIRHE: {{{exerciseFile}}} ei ole workshopperin tunnistama harjoitustehtävä.",
+      "method_not_required": "Menetelmää {{method}} ei tarvita tätä harjoitustehtävää varten.",
+      "preparing": "Virhe valmistellessa harjoitustehtävää {{{err}}}",
+      "loading": "Virhe ladattaessa harjoitustehtävän {{{err}}} tietoja"
+    },
+    "no_uncomplete_left": "Nykyisen harjoitustehtävän jälkeen ei enää ole tekemättömiä tehtäviä",
+    "cleanup": "Virhe siivottaessa tietoja: {{{err}}}",
+    "notty": "Voisitko käynnistää tämän pääteohjelmassa, joka tukee valikoita."
+  },
+  "solution": {
+    "fail": {
+      "title": "VÄÄRIN",
+      "message": "Ratkaisusi tehtävään {{{currentExercise.name}}} ei ollut oikea. Yritä uudelleen!\n"
+    },
+    "pass": {
+      "title": "OIKEIN",
+      "message": "Ratkaisusi tehtävään {{{currentExercise.name}}} on oikea!"
+    },
+    "notes": {
+      "compare": "Tässä on malliratkaisu vertailun vuoksi:\n",
+      "load_error": "VIRHE: Malliratkaisutiedoston tulostus epäonnistui: {{{err}}}"
+    }
+  },
+  "ui": {
+    "return": "Kirjoita '{{appName}}' nähdäksesi valikon.\n",
+    "usage": "Käyttö: {{appName}} {{mode}} tehtava.js"
+  },
+  "progress": {
+    "reset": "{{title}} merkitty tekemättömäksi",
+    "finished": "Onnittelut! Olet ratkaissut kaikki tehtävät!\n",
+    "state": "{{count}} tehtävää tehty {{amount}}:sta",
+    "remaining": {
+      "one": "Sinulla on yksi harjoitustehtävä jäljellä.",
+      "other": "Sinulla on {{count}} harjoitustehtävää jäljellä."
+    }
+  },
+  "credits": {
+    "title": "Sovelluksen {{appName}} tarjoavat sinulle seuraavat sovelluskehittäjät:",
+    "name": "Name",
+    "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** on jo uusin version.\n\n**Onnittelut!**",
+    "now": "{{name}}_@{{current}}_ on vanhentunut, päivitetään versioon **{{latest}}** komennolla \n\n```bash\n{{cmd}}\n```\n"
+  }
+}
