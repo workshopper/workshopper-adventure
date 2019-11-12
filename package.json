@@ -34,10 +34,11 @@
   },
   "devDependencies": {
     "standard": "^14.2.0",
-    "standard-version": "^7.0.0"
+    "standard-version": "^7.0.0",
+    "tape": "^4.11.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/standard",
+    "test": "standard && tape test/**/*",
     "release": "./node_modules/.bin/standard-version"
   }
 }
