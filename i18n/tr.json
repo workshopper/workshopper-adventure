@@ -1,5 +1,5 @@
 {
-  "subtitle": "\u001b[23mSelect an exercise and hit \u001b[3mEnter\u001b[23m to begin",
+  "subtitle": "\u001b[23mBir alıştırma seçiniz ve başlamak için \u001b[3mEnter\u001b[23m tuşuna basınız",
   "menu": {
     "credits": "KATKIDA BULUNANLAR",
     "exit": "ÇIKIŞ",
@@ -32,53 +32,53 @@
   },
   "error": {
     "exercise": {
-      "none_active": "No active exercise. Select one from the menu.",
-      "missing": "No such exercise: {{{name}}}",
-      "unexpected_error": "Could not {{mode}}: {{{err}}}",
-      "missing_file": "ERROR: {{{exerciseFile}}} does not exist!",
-      "not_a_workshopper": "ERROR: {{{exerciseFile}}} is not a workshopper exercise.",
-      "method_not_required": "{{method}} is not required for this exercise.",
-      "preparing": "Error preparing exercise: {{{err}}}",
-      "loading": "Error loading exercise text: {{{err}}}"
+      "none_active": "Aktif alıştırma yok. Menüden bir tane seçiniz.",
+      "missing": "Böyle bir alıştırma bulunamadı: {{{name}}}",
+      "unexpected_error": "Beklenmedik Hata {{mode}}: {{{err}}}",
+      "missing_file": "HATA: {{{exerciseFile}}} bulunamadı!",
+      "not_a_workshopper": "HATA: {{{exerciseFile}}}, workshopper alıştırması değil.",
+      "method_not_required": "{{method}}, bu alıştırma için gerekli değil.",
+      "preparing": "Alıştırma hazırlanırken hata oluştu: {{{err}}}",
+      "loading": "Alıştırma metni yüklenirken hata oluştu: {{{err}}}"
     },
-    "no_uncomplete_left": "There are no incomplete exercises after the current exercise",
-    "cleanup": "Error cleaning up: {{{err}}}",
-    "notty": "Please start this in a tty-compatible terminal program."
+    "no_uncomplete_left": "Şu an ki alıştırmadan sonra yapılmamış alıştırma bulunmamaktadır",
+    "cleanup": "Temizleme hatası: {{{err}}}",
+    "notty": "Lütfen, bunu tty uyumlu bir konsol uygulamasında başlatınız."
   },
   "solution": {
     "fail": {
-      "title": "FAIL",
-      "message": "Your solution to {{{currentExercise.name}}} didn't pass. Try again!\n"
+      "title": "BAŞARISIZ",
+      "message": "{{{currentExercise.name}}} alıştırması için çözümünüz doğru değil. Tekrar deneyiniz!\n"
     },
     "pass": {
-      "title": "PASS",
-      "message": "Your solution to {{{currentExercise.name}}} passed!"
+      "title": "BAŞARILI",
+      "message": "{{{currentExercise.name}}} alıştırması için çözümünüz başarılı!"
     },
     "notes": {
-      "compare": "Here's the official solution in case you want to compare notes:\n",
-      "load_error": "ERROR: There was a problem printing the solution files: {{{err}}}"
+      "compare": "Bizim çözümümüz ile karşılaştırmak isterseniz eğer, buyrun, bizim çözümümüz:\n",
+      "load_error": "HATA: Çözüm dosyası yazdırılırken hata oluştu: {{{err}}}"
     }
   },
   "ui": {
-    "return": "Type '{{appName}}' to show the menu.\n",
-    "usage": "Usage: {{appName}} {{mode}} mysubmission.js"
+    "return": "'{{appName}}' yazarak menüyü görüntüleyebilirsiniz.\n",
+    "usage": "Kullanım: {{appName}} {{mode}} benimcozumum.js"
   },
   "progress": {
-    "reset": "{{title}} progress reset",
-    "finished": "You've finished all the challenges! Hooray!\n",
-    "state": "Exercise {{count}} of {{amount}}",
+    "reset": "{{title}} ilerlemeyi sıfırla",
+    "finished": "Tüm meydan okumaları bitirdin! Yaşasın!\n",
+    "state": "{{amount}} alıştırmadan {{count}}. alıştırmadasın",
     "remaining": {
-      "one": "You have one challenge left.",
-      "other": "You have {{count}} challenges left."
+      "one": "Geriye bir meydan okuma kaldı.",
+      "other": "Geriye {{count}} adet meydan okuma kaldı."
     }
   },
   "credits": {
-    "title": "{{appName}} is brought to you by the following dedicated hackers:",
-    "name": "Name",
-    "user": "GitHub Username"
+    "title": "{{appName}} uygulaması aşağıdaki adanmış geliştiriciler tarafından hayata geçirildi:",
+    "name": "İsim",
+    "user": "GitHub Kullanıcı Adı"
   },
   "update": {
-    "latest_version": "{{name}}**@{{version}}** is already at the latest version.\n\n**Congratulations!**",
-    "now": "{{name}}_@{{current}}_ is out-of-date, updating to **{{latest}}** with \n\n```bash\n{{cmd}}\n```\n"
+    "latest_version": "{{name}}**@{{version}}** uygulaması en son sürümüne sahip.\n\n**Tebrikler!**",
+    "now": "{{name}}_@{{current}}_ uygulaması is güncel değil, **{{latest}}** sürümüne yükselmek için şu komutu kullanabilirsin; \n\n```bash\n{{cmd}}\n```\n"
   }
 }
