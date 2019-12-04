@@ -1,0 +1,84 @@
+{
+  "subtitle": "\u001b[23mBir alıştırma seçiniz ve başlamak için \u001b[3mEnter\u001b[23m tuşuna basınız",
+  "menu": {
+    "credits": "KATKIDA BULUNANLAR",
+    "exit": "ÇIKIŞ",
+    "help": "YARDIM",
+    "completed": "TAMAMLANDI",
+    "language": "DİL SEÇ",
+    "cancel": "İPTAL",
+    "update": "GÜNCELLEME"
+  },
+  "language": {
+    "_current": "SEÇİLİ",
+    "de": "Almanca  (Deutsch)",
+    "en": "İngilizce (English)",
+    "fr": "Fransızca (français)",
+    "ja": "Japonca (日本語)",
+    "zh-cn": "Çinçe (简体中文)",
+    "zh-tw": "Tayvanca (繁體中文)",
+    "es": "İspanyolca (Español)",
+    "pt-br": "Brazilya Portekizcesi (Português)",
+    "vi": "Vietnam Dili (Tiếng Việt)",
+    "ru": "Rusça (Русский)",
+    "ko": "Korece (한국어)",
+    "pl": "Lehçe (Polski)",
+    "nb-no": "Norveççe (Norsk)",
+    "it": "İtalyanca (Italiano)",
+    "uk": "Ukraynaca (Українська)",
+    "sr": "Sırpça Serbian (српски)",
+    "fi": "Fince (suomi)",
+    "tr": "Türkçe"
+  },
+  "error": {
+    "exercise": {
+      "none_active": "Aktif alıştırma yok. Menüden bir tane seçiniz.",
+      "missing": "Böyle bir alıştırma bulunamadı: {{{name}}}",
+      "unexpected_error": "Beklenmedik Hata {{mode}}: {{{err}}}",
+      "missing_file": "HATA: {{{exerciseFile}}} bulunamadı!",
+      "not_a_workshopper": "HATA: {{{exerciseFile}}}, workshopper alıştırması değil.",
+      "method_not_required": "{{method}}, bu alıştırma için gerekli değil.",
+      "preparing": "Alıştırma hazırlanırken hata oluştu: {{{err}}}",
+      "loading": "Alıştırma metni yüklenirken hata oluştu: {{{err}}}"
+    },
+    "no_uncomplete_left": "Şu an ki alıştırmadan sonra yapılmamış alıştırma bulunmamaktadır",
+    "cleanup": "Temizleme hatası: {{{err}}}",
+    "notty": "Lütfen, bunu tty uyumlu bir konsol uygulamasında başlatınız."
+  },
+  "solution": {
+    "fail": {
+      "title": "BAŞARISIZ",
+      "message": "{{{currentExercise.name}}} alıştırması için çözümünüz doğru değil. Tekrar deneyiniz!\n"
+    },
+    "pass": {
+      "title": "BAŞARILI",
+      "message": "{{{currentExercise.name}}} alıştırması için çözümünüz başarılı!"
+    },
+    "notes": {
+      "compare": "Bizim çözümümüz ile karşılaştırmak isterseniz eğer, buyrun, bizim çözümümüz:\n",
+      "load_error": "HATA: Çözüm dosyası yazdırılırken hata oluştu: {{{err}}}"
+    }
+  },
+  "ui": {
+    "return": "'{{appName}}' yazarak menüyü görüntüleyebilirsiniz.\n",
+    "usage": "Kullanım: {{appName}} {{mode}} benimcozumum.js"
+  },
+  "progress": {
+    "reset": "{{title}} ilerlemeyi sıfırla",
+    "finished": "Tüm meydan okumaları bitirdin! Yaşasın!\n",
+    "state": "{{amount}} alıştırmadan {{count}}. alıştırmadasın",
+    "remaining": {
+      "one": "Geriye bir meydan okuma kaldı.",
+      "other": "Geriye {{count}} adet meydan okuma kaldı."
+    }
+  },
+  "credits": {
+    "title": "{{appName}} uygulaması aşağıdaki adanmış geliştiriciler tarafından hayata geçirildi:",
+    "name": "İsim",
+    "user": "GitHub Kullanıcı Adı"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** uygulaması en son sürümüne sahip.\n\n**Tebrikler!**",
+    "now": "{{name}}_@{{current}}_ uygulaması is güncel değil, **{{latest}}** sürümüne yükselmek için şu komutu kullanabilirsin; \n\n```bash\n{{cmd}}\n```\n"
+  }
+}

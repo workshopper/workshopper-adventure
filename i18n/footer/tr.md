@@ -1,0 +1,4 @@
+ - Bu talimatları tekrar yazdırmak için `{appname} print` komutunu çalıştırınız
+ - Programınızı test ortamında çalıştırmak için `{appname} run program.js` komutunu çalıştırınız
+ - Programınızın doğru şekilde çalışıp çalışmadığını görmek için `{appname} verify program.js` komutunu çalıştırınız
+ - Yardım için `{appname} help` komutunu çalıştırınız.
