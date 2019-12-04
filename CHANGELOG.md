@@ -1,6 +1,13 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [6.1.0](https://github.com/workshopper/workshopper-adventure/compare/v6.0.4...v6.1.0) (2019-12-04)
+
+
+### Features
+
+* **util/idFromName:** allow customize character for white space ([d1d925f](https://github.com/workshopper/workshopper-adventure/commit/d1d925f))
 
 <a name="6.0.4"></a>
 ## [6.0.4](https://github.com/workshopper/workshopper-adventure/compare/v6.0.3...v6.0.4) (2018-07-07)
