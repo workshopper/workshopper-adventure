@@ -1,15 +1,16 @@
 const path = require('path')
 const fs = require('fs')
 
-function idFromName (id) {
+function idFromName (id, spaceChar = '_') {
   if (id === null || id === undefined) {
     id = ''
   }
+  const regex = new RegExp(`[^\\w${spaceChar}]`, 'gi')
 
   return id.toString().toLowerCase()
     .replace(/^\s+|\s+$/g, '')
-    .replace(/\s/g, '_')
-    .replace(/[^\w]/gi, '')
+    .replace(/\s/g, spaceChar)
+    .replace(regex, '')
 }
 
 function dirFromName (exerciseDir, name) {
