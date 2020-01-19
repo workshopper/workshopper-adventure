@@ -1,8 +1,8 @@
-var path = require('path')
+const { join } = require('path')
 
 module.exports = {
   file: [
-    path.join(__dirname, '../i18n/usage/{lang}.md'),
-    path.join(__dirname, '../i18n/usage/en.md')
+    join(__dirname, '../i18n/usage/{lang}.md'),
+    join(__dirname, '../i18n/usage/en.md')
   ]
 }
