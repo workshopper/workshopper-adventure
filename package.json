@@ -35,7 +35,7 @@
   "devDependencies": {
     "sinon": "^9.0.1",
     "standard": "^14.3.1",
-    "standard-version": "^7.0.1",
+    "standard-version": "^8.0.1",
     "tape": "^4.13.0"
   },
   "scripts": {
