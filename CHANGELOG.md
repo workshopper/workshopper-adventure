@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/workshopper/workshopper-adventure/compare/v6.1.1...v7.0.0) (2020-10-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** changes in simple-terminal-menu might affect the ui/output of the workshopper. see https://github.com/martinheidegger/simple-terminal-menu/blob/master/CHANGELOG.md
+
+* **deps:** update to latest version of simple-terminal-menu ([#114](https://github.com/workshopper/workshopper-adventure/issues/114)) ([d005cfb](https://github.com/workshopper/workshopper-adventure/commit/d005cfb0ad508f2d11a59bcf30aae6e3ca10f975))
+
 ### [6.1.1](https://github.com/workshopper/workshopper-adventure/compare/v6.1.0...v6.1.1) (2020-09-25)
 
 ## [6.1.0](https://github.com/workshopper/workshopper-adventure/compare/v6.0.4...v6.1.0) (2019-12-04)
