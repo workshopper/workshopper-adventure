@@ -1,10 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 
-function idFromName (id, spaceChar = '_') {
-  if (id === null || id === undefined) {
-    id = ''
-  }
+function idFromName (id = '', spaceChar = '_') {
   const regex = new RegExp(`[^\\w${spaceChar}]`, 'gi')
 
   return id.toString().toLowerCase()
@@ -13,7 +10,8 @@ function idFromName (id, spaceChar = '_') {
     .replace(regex, '')
 }
 
-function dirFromName (exerciseDir, name) {
+exports.idFromName = idFromName
+exports.dirFromName = (exerciseDir, name) => {
   if (typeof exerciseDir !== 'string') {
     return null
   }
@@ -39,9 +37,5 @@ function getFsObject (type, file, base) {
   return file
 }
 
-module.exports = {
-  idFromName: idFromName,
-  dirFromName: dirFromName,
-  getDir: getFsObject.bind(null, 'dir'),
-  getFile: getFsObject.bind(null, 'file')
-}
+exports.getDir = (file, base) => getFsObject('dir', file, base)
+exports.getFile = (file, base) => getFsObject('file', file, base)
