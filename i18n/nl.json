@@ -1,0 +1,85 @@
+{
+  "subtitle": "\u001b[23mSelecteer een opdracht en druk \u001b[3mEnter\u001b[23m om te beginnen",
+  "menu": {
+    "credits": "CREDITS",
+    "exit": "EXIT",
+    "help": "HULP",
+    "completed": "VOLTOOID",
+    "language": "KIES TAAL",
+    "cancel": "ANNULEREN",
+    "update": "CONTROLEER OP UPDATES"
+  },
+  "language": {
+    "_current": "HUIDIGE",
+    "de": "Duits (Deutsch)",
+    "en": "Engels",
+    "fr": "Frans (français)",
+    "ja": "Japans (日本語)",
+    "zh-cn": "Chinees (中文)",
+    "zh-tw": "Taiwanees (國語)",
+    "es": "Spaans (Español)",
+    "pt-br": "Braziliaans/Portugees (Português)",
+    "vi": "Vietnamees (Tiếng Việt)",
+    "ru": "Russisch (Русский)",
+    "ko": "Koreaans (한국어)",
+    "pl": "Pools (Polski)",
+    "nb-no": "Noors (Norsk)",
+    "it": "Italiaans (Italiano)",
+    "uk": "Oekraïens (Українська)",
+    "sr": "Servisch (српски)",
+    "fi": "Fins (suomi)",
+    "tr": "Turks (Türkçe)",
+    "nl": "Nederlands (Nederlands)"
+  },
+  "error": {
+    "exercise": {
+      "none_active": "Geen actieve uitdaging. Kies er een uit het menu.",
+      "missing": "Onbekende uitdaging: {{{name}}}",
+      "unexpected_error": "{{mode}} kon niet uitgevoerd worden: {{{err}}}",
+      "missing_file": "ERROR: {{{exerciseFile}}} bestaat niet!",
+      "not_a_workshopper": "ERROR: {{{exerciseFile}}} is geen workshopper uitdaging",
+      "method_not_required": "{{method}} is niet verplicht voor deze uitdaging.",
+      "preparing": "Fout bij het voorbereiden van uitdaging: {{{err}}}",
+      "loading": "Fout tijdens het laden van uitdaging tekst: {{{err}}}"
+    },
+    "no_uncomplete_left": "Er zijn geen onvoltooide uitdagingen na de huidige uitdaging",
+    "cleanup": "Fout bij het opschonen: {{{err}}}",
+    "notty": "Start dit a.u.b. in een tty-compatibel terminal programma."
+  },
+  "solution": {
+    "fail": {
+      "title": "MISLUKT",
+      "message": "Jouw oplossing voor {{{name}}} werkt niet. Probeer het opnieuw!\n"
+    },
+    "pass": {
+      "title": "SUCCES",
+      "message": "Jouw oplossing voor {{{name}}} werkt!"
+    },
+    "notes": {
+      "compare": "Hier is de officiële oplossing voor het geval je het wilt vergelijken:\n",
+      "load_error": "FOUT: Er was een probleem bij het tonen van de oplossings bestanden: {{{err}}}"
+    }
+  },
+  "ui": {
+    "return": "Typ '{{appName}}' om het menu te tonen.\n",
+    "usage": "Gebruik: {{appName}} {{mode}} mysubmission.js"
+  },
+  "progress": {
+    "reset": "{{title}} voortgang opnieuw ingesteld",
+    "finished": "Je hebt alle uitdagingen afgerond! Hoera!\n",
+    "state": "Uitdaging {{count}} van {{amount}}",
+    "remaining": {
+      "one": "Je hebt nog één uitdaging te gaan",
+      "other": "Je hebt nog {{count}} uitdagingen te gaan."
+    }
+  },
+  "credits": {
+    "title": "{{appName}} wordt je aangeboden door de volgende toegewijde hackers:",
+    "name": "Name",
+    "user": "GitHub Username"
+  },
+  "update": {
+    "latest_version": "{{name}}**@{{version}}** is al de laatste versie.\n\n**Gefeliciteerd!**",
+    "now": "{{name}}_@{{current}}_ is out-of-date, updaten naar **{{latest}}** met \n\n```bash\n{{cmd}}\n```\n"
+  }
+}
