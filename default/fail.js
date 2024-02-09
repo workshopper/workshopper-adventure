@@ -1,4 +1,6 @@
 module.exports = {
-  text: '\n{bold}{red}# {solution.fail.title}{/red}{/bold}\n' +
-    '{solution.fail.message}\n'
+  text: `
+{bold}{red}# {solution.fail.title}{/red}{/bold}
+{solution.fail.message}
+`
 }
